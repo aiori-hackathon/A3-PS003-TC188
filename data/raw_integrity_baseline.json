@@ -1,0 +1,21 @@
+{
+  "recorded_at_utc": "2026-10-24 06:55 UTC",
+  "provenance": "Local baseline recorded during the project, after download. NOT the hash of the original download and NOT a publisher checksum; detects changes after recording only.",
+  "files": {
+    "year_2023/2023_p01.npy": {
+      "sha256": "6f46a5a8884b6b9a347039a30581eb26d927ec6a296da5b64930eed84cd0eb22",
+      "size": 1818312320,
+      "mtime_ns": 1792819817339976900
+    },
+    "node_order.npy": {
+      "sha256": "b69aae88cacbca49e0f0e4355009127f0ef3961fe7f689d2cee80d7172d486b7",
+      "size": 135904,
+      "mtime_ns": 1792819623916419000
+    },
+    "sensor_meta_feature.csv": {
+      "sha256": "a1935d74fc61ada5c0b1d9b3f0161dd4dbcdfc0891c591017d2c1f218a7774bd",
+      "size": 3805662,
+      "mtime_ns": 1792819574336759300
+    }
+  }
+}

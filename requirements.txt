@@ -1,0 +1,4 @@
+# Versions used for the 2026-10-24 preprocessing checkpoint (Python 3.12.10).
+numpy==2.5.4
+pandas==3.1.0
+pytest==9.1.1

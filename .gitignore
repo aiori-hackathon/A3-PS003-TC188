@@ -1,0 +1,41 @@
+# --- Raw XTraffic dataset (CC BY-NC 4.0; never commit) ---
+year_2023/
+*.npy
+node_order.npy
+sensor_meta_feature.csv
+incidents_y*.csv
+
+# --- Generated / derived data (regenerate with aiori.flow_audit and aiori.prepare_pilot) ---
+# Includes derived arrays, sensor metadata and assignments, selection manifests,
+# generated reports with local paths, verification results and the v1 archive.
+*.npz
+data/processed/
+# The local raw-file hash baseline is the only data file intended for the repository.
+data/*
+!data/raw_integrity_baseline.json
+
+# --- Model artifacts (none yet; Phase 6 not started) ---
+*.pt
+*.pth
+*.ckpt
+results/
+
+# --- Python environment and caches ---
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Secrets and local configuration ---
+.env
+.env.*
+*.pem
+*.key
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
