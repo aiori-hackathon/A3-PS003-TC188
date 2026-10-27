@@ -1,0 +1,17 @@
+{
+  "arm": "centralised_b0",
+  "description": "B0: [scaled flow, observed flag]; compact GRU (docs/phase6_technical_spec.md)",
+  "calendar": false,
+  "hidden_size": 64,
+  "optimizer": "adam",
+  "lr": 0.001,
+  "batch_size": 512,
+  "max_epochs": 50,
+  "patience": 5,
+  "grad_clip": 1.0,
+  "lr_schedule": null,
+  "early_stopping_metric": "validation pooled MAE, raw units",
+  "clip_negative_predictions": false,
+  "seeds": [0, 1, 2],
+  "threads": 8
+}

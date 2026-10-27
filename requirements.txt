@@ -2,3 +2,7 @@
 numpy==2.5.4
 pandas==3.1.0
 pytest==9.1.1
+# Phase 6 (approved D-A, 2026-10-27): official CPU build. Install with
+#   pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+# Windows needs the Microsoft Visual C++ 2015-2022 x64 Redistributable (14.44 verified).
+torch==2.14.1+cpu
