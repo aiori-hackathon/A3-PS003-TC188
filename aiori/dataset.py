@@ -26,6 +26,7 @@ RUNS = {
     "primary": (config.PROCESSED_DIR, config.PROCESSED_DIR / "sensor_selection.csv"),
     "missing_validation": (config.PROCESSED_DIR / "missing_validation",
                            config.PROCESSED_DIR / "missing_validation_selection.csv"),
+    "geo200": (config.PROCESSED_DIR / "geo200", config.PROCESSED_DIR / "geo200" / "sensor_selection.csv"),  # Phase 8
 }
 ARRAYS = ("inputs_scaled", "input_imputed", "targets_scaled", "observed_mask", "flow_raw", "tod_median",
           "array_index", "station_id")

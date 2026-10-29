@@ -1,0 +1,24 @@
+{
+  "arm": "centralised_b1_geo200",
+  "description": "Phase 8 geo200 (200 sensors, 50 per client); otherwise identical to phase6_b1.json (docs/phase8_200_sensor_technical_spec.md section 4.1)",
+  "run": "geo200",
+  "derived_from": "phase6_b1.json",
+  "calendar": true,
+  "hidden_size": 64,
+  "optimizer": "adam",
+  "lr": 0.001,
+  "batch_size": 512,
+  "max_epochs": 50,
+  "patience": 5,
+  "grad_clip": 1.0,
+  "lr_schedule": null,
+  "early_stopping_metric": "validation pooled MAE, raw units",
+  "clip_negative_predictions": false,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "threads": 8,
+  "results_subdir": "phase8"
+}

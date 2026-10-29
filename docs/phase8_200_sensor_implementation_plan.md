@@ -1,6 +1,6 @@
 # Phase 8 implementation plan — ≈ 200-sensor geographic experiment
 
-**Date:** 2026-10-27. **Status: PROPOSED; nothing implemented.** Implements `docs/phase8_200_sensor_technical_spec.md`.
+**Date:** 2026-10-27. **Status (2026-10-28): S1–S5 complete (§8–§12); results in `docs/phase8_results.md`.** Implements `docs/phase8_200_sensor_technical_spec.md`.
 
 **Boundaries until each gate below is approved:**
 - no sensor selection or export;
@@ -127,3 +127,78 @@
 
 ## 7. Next stage requiring approval
 **G0:** approve this plan and decisions D8-1 to D8-12. After that, **S1** (code and synthetic tests only) can start. Generating the actual selection and checkpoint (S2) needs **G1**.
+
+## 8. G0 record and S1 status (2026-10-28)
+
+**Decisions at G0:**
+- D8-1 to D8-7 and D8-9: approved as recommended.
+- D8-8: the analysis module and the SESOI are **deferred** to a separate approval before S5. They are not part of S1.
+- D8-10: **deferred**; decide at G1/G2.
+- D8-11: **included**, report-only, in `scripts/verify_geo200.py`. Pairs with training-period r ≥ 0.999 are reported and the selection is never changed.
+- D8-12 (replaces "everything uncommitted"): S1 code, tests, configs and aggregate docs may be committed **with approval**. Manifests, selection reports, checkpoints and results are never committed.
+
+**S1 files:**
+
+| File | Kind |
+|---|---|
+| `aiori/select_geo200.py` | new: allow-listed selection, allocation, hash draw, fallbacks, District floor, input-hash check, no-overwrite outputs, config loader, near-duplicate screen |
+| `scripts/prepare_geo200.py` | new: S2 wrapper (selection → unchanged `prepare_pilot` → `checkpoint_manifest.json`) |
+| `scripts/verify_geo200.py` | new: read-only S2 checks (reuses `verify_artifacts.py`) |
+| `experiments/configs/phase8_selection.json` | new: salt, 50 per client, inputs and their approved SHA-256, `prepare_pilot` bounds |
+| `experiments/configs/phase8_{centralised,local,fedavg_iid,fedavg_geo}_b1.json` | new: pilot settings plus `run`, `derived_from` and `results_subdir: phase8` |
+| `aiori/dataset.py` | additive `RUNS["geo200"]` |
+| `experiments/run_phase6.py` | output root from `results_subdir` (default `phase6`); refuses a non-empty run folder before loading |
+| `tests/test_select_geo200.py`, `tests/test_phase8_configs.py` | new synthetic tests |
+
+**Implementation notes:**
+- `duplicate_series` (training-period) is on the allow-list as a guard only: an eligible exact copy raises.
+- An unmapped or missing `Type` among the candidates fails closed.
+- Tertiles for type groups with fewer than 3 candidates: 1 → mid; 2 → low, high (qcut-consistent).
+- District floor: "largest stratum" means most drawn sensors, ties by name. Only a sensor whose District keeps ≥ 1 is replaced. If none exists the run fails closed and does not extend the rule.
+- The checkpoint manifest counts test windows but reads no test targets. Masked-target counts are for train and val only.
+
+**Next gate: G1** approves running `scripts/prepare_geo200.py` and `scripts/verify_geo200.py` on the real frozen inputs.
+
+## 9. S2 status (2026-10-28, aggregate only)
+- Selection: 200 sensors, 50 per client, from 11,140 candidates (48 pilot sensors excluded); 0 fallbacks; District floor not needed.
+- Type groups: mainline 128, ramp 41, HOV 26, other 5. Per client, mainline/ramp/HOV/other: LA/Ventura 27/13/9/1, Bay Area 36/13/0/1, Coastal/South Central 30/7/11/2, Inland/Central 35/8/6/1.
+- Training coverage: 46 of 200 sensors have at least one missing training step (560 steps in total; minimum coverage 99.46%).
+- Checkpoint `data/processed/geo200/` (local, git-ignored, about 10.5 MB): 1,262,580 train and 170,600 val windows; 6,480 masked train target cells and 24 masked val target cells.
+- `verify_geo200.py`: 48 checks passed, 0 failed. Near-duplicate screen: 0 pairs with r ≥ 0.999.
+- Integrity: all 276 pre-S2 fingerprints are unchanged. Only `2023_p01.npy` was opened.
+- **Next gate: G3** (S3 smoke tests).
+
+## 10. S3 status (2026-10-28, smoke only, validation only)
+- All 4 arms ran at seed 0 with the smoke budget: 2 epochs or rounds × 5 batches (per client for the federated and local arms). The centralised arm ran with `--max-batches 5` to match this plan. Outputs are in `results/phase8_smoke/` (git-ignored).
+- Every arm passed:
+  - finite losses, gradient norms, predictions, metrics and checkpoints;
+  - validation masks match the missing targets (24 masked cells);
+  - identical validation targets across arms;
+  - 0 skipped batches.
+- The federated partitions are 4 × 50, disjoint and cover all 200 sensors. The geographic partition equals the manifest clients, and the IID partition differs. Pooled metrics computed from client sums equal the merged records. Each FedAvg round transfers 475,304 B.
+- Rerunning each arm reproduced its predictions, checkpoints and history exactly.
+- Peak memory was 550–580 MB per arm. Smoke time per optimiser step was about 10 ms for the federated and local arms (17.6 ms centralised, including warm-up), against 7.6 ms in the pilot.
+- 184 tests pass. All 286 pre-S3 fingerprints are unchanged.
+- **Next gate: G3** (the 12 full runs).
+
+## 11. S4 status (2026-10-28, validation only, descriptive only)
+- 12 of 12 runs completed sequentially (07:16–09:20 UTC, about 2 h 03 min). No run failed and none was repeated. Outputs are in `results/phase8/geo200/`, with logs and status in `results/phase8/logs/` (git-ignored).
+- Every run passed:
+  - finite losses, gradient norms, predictions, metrics and checkpoints;
+  - masks match the observed targets;
+  - identical validation targets across the 12 runs;
+  - 0 skipped batches and 0 clipped steps;
+  - partitions 4 × 50; pooled metrics from client sums equal the records; 475,304 B per round.
+- Pooled validation MAE, mean ± SD over seeds 0–2: centralised 16.383 ± 0.098; local-only 16.458 ± 0.147; IID FedAvg 16.477 ± 0.087; geographic FedAvg 16.495 ± 0.098.
+- Reference forecasts on the same windows: historical average 22.543, persistence 22.671.
+- Geographic FedAvg seed 0 reached the 50-round cap without early stopping (best round 46).
+- **No statistical analysis has been done.** The S5 analysis module and SESOI need separate approval.
+- 184 tests pass. All 330 pre-S4 fingerprints are unchanged.
+
+## 12. S5 status (2026-10-28)
+- SESOI fixed at 0.1638 (1% of 16.383) and recorded before any contrast was computed (`results/phase8/analysis/sesoi_log.json`).
+- Analysis code: `aiori/phase8_analysis.py` and `scripts/phase8_analysis.py`, with 12 synthetic tests (196 tests in total pass).
+- Results are in `docs/phase8_results.md`, aggregate only:
+  - C1 (geographic FedAvg − centralised) +0.112: detectable but below the practical threshold;
+  - C2, C3 and C4: not distinguishable on this validation set.
+- No test split was used and no model was retrained. All earlier artifacts are unchanged.

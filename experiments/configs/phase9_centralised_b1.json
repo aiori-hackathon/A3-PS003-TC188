@@ -1,0 +1,24 @@
+{
+  "arm": "centralised_b1_ninemonth",
+  "description": "Phase 9 nine-month (Jan 1 - Sep 30, 2023) 200 sensors; settings identical to phase8_centralised_b1.json",
+  "run": "nine_month",
+  "derived_from": "phase8_centralised_b1.json",
+  "calendar": true,
+  "hidden_size": 64,
+  "optimizer": "adam",
+  "lr": 0.001,
+  "batch_size": 512,
+  "max_epochs": 50,
+  "patience": 5,
+  "grad_clip": 1.0,
+  "lr_schedule": null,
+  "early_stopping_metric": "validation pooled MAE, raw units",
+  "clip_negative_predictions": false,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "threads": 8,
+  "results_subdir": "phase9"
+}

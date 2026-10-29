@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="380" font-family="sans-serif" font-size="12">
+<rect width="760" height="380" fill="white"/><text x="380.0" y="20" text-anchor="middle" font-size="15">Test MAE per forecast horizon</text>
+<line x1="70" y1="320" x2="750" y2="320" stroke="#333"/><line x1="70" y1="30" x2="70" y2="320" stroke="#333"/>
+<text x="380.0" y="354" text-anchor="middle">horizon (5-min steps)</text>
+<text x="16" y="180.0" transform="rotate(-90 16 180.0)">MAE</text>
+<text x="64" y="324.0" text-anchor="end">11.32</text><line x1="70" y1="320.0" x2="750" y2="320.0" stroke="#eee"/>
+<text x="64" y="251.5" text-anchor="end">17.29</text><line x1="70" y1="247.5" x2="750" y2="247.5" stroke="#eee"/>
+<text x="64" y="179.0" text-anchor="end">23.27</text><line x1="70" y1="175.0" x2="750" y2="175.0" stroke="#eee"/>
+<text x="64" y="106.50000000000003" text-anchor="end">29.25</text><line x1="70" y1="102.50000000000003" x2="750" y2="102.50000000000003" stroke="#eee"/>
+<text x="64" y="34.0" text-anchor="end">35.22</text><line x1="70" y1="30.0" x2="750" y2="30.0" stroke="#eee"/>
+<polyline fill="none" stroke="#2a6fdb" stroke-width="2" points="70.0,300.0 130.9,287.2 191.8,275.8 252.7,267.0 313.6,258.6 374.5,250.8 435.5,243.2 496.4,235.7 557.3,229.5 618.2,223.0 679.1,215.8 740.0,206.4"><title>Centralised GRU</title></polyline>
+<text x="746" y="40" text-anchor="end" fill="#2a6fdb">Centralised GRU</text>
+<polyline fill="none" stroke="#e07b39" stroke-width="2" points="70.0,299.0 130.9,285.8 191.8,274.1 252.7,264.8 313.6,256.5 374.5,248.3 435.5,240.2 496.4,232.6 557.3,225.7 618.2,219.1 679.1,211.6 740.0,202.4"><title>Geographic FedAvg</title></polyline>
+<text x="746" y="54" text-anchor="end" fill="#e07b39">Geographic FedAvg</text>
+<polyline fill="none" stroke="#3aa76d" stroke-width="2" points="70.0,299.3 130.9,286.6 191.8,275.9 252.7,267.3 313.6,259.9 374.5,252.6 435.5,245.2 496.4,238.5 557.3,232.4 618.2,226.3 679.1,219.5 740.0,210.7"><title>Local-only GRU</title></polyline>
+<text x="746" y="68" text-anchor="end" fill="#3aa76d">Local-only GRU</text>
+<polyline fill="none" stroke="#9b59b6" stroke-width="2" points="70.0,299.6 130.9,286.3 191.8,274.9 252.7,265.6 313.6,257.5 374.5,249.5 435.5,241.4 496.4,233.6 557.3,227.0 618.2,220.3 679.1,213.1 740.0,204.1"><title>IID FedAvg</title></polyline>
+<text x="746" y="82" text-anchor="end" fill="#9b59b6">IID FedAvg</text>
+<polyline fill="none" stroke="#7f8c8d" stroke-width="2" points="70.0,275.3 130.9,252.3 191.8,229.5 252.7,209.1 313.6,190.4 374.5,171.7 435.5,151.5 496.4,130.6 557.3,110.3 618.2,90.7 679.1,70.9 740.0,50.0"><title>persistence</title></polyline>
+<text x="746" y="96" text-anchor="end" fill="#7f8c8d">persistence</text>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="380" font-family="sans-serif" font-size="12">
+<rect width="760" height="380" fill="white"/><text x="380.0" y="20" text-anchor="middle" font-size="15">Test MAE per client</text>
+<line x1="70" y1="310" x2="750" y2="310" stroke="#333"/><line x1="70" y1="30" x2="70" y2="310" stroke="#333"/>
+<text x="16" y="175.0" transform="rotate(-90 16 175.0)">MAE</text>
+<text x="64" y="314.0" text-anchor="end">0.0</text><line x1="70" y1="310.0" x2="750" y2="310.0" stroke="#eee"/>
+<text x="64" y="244.0" text-anchor="end">6.4</text><line x1="70" y1="240.0" x2="750" y2="240.0" stroke="#eee"/>
+<text x="64" y="174.0" text-anchor="end">12.8</text><line x1="70" y1="170.0" x2="750" y2="170.0" stroke="#eee"/>
+<text x="64" y="104.0" text-anchor="end">19.2</text><line x1="70" y1="100.0" x2="750" y2="100.0" stroke="#eee"/>
+<text x="64" y="34.0" text-anchor="end">25.6</text><line x1="70" y1="30.0" x2="750" y2="30.0" stroke="#eee"/>
+<rect x="86.8" y="103.9" width="33.5" height="206.1" fill="#2a6fdb"><title>Centralised GRU: 18.838</title></rect>
+<rect x="254.2" y="60.8" width="33.5" height="249.2" fill="#2a6fdb"><title>Centralised GRU: 22.771</title></rect>
+<rect x="421.8" y="166.3" width="33.5" height="143.7" fill="#2a6fdb"><title>Centralised GRU: 13.137</title></rect>
+<rect x="589.2" y="159.1" width="33.5" height="150.9" fill="#2a6fdb"><title>Centralised GRU: 13.789</title></rect>
+<rect x="80" y="358" width="10" height="10" fill="#2a6fdb"/><text x="94" y="367">Centralised GRU</text>
+<rect x="120.2" y="98.1" width="33.5" height="211.9" fill="#e07b39"><title>Geographic FedAvg: 19.368</title></rect>
+<rect x="287.8" y="60.0" width="33.5" height="250.0" fill="#e07b39"><title>Geographic FedAvg: 22.847</title></rect>
+<rect x="455.2" y="163.9" width="33.5" height="146.1" fill="#e07b39"><title>Geographic FedAvg: 13.354</title></rect>
+<rect x="622.8" y="158.1" width="33.5" height="151.9" fill="#e07b39"><title>Geographic FedAvg: 13.878</title></rect>
+<rect x="230" y="358" width="10" height="10" fill="#e07b39"/><text x="244" y="367">Geographic FedAvg</text>
+<rect x="153.8" y="109.0" width="33.5" height="201.0" fill="#3aa76d"><title>Local-only GRU: 18.372</title></rect>
+<rect x="321.2" y="65.5" width="33.5" height="244.5" fill="#3aa76d"><title>Local-only GRU: 22.340</title></rect>
+<rect x="488.8" y="161.9" width="33.5" height="148.1" fill="#3aa76d"><title>Local-only GRU: 13.538</title></rect>
+<rect x="656.2" y="160.0" width="33.5" height="150.0" fill="#3aa76d"><title>Local-only GRU: 13.707</title></rect>
+<rect x="380" y="358" width="10" height="10" fill="#3aa76d"/><text x="394" y="367">Local-only GRU</text>
+<rect x="187.2" y="100.9" width="33.5" height="209.1" fill="#9b59b6"><title>IID FedAvg: 19.110</title></rect>
+<rect x="354.8" y="60.1" width="33.5" height="249.9" fill="#9b59b6"><title>IID FedAvg: 22.836</title></rect>
+<rect x="522.2" y="164.7" width="33.5" height="145.3" fill="#9b59b6"><title>IID FedAvg: 13.281</title></rect>
+<rect x="689.8" y="158.3" width="33.5" height="151.7" fill="#9b59b6"><title>IID FedAvg: 13.867</title></rect>
+<rect x="530" y="358" width="10" height="10" fill="#9b59b6"/><text x="544" y="367">IID FedAvg</text>
+<text x="153.8" y="326" text-anchor="middle">la ventura</text>
+<text x="321.2" y="326" text-anchor="middle">bay area</text>
+<text x="488.8" y="326" text-anchor="middle">coastal south central</text>
+<text x="656.2" y="326" text-anchor="middle">inland central</text>
+</svg>

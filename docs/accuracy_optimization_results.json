@@ -1,0 +1,265 @@
+{
+ "baseline_validation_wape_pct": 8.2226,
+ "ranked": [
+  {
+   "exp_id": "res_s2_mlp512",
+   "algorithm": "ensemble+residual",
+   "architecture": "combination",
+   "input": "-",
+   "loss": "-",
+   "val_wape_pct": 6.569,
+   "val_mae": 13.143,
+   "val_rmse": 23.388,
+   "val_smape_pct": 13.163,
+   "rel_improvement_pct": 20.1,
+   "runtime_min": null,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 5.72,
+    "client_1_bay_area": 6.96,
+    "client_2_coastal_south_central": 5.56,
+    "client_3_inland_central": 8.7
+   },
+   "evaluation": "2-fold blocked out-of-fold within validation"
+  },
+  {
+   "exp_id": "s2_mlp512_L288_emb",
+   "algorithm": "local",
+   "architecture": "mlp",
+   "input": "L288, calendar, profile, lags 1d/1w, sensor emb",
+   "loss": "l1_raw",
+   "val_wape_pct": 6.794,
+   "val_mae": 13.593,
+   "val_rmse": 23.776,
+   "val_smape_pct": 13.785,
+   "rel_improvement_pct": 17.4,
+   "runtime_min": 43.7,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 5.8,
+    "client_1_bay_area": 7.04,
+    "client_2_coastal_south_central": 6.32,
+    "client_3_inland_central": 8.76
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "oof_s2_mlp512_alone",
+   "algorithm": "ensemble",
+   "architecture": "combination",
+   "input": "-",
+   "loss": "-",
+   "val_wape_pct": 6.794,
+   "val_mae": 13.593,
+   "val_rmse": 23.776,
+   "val_smape_pct": 13.785,
+   "rel_improvement_pct": 17.4,
+   "runtime_min": null,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 5.8,
+    "client_1_bay_area": 7.04,
+    "client_2_coastal_south_central": 6.32,
+    "client_3_inland_central": 8.76
+   },
+   "evaluation": "2-fold blocked out-of-fold within validation"
+  },
+  {
+   "exp_id": "s1_l1raw_all_L72",
+   "algorithm": "local",
+   "architecture": "gru",
+   "input": "L72, calendar, profile, lags 1d/1w",
+   "loss": "l1_raw",
+   "val_wape_pct": 7.269,
+   "val_mae": 14.544,
+   "val_rmse": 24.705,
+   "val_smape_pct": 14.693,
+   "rel_improvement_pct": 11.6,
+   "runtime_min": 6.6,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 6.36,
+    "client_1_bay_area": 7.43,
+    "client_2_coastal_south_central": 6.87,
+    "client_3_inland_central": 9.16
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "s1_central_all_L72_emb",
+   "algorithm": "central",
+   "architecture": "gru",
+   "input": "L72, calendar, profile, lags 1d/1w, sensor emb",
+   "loss": "l1_raw",
+   "val_wape_pct": 7.318,
+   "val_mae": 14.642,
+   "val_rmse": 24.84,
+   "val_smape_pct": 14.908,
+   "rel_improvement_pct": 11.0,
+   "runtime_min": 2.5,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 6.65,
+    "client_1_bay_area": 7.49,
+    "client_2_coastal_south_central": 6.53,
+    "client_3_inland_central": 9.26
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "s1_mlp_all_L72",
+   "algorithm": "local",
+   "architecture": "mlp",
+   "input": "L72, calendar, profile, lags 1d/1w",
+   "loss": "l1_raw",
+   "val_wape_pct": 7.344,
+   "val_mae": 14.693,
+   "val_rmse": 24.81,
+   "val_smape_pct": 14.912,
+   "rel_improvement_pct": 10.7,
+   "runtime_min": 2.7,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 6.41,
+    "client_1_bay_area": 7.5,
+    "client_2_coastal_south_central": 7.02,
+    "client_3_inland_central": 9.19
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "fl_fedavg",
+   "algorithm": "fedavg",
+   "architecture": "gru",
+   "input": "L72, calendar, profile, lags 1d/1w",
+   "loss": "l1_raw",
+   "val_wape_pct": 7.458,
+   "val_mae": 14.921,
+   "val_rmse": 25.088,
+   "val_smape_pct": 14.935,
+   "rel_improvement_pct": 9.3,
+   "runtime_min": 35.3,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 6.96,
+    "client_1_bay_area": 7.52,
+    "client_2_coastal_south_central": 6.71,
+    "client_3_inland_central": 9.24
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "s1_l1raw_all",
+   "algorithm": "local",
+   "architecture": "gru",
+   "input": "L12, calendar, profile, lags 1d/1w",
+   "loss": "l1_raw",
+   "val_wape_pct": 7.497,
+   "val_mae": 14.999,
+   "val_rmse": 25.264,
+   "val_smape_pct": 14.982,
+   "rel_improvement_pct": 8.8,
+   "runtime_min": 2.4,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 6.62,
+    "client_1_bay_area": 7.6,
+    "client_2_coastal_south_central": 7.18,
+    "client_3_inland_central": 9.31
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "s1_l1raw_L72",
+   "algorithm": "local",
+   "architecture": "gru",
+   "input": "L72",
+   "loss": "l1_raw",
+   "val_wape_pct": 7.593,
+   "val_mae": 15.192,
+   "val_rmse": 25.918,
+   "val_smape_pct": 15.337,
+   "rel_improvement_pct": 7.7,
+   "runtime_min": 6.3,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 6.55,
+    "client_1_bay_area": 7.95,
+    "client_2_coastal_south_central": 6.81,
+    "client_3_inland_central": 9.85
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "s1_l1raw_prof",
+   "algorithm": "local",
+   "architecture": "gru",
+   "input": "L12, calendar, profile",
+   "loss": "l1_raw",
+   "val_wape_pct": 7.728,
+   "val_mae": 15.462,
+   "val_rmse": 25.94,
+   "val_smape_pct": 15.379,
+   "rel_improvement_pct": 6.0,
+   "runtime_min": 2.9,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 6.84,
+    "client_1_bay_area": 7.71,
+    "client_2_coastal_south_central": 7.65,
+    "client_3_inland_central": 9.52
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "s1_l1raw_L36",
+   "algorithm": "local",
+   "architecture": "gru",
+   "input": "L36",
+   "loss": "l1_raw",
+   "val_wape_pct": 7.741,
+   "val_mae": 15.488,
+   "val_rmse": 26.404,
+   "val_smape_pct": 15.558,
+   "rel_improvement_pct": 5.9,
+   "runtime_min": 3.8,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 6.67,
+    "client_1_bay_area": 8.14,
+    "client_2_coastal_south_central": 6.89,
+    "client_3_inland_central": 10.05
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "s1_l1raw",
+   "algorithm": "local",
+   "architecture": "gru",
+   "input": "L12",
+   "loss": "l1_raw",
+   "val_wape_pct": 8.153,
+   "val_mae": 16.312,
+   "val_rmse": 27.454,
+   "val_smape_pct": 16.341,
+   "rel_improvement_pct": 0.8,
+   "runtime_min": 2.7,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 7.06,
+    "client_1_bay_area": 8.52,
+    "client_2_coastal_south_central": 7.36,
+    "client_3_inland_central": 10.5
+   },
+   "evaluation": "validation, single fit"
+  },
+  {
+   "exp_id": "s1_base_mse",
+   "algorithm": "local",
+   "architecture": "gru",
+   "input": "L12",
+   "loss": "mse_z",
+   "val_wape_pct": 8.405,
+   "val_mae": 16.817,
+   "val_rmse": 27.869,
+   "val_smape_pct": 16.931,
+   "rel_improvement_pct": -2.2,
+   "runtime_min": 2.5,
+   "by_client_wape_pct": {
+    "client_0_la_ventura": 7.29,
+    "client_1_bay_area": 8.68,
+    "client_2_coastal_south_central": 7.82,
+    "client_3_inland_central": 10.7
+   },
+   "evaluation": "validation, single fit"
+  }
+ ]
+}

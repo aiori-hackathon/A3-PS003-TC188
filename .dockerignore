@@ -1,0 +1,7 @@
+# Only source enters the image; private data, checkpoints and results are mounted at run time.
+*
+!aiori/
+!app/backend/
+!app/data/percentage_error.json
+!app/web/dist/
+**/__pycache__

@@ -1,0 +1,31 @@
+{
+  "arm": "fedavg_iid_b1_geo200",
+  "description": "Phase 8 geo200 (200 sensors, 50 per client); otherwise identical to phase7_fedavg_iid_b1.json (docs/phase8_200_sensor_technical_spec.md section 4.1)",
+  "run": "geo200",
+  "derived_from": "phase7_fedavg_iid_b1.json",
+  "partition": "iid_sensor_balanced",
+  "partition_seed": 20261027,
+  "rounds_max": 50,
+  "local_epochs": 1,
+  "client_fraction": 1.0,
+  "aggregation_weights": "train_windows",
+  "aggregation_dtype": "float64",
+  "optimizer_state": "reset_each_round",
+  "calendar": true,
+  "hidden_size": 64,
+  "optimizer": "adam",
+  "lr": 0.001,
+  "batch_size": 512,
+  "patience": 5,
+  "grad_clip": 1.0,
+  "lr_schedule": null,
+  "early_stopping_metric": "validation pooled MAE, raw units",
+  "clip_negative_predictions": false,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "threads": 8,
+  "results_subdir": "phase8"
+}

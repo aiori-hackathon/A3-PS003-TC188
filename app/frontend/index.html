@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AIORI Traffic Intelligence</title>
+  <meta name="description" content="Next-hour traffic-flow forecasts from the AIORI PS-003 study's frozen GRU models, with verified centralised, local-only and federated results.">
+  <meta name="theme-color" content="#0e0e0e">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23181818'/%3E%3Cpath d='M9 24 15 8M17 8l6 16' stroke='%233bb27e' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M16 13v2M16 19v2' stroke='%23ededed' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <a class="wordmark" href="#overview" aria-label="AIORI Traffic Intelligence home">
+      <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1f1f1f" stroke="#353535"/><path d="M9 24 15 8M17 8l6 16" stroke="#3bb27e" stroke-width="2.6" stroke-linecap="round"/><path d="M16 13v2M16 19v2" stroke="#ededed" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="wordmark-name">aiori<span>traffic</span></span>
+    </a>
+    <nav class="nav-group" aria-label="Product">
+      <div class="nav-label">Product</div>
+      <a class="nav-link" href="#overview"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1.2"/><rect x="9" y="2" width="5" height="5" rx="1.2"/><rect x="2" y="9" width="5" height="5" rx="1.2"/><rect x="9" y="9" width="5" height="5" rx="1.2"/></svg>Overview</a>
+      <a class="nav-link" href="#forecast"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12.5 6 8l3 2.5L14 4"/><path d="M10.5 4H14v3.5"/></svg>Forecasting</a>
+      <a class="nav-link" href="#performance"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 13V8M8 13V3M13 13V6"/></svg>Model performance</a>
+    </nav>
+    <nav class="nav-group" aria-label="Research">
+      <div class="nav-label">Research</div>
+      <a class="nav-link" href="#federated"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="3.5" r="1.8"/><circle cx="3.2" cy="12" r="1.8"/><circle cx="12.8" cy="12" r="1.8"/><path d="M7.1 5 4.1 10.4M8.9 5l3 5.4M5 12h6" stroke-linecap="round"/></svg>Federated learning</a>
+      <a class="nav-link" href="#methodology"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 2h6l3 3v9h-9z"/><path d="M9.5 2v3h3M5.8 8.5h4.4M5.8 11h4.4"/></svg>Methodology</a>
+      <a class="nav-link" href="#about"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 7.2V11M8 5v.01"/></svg>About</a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="service" id="api-status"><span class="dot"></span>Connecting to model service</div>
+      <div class="xs subtle">XTraffic 2023, January–September. Historical data; nothing is live.</div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="main">
+    <header class="topbar">
+      <button class="btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="sidebar" aria-label="Open navigation">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 5h12M3 9h12M3 13h12"/></svg>
+      </button>
+      <div class="crumbs"><span class="hide-md">Traffic Intelligence</span><span class="hide-md" aria-hidden="true">/</span><b id="crumb">Overview</b></div>
+      <div class="topbar-right">
+        <span class="badge" title="All observations are historical (January–September 2023)"><span class="dot"></span>Historical data<span class="hide-md">&nbsp;· Jan–Sep 2023</span></span>
+        <a class="btn primary hide-sm" href="#forecast" id="top-cta">Run a forecast</a>
+      </div>
+    </header>
+    <main>
+      <div class="view" id="view-overview" hidden></div>
+      <div class="view" id="view-forecast" hidden></div>
+      <div class="view" id="view-performance" hidden></div>
+      <div class="view" id="view-federated" hidden></div>
+      <div class="view" id="view-methodology" hidden></div>
+      <div class="view" id="view-about" hidden></div>
+    </main>
+  </div>
+</div>
+<script src="app.js" defer></script>
+</body>
+</html>

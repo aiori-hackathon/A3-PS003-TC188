@@ -1,0 +1,22 @@
+[
+ {
+  "exp_id": "s2_gru128_L144_emb",
+  "algorithm": "local",
+  "kind": "gru",
+  "hidden": 128,
+  "head_hidden": 128,
+  "input_len": 144,
+  "emb_dim": 16,
+  "future_cal": true,
+  "profile": true,
+  "lags": true,
+  "loss": "l1_raw",
+  "batch": 2048,
+  "lr": 0.002,
+  "seed": 0,
+  "max_steps": 40000,
+  "eval_every": 2000,
+  "patience": 6,
+  "lr_decay": true
+ }
+]

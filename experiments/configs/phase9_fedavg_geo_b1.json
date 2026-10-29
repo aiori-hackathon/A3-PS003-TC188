@@ -1,0 +1,30 @@
+{
+  "arm": "fedavg_geo_b1_ninemonth",
+  "description": "Phase 9 nine-month (Jan 1 - Sep 30, 2023) 200 sensors; settings identical to phase8_fedavg_geo_b1.json",
+  "run": "nine_month",
+  "derived_from": "phase8_fedavg_geo_b1.json",
+  "partition": "geographic",
+  "rounds_max": 50,
+  "local_epochs": 1,
+  "client_fraction": 1.0,
+  "aggregation_weights": "train_windows",
+  "aggregation_dtype": "float64",
+  "optimizer_state": "reset_each_round",
+  "calendar": true,
+  "hidden_size": 64,
+  "optimizer": "adam",
+  "lr": 0.001,
+  "batch_size": 512,
+  "patience": 5,
+  "grad_clip": 1.0,
+  "lr_schedule": null,
+  "early_stopping_metric": "validation pooled MAE, raw units",
+  "clip_negative_predictions": false,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "threads": 8,
+  "results_subdir": "phase9"
+}

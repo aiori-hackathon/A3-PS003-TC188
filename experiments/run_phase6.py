@@ -6,7 +6,8 @@ Run from the project root:
 --smoke trains for a few batches only (pipeline check, not a result). Evaluation defaults to
 the validation split. The test split is refused unless --final is given together with the
 SHA-256 of the exact config file (--approved-config-sha256), i.e. only for an approved,
-frozen configuration. Outputs go to results/phase6/ (git-ignored).
+frozen configuration. Outputs go to results/<config results_subdir, else phase6>/ (git-ignored);
+an existing non-empty run folder is never overwritten.
 """
 
 import argparse
@@ -43,7 +44,8 @@ def parse_args(argv):
     p.add_argument("--final", action="store_true")
     p.add_argument("--approved-config-sha256", default=None)
     p.add_argument("--baselines", action="store_true", help="also score the reference forecasts on the evaluated split")
-    p.add_argument("--out-dir", type=Path, default=ROOT / "results" / "phase6")
+    p.add_argument("--out-dir", type=Path, default=None,
+                   help="default: results/<config results_subdir, else phase6>")
     return p.parse_args(argv)
 
 
@@ -66,6 +68,11 @@ def main(argv=None):
     seed = cfg["seeds"][0] if args.seed is None else args.seed
     epochs = args.epochs or (2 if args.smoke else cfg["max_epochs"])
     max_batches = args.max_batches or (20 if args.smoke else None)
+    out_root = args.out_dir or ROOT / "results" / cfg.get("results_subdir", "phase6")
+    tag = f"{cfg['arm']}_seed{seed}" + ("_smoke" if args.smoke else "")
+    out = out_root / args.run / tag
+    if out.exists() and any(out.iterdir()):
+        raise SystemExit(f"Refusing to overwrite existing results in {out}")
 
     training.configure_torch(cfg["threads"])
     training.seed_everything(seed)
@@ -90,8 +97,6 @@ def main(argv=None):
     result = evaluation.evaluate_predictions(pred, run)
     eval_seconds = time.perf_counter() - t
 
-    tag = f"{cfg['arm']}_seed{seed}" + ("_smoke" if args.smoke else "")
-    out = args.out_dir / args.run / tag
     out.mkdir(parents=True, exist_ok=True)
     meta = {
         "config": cfg, "config_file": args.config.name, "config_sha256": config_sha256, "run": args.run,

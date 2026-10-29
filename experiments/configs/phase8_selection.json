@@ -1,0 +1,18 @@
+{
+  "description": "Phase 8 geo200 stratified selection and checkpoint (docs/phase8_200_sensor_technical_spec.md sections 2-3; D8-1 to D8-4)",
+  "salt": "aiori-geo200-v1",
+  "per_client": 50,
+  "inputs": {
+    "audit": "data/processed/flow_sensor_audit.csv",
+    "metadata": "data/processed/sensor_metadata_aligned.csv",
+    "pilot_manifests": ["data/processed/sensor_selection.csv", "data/processed/missing_validation_selection.csv"]
+  },
+  "input_sha256": {
+    "data/processed/flow_sensor_audit.csv": "5590382625b95b385f12b40386f13788f15dd4da0281eb2a2eb1795b24edba2c",
+    "data/processed/sensor_metadata_aligned.csv": "d5bc7bd817cf1c63d4984e900db66bc82ac225e616be0d97f48640ee097cbeaa",
+    "data/processed/sensor_selection.csv": "3e1cd600380a3eb42d392c54410a6c1a824c0221e817e08743aa8ea839b6788d",
+    "data/processed/missing_validation_selection.csv": "c21e28b9bab3ace26a68269b204748e31de852681e78eb74366efbdcbf9da68f"
+  },
+  "out_dir": "data/processed/geo200",
+  "prepare_pilot": {"min_sensors": 150, "max_sensors": 250, "run_label": "geo200 (Phase 8)"}
+}

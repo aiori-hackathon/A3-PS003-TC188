@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="380" font-family="sans-serif" font-size="12">
+<rect width="760" height="380" fill="white"/><text x="380.0" y="20" text-anchor="middle" font-size="15">Test MAE and RMSE (Aug 8 - Sep 30)</text>
+<line x1="70" y1="310" x2="750" y2="310" stroke="#333"/><line x1="70" y1="30" x2="70" y2="310" stroke="#333"/>
+<text x="16" y="175.0" transform="rotate(-90 16 175.0)">vehicles / 5 min</text>
+<text x="64" y="314.0" text-anchor="end">0.0</text><line x1="70" y1="310.0" x2="750" y2="310.0" stroke="#eee"/>
+<text x="64" y="244.0" text-anchor="end">8.1</text><line x1="70" y1="240.0" x2="750" y2="240.0" stroke="#eee"/>
+<text x="64" y="174.0" text-anchor="end">16.2</text><line x1="70" y1="170.0" x2="750" y2="170.0" stroke="#eee"/>
+<text x="64" y="104.0" text-anchor="end">24.3</text><line x1="70" y1="100.0" x2="750" y2="100.0" stroke="#eee"/>
+<text x="64" y="34.0" text-anchor="end">32.4</text><line x1="70" y1="30.0" x2="750" y2="30.0" stroke="#eee"/>
+<rect x="86.8" y="161.9" width="67.0" height="148.1" fill="#2a6fdb"><title>MAE: 17.134</title></rect>
+<rect x="254.2" y="160.0" width="67.0" height="150.0" fill="#2a6fdb"><title>MAE: 17.362</title></rect>
+<rect x="421.8" y="163.2" width="67.0" height="146.8" fill="#2a6fdb"><title>MAE: 16.990</title></rect>
+<rect x="589.2" y="160.7" width="67.0" height="149.3" fill="#2a6fdb"><title>MAE: 17.274</title></rect>
+<rect x="80" y="358" width="10" height="10" fill="#2a6fdb"/><text x="94" y="367">MAE</text>
+<rect x="153.8" y="62.9" width="67.0" height="247.1" fill="#e07b39"><title>RMSE: 28.591</title></rect>
+<rect x="321.2" y="60.0" width="67.0" height="250.0" fill="#e07b39"><title>RMSE: 28.927</title></rect>
+<rect x="488.8" y="65.4" width="67.0" height="244.6" fill="#e07b39"><title>RMSE: 28.301</title></rect>
+<rect x="656.2" y="60.9" width="67.0" height="249.1" fill="#e07b39"><title>RMSE: 28.827</title></rect>
+<rect x="230" y="358" width="10" height="10" fill="#e07b39"/><text x="244" y="367">RMSE</text>
+<text x="153.8" y="326" text-anchor="middle">Centralised GRU</text>
+<text x="321.2" y="326" text-anchor="middle">Geographic FedAvg</text>
+<text x="488.8" y="326" text-anchor="middle">Local-only GRU</text>
+<text x="656.2" y="326" text-anchor="middle">IID FedAvg</text>
+</svg>
