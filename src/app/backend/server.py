@@ -1,6 +1,6 @@
 """AIORI Traffic Intelligence API: real inference with the frozen Phase 9 GRU checkpoints (standard library only).
 
-    .venv\\Scripts\\python.exe app/backend/server.py            # http://127.0.0.1:8000
+    .venv\\Scripts\\python.exe src/app/backend/server.py            # http://127.0.0.1:8000
 
 Endpoints: GET /health, /models, /sensors, /metrics, /demo; POST /predict (also under /api/). The front end is served at /:
 the React build (app/web/dist) when it exists, otherwise the original static front end (app/frontend).

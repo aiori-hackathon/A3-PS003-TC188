@@ -40,5 +40,5 @@ Scale (px): 12 · 13 · 14 · 16 · 18 · 22 · 28 · 40 (display). Weights 400 
 ## Breakpoints
 ≥ 1100 two-column grids; 760–1099 single column with sidebar; < 760 sidebar becomes a drawer, cards stack, tables scroll inside their card.
 
-## Implementation (React app, app/web)
-Tokens live as Tailwind 4 theme variables in `app/web/src/index.css` (`bg`, `raised`, `surface`, `surface-2/3`, `line`, `line-strong`, `fg`, `fg-2/3`, `accent`, `observed`, `danger`, `g1–g3`). Primitives are in `src/components/ui`, charts in `src/components/charts`. Stats sit in one bordered strip with 1px dividers rather than separate cards. Motion: one entrance on the overview headline; charts do not animate (Recharts ignores reduced-motion settings, and drawing must not depend on animation frames).
+## Implementation (React app, src/app/web)
+Tokens live as Tailwind 4 theme variables in `src/app/web/src/index.css` (`bg`, `raised`, `surface`, `surface-2/3`, `line`, `line-strong`, `fg`, `fg-2/3`, `accent`, `observed`, `danger`, `g1–g3`). Primitives are in `src/components/ui`, charts in `src/components/charts`. Stats sit in one bordered strip with 1px dividers rather than separate cards. Motion: one entrance on the overview headline; charts do not animate (Recharts ignores reduced-motion settings, and drawing must not depend on animation frames).

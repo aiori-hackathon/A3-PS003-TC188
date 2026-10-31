@@ -1,6 +1,6 @@
 # AIORI Traffic Intelligence API (+ the built React front end), CPU only.
-# Build from the repository root after `npm run build` in app/web:
-#   docker build -f app/backend/Dockerfile -t aiori-traffic .
+# Build from the repository root after `npm run build` in src/app/web:
+#   docker build -f src/app/backend/Dockerfile -t aiori-traffic .
 # The frozen research artifacts are private and are NOT copied into the image. Mount them read-only at run time:
 #   docker run -p 8000:8000 \
 #     -v /secure/nine_month:/artifacts/data:ro -v /secure/runs:/artifacts/runs:ro -v /secure/final:/artifacts/final:ro \
@@ -12,10 +12,10 @@ WORKDIR /srv
 RUN pip install --no-cache-dir numpy==2.5.4 pandas==3.1.0 \
  && pip install --no-cache-dir torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
 
-COPY aiori/ aiori/
-COPY app/backend/ app/backend/
-COPY app/data/percentage_error.json app/data/percentage_error.json
-COPY app/web/dist/ app/web/dist/
+COPY src/aiori/ aiori/
+COPY src/app/backend/ app/backend/
+COPY src/app/data/percentage_error.json app/data/percentage_error.json
+COPY src/app/web/dist/ app/web/dist/
 
 ENV AIORI_HOST=0.0.0.0 \
     AIORI_PORT=8000 \

@@ -9,7 +9,7 @@
 web
 
 ## Stack
-delegated: Python standard-library HTTP server with real PyTorch inference (app/backend), and a React 19 + TypeScript + Vite front end (app/web) with Tailwind CSS 4, React Router, Recharts and Lucide icons, using shadcn/ui-style primitives written in place. Node.js LTS was installed with the project lead's approval on 2026-10-29. The earlier dependency-free HTML/CSS/JavaScript front end stays in app/frontend as a fallback.
+delegated: Python standard-library HTTP server with real PyTorch inference (src/app/backend), and a React 19 + TypeScript + Vite front end (src/app/web) with Tailwind CSS 4, React Router, Recharts and Lucide icons, using shadcn/ui-style primitives written in place. Node.js LTS was installed with the project lead's approval on 2026-10-29. The earlier dependency-free HTML/CSS/JavaScript front end stays in app/frontend as a fallback.
 
 ## Users
 Hackathon judges, research reviewers and the project team (*inferred*: technically literate, evaluating a federated-learning traffic-forecasting study in a demo session on a laptop or projector).

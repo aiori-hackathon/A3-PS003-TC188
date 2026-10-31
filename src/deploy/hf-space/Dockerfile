@@ -17,6 +17,6 @@ RUN git init -q app && git -C app fetch -q --depth 1 "$REPO" "$REF" && git -C ap
 COPY --chown=user start.sh /home/user/start.sh
 
 ENV AIORI_HOST=0.0.0.0 AIORI_PORT=7860 AIORI_CANDIDATE=1 AIORI_THREADS=2 \
-    AIORI_FRONTEND_DIR=/home/user/app/app/frontend PYTHONUNBUFFERED=1
+    AIORI_FRONTEND_DIR=/home/user/app/src/app/frontend PYTHONUNBUFFERED=1
 EXPOSE 7860
 CMD ["sh", "/home/user/start.sh"]
