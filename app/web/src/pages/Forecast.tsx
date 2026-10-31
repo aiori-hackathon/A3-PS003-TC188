@@ -64,7 +64,7 @@ function SensorPicker({ data, client, sensor, onClient, onSensor }: { data: Stud
           <Select id={id} value={sensor} onChange={(e) => onSensor(e.target.value)}>
             {list.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.id} · {s.type_group} · median {Math.round(s.median_test_flow)}
+                {s.id} · {s.type_group} · median {s.median_test_flow === null ? "n/a" : Math.round(s.median_test_flow)}
               </option>
             ))}
           </Select>

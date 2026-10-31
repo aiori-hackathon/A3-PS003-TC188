@@ -4,14 +4,16 @@
 FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/* \
- && pip install --no-cache-dir numpy==2.5.4 pandas==3.1.0 huggingface_hub \
+ && pip install --no-cache-dir numpy==2.5.4 pandas==3.1.0 huggingface_hub==2.3.0 \
  && pip install --no-cache-dir torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
 
 RUN useradd -m -u 1000 user
 USER user
 WORKDIR /home/user
 ARG REPO=https://github.com/aiori-hackathon/A3-PS003-TC188.git
-RUN git clone --depth 1 "$REPO" app
+# Exact commit to build; deploy/hf_deploy.py sets it to the pushed commit being deployed.
+ARG REF=c4bce213f33e1288c21ecb9dd9ee030e2b172d48
+RUN git init -q app && git -C app fetch -q --depth 1 "$REPO" "$REF" && git -C app checkout -q FETCH_HEAD
 COPY --chown=user start.sh /home/user/start.sh
 
 ENV AIORI_HOST=0.0.0.0 AIORI_PORT=7860 AIORI_CANDIDATE=1 AIORI_THREADS=2 \

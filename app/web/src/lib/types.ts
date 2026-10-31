@@ -26,7 +26,7 @@ export interface Sensor {
   client: ClientKey;
   client_name: string;
   type_group: string;
-  median_test_flow: number;
+  median_test_flow: number | null;
 }
 
 export interface DemoExample {

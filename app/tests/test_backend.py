@@ -115,7 +115,7 @@ def test_invalid_requests(api, body, status):
 def test_bad_json_unknown_route_and_traversal(api):
     _, base = api
     assert call(base, "/predict", raw=b"{not json")[0] == 400
-    assert call(base, "/nope")[0] == 404
+    assert call(base, "/nope.txt")[0] == 404  # extensionless paths get the app shell instead
     assert call(base, "/../../data/processed/nine_month/sensor_selection.csv")[0] == 404
 
 
@@ -134,8 +134,12 @@ def test_frontend_is_served_with_first_party_scripts_only(api):
     assert scripts and all(not u.startswith(("http:", "https:", "//")) for u in scripts + styles)
     bundle = "".join(_page(base, "/" + u.lstrip("/")) for u in scripts)
     assert "/predict" in bundle or "predict" in bundle
-    for route in sorted(S.SPA_ROUTES):  # client-side routes return the app shell, unknown paths stay 404
-        assert _page(base, route) == index
+    for route in ("/forecast", "/performance", "/federated", "/methodology", "/about", "/no-such-page"):
+        assert _page(base, route) == index  # client-side routes return the app shell; React renders NotFound
+    for missing in ("/assets/missing.js", "/api/nope"):
+        with pytest.raises(urllib.error.HTTPError) as e:
+            _page(base, missing)
+        assert e.value.code == 404
 
 
 def test_frontend_source_invents_no_data():
