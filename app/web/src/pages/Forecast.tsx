@@ -25,7 +25,7 @@ import {
   Tag,
 } from "../components/ui";
 import { api } from "../lib/api";
-import { addSteps, beyondStudy, fromMinutes, HORIZON, hhmm, niceDate, STEP_MIN, toMinutes } from "../lib/clock";
+import { addSteps, beyondStudy, HORIZON, hhmm, nextInterval, niceDate, STEP_MIN, toMinutes } from "../lib/clock";
 import { cn } from "../lib/cn";
 import { useRequest, type StudyData } from "../lib/data";
 import { displayModels } from "../lib/series";
@@ -35,13 +35,6 @@ import { CLIENT_NAME, CLIENTS, SERIES } from "../lib/study";
 import type { ClientKey, ModelKey, Prediction } from "../lib/types";
 
 type Mode = "historical" | "future";
-
-/** The next 5-minute boundary on the viewer's clock: forecasting "from now" with the hour of readings just before it. */
-function nextInterval() {
-  const d = new Date();
-  const local = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()) / 60000;
-  return fromMinutes(Math.ceil(local / STEP_MIN) * STEP_MIN);
-}
 
 /* ---------- inputs: shared sensor picker ---------- */
 function SensorPicker({ data, client, sensor, onClient, onSensor }: { data: StudyData; client: ClientKey; sensor: string; onClient: (c: ClientKey) => void; onSensor: (s: string) => void }) {
@@ -438,7 +431,10 @@ function ForecastWorkspace({ data }: { data: StudyData }) {
   // Each mode keeps its own result: switching clears the panel, and historical mode opens on its first example.
   useEffect(() => {
     reset();
-    if (mode === "historical") void run({ sensor: first.sensor, time: first.time, models: histModels });
+    if (mode === "historical") {
+      setSensor(first.sensor); // the picker shows the sensor whose result is displayed
+      void run({ sensor: first.sensor, time: first.time, models: histModels });
+    }
   }, [mode]);
 
   const models: ModelKey[] = compare ? ["final", "centralised"] : ["final"];

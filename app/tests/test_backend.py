@@ -186,3 +186,33 @@ def test_cors_is_closed_by_default(api):
     with pytest.raises(urllib.error.HTTPError) as e:
         urllib.request.urlopen(req, timeout=30)
     assert e.value.code == 403
+
+
+def test_invalid_inputs_are_client_errors(api):
+    _, base = api
+    obs = [100] * 12
+    assert call(base, "/predict", {"sensor": ["LA-01"], "time": "2023-09-12T07:30"})[0] == 404
+    assert call(base, "/predict", {"sensor": {"x": 1}, "time": "2023-09-12T07:30"})[0] == 404
+    assert call(base, "/predict", raw=b'{"sensor": "LA-01", "time": "2024-03-05T08:00", "observations": [1' + b"0" * 400
+                + b', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}')[0] == 400
+    assert call(base, "/predict", {"sensor": "LA-01", "time": "2023-09-12T07:30junk"})[0] == 400
+    assert call(base, "/predict", {"sensor": "LA-01", "time": 20230912})[0] == 400
+    assert call(base, "/predict", {"sensor": "LA-01", "time": "2024-03-05T08:00:00", "observations": obs})[0] == 200
+    assert call(base, "/api")[0] == 404 and call(base, "/api/")[0] == 404
+
+
+def test_stalled_body_times_out_instead_of_holding_a_thread(api, monkeypatch):
+    import socket
+    S, base = api
+    monkeypatch.setattr(S.Handler, "timeout", 1)
+    host, port = base.removeprefix("http://").split(":")
+    with socket.create_connection((host, int(port)), timeout=10) as sock:
+        sock.sendall(b"POST /predict HTTP/1.1\r\nHost: x\r\nContent-Type: application/json\r\nContent-Length: 100\r\n\r\n{}")
+        reply = sock.recv(4096)
+    assert reply.startswith(b"HTTP/1.0 408") or reply.startswith(b"HTTP/1.1 408")
+
+
+def test_server_header_hides_python_version(api):
+    _, base = api
+    with urllib.request.urlopen(base + "/health", timeout=30) as r:
+        assert "Python" not in r.headers["Server"]

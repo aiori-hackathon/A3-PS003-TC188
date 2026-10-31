@@ -19,6 +19,7 @@ import hashlib
 import json
 import mimetypes
 import os
+import re
 import sys
 import threading
 import time
@@ -68,8 +69,10 @@ def ts(step):
 
 
 def parse_time(s):
+    if not isinstance(s, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:00)?", s):
+        raise ApiError(400, "time must look like 2023-09-12T17:00 (local clock time, 5-minute steps)")
     try:
-        t = datetime.strptime(str(s)[:16], "%Y-%m-%dT%H:%M")
+        t = datetime.strptime(s[:16], "%Y-%m-%dT%H:%M")
     except ValueError:
         raise ApiError(400, "time must look like 2023-09-12T17:00 (local clock time, 5-minute steps)")
     if t.minute % 5:
@@ -128,6 +131,8 @@ class Engine:
             net.load_state_dict(torch.load(f, map_location="cpu", weights_only=True), strict=True)
             nets[key] = net.to(self.device).eval()
             sha[key] = hashlib.sha256(f.read_bytes()).hexdigest()
+        if "all" not in nets and set(CLIENTS) - set(nets):
+            raise FileNotFoundError(f"{d} lacks checkpoints for {sorted(set(CLIENTS) - set(nets))}")
         val = json.loads((d / "COMPLETE.json").read_text(encoding="utf-8"))
         test = json.loads((FINAL / "test" / f"{arm}_seed{seed}" / "metrics_test.json").read_text(encoding="utf-8"))
         return dict(arm=arm, seed=seed, clip=clip, nets=nets, label=ARM_LABEL[arm], config=cfg, meta=meta,
@@ -189,7 +194,7 @@ class Engine:
         if not isinstance(body, dict):
             raise ApiError(400, "Send a JSON object")
         sid = body.get("sensor")
-        if sid not in self.by_id:
+        if not isinstance(sid, str) or sid not in self.by_id:
             raise ApiError(404, "Unknown sensor. Use an id from GET /sensors, for example LA-01.")
         pos = self.by_id[sid]
         wanted = body.get("models", ["final", "centralised"])
@@ -212,7 +217,7 @@ class Engine:
             for v in obs:
                 if v is None:
                     clean.append(None)
-                elif isinstance(v, (int, float)) and not isinstance(v, bool) and np.isfinite(v) and 0 <= v <= MAX_FLOW:
+                elif isinstance(v, (int, float)) and not isinstance(v, bool) and 0 <= v <= MAX_FLOW:  # also rejects NaN and huge ints
                     clean.append(float(v))
                 else:
                     raise ApiError(400, f"each observation must be null or a number between 0 and {MAX_FLOW:g}")
@@ -227,8 +232,10 @@ class Engine:
         forecasts = {}
         for m in wanted:
             if m == "candidate":
+                with self.lock:
+                    values = self.candidate.forecast(pos, t0).tolist()
                 forecasts[m] = dict(label="Optimized MLP (1-day context, not federated)",
-                                    values=[round(v, 2) for v in self.candidate.forecast(pos, t0).tolist()], negative_clipping=True)
+                                    values=[round(v, 2) for v in values], negative_clipping=True)
                 continue
             raw, _ = self._forecast(self.models[m], pos, x)
             forecasts[m] = dict(label=self.models[m]["label"], values=[round(v, 2) for v in raw.tolist()],
@@ -337,6 +344,8 @@ ENGINE = None
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "AIORI/1.0"
+    sys_version = ""      # no Python version in the Server header
+    timeout = 10          # seconds; a client that stalls mid-request releases its thread
 
     def log_message(self, fmt, *args):  # quieter console; no request bodies are logged
         sys.stderr.write(f"{self.command} {urlparse(self.path).path} {args[1] if len(args) > 1 else ''}\n")
@@ -403,6 +412,9 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, ENGINE.predict(body))
         except ApiError as e:
             return self._err(e.status, e.message)
+        except TimeoutError:
+            self.close_connection = True
+            return self._err(408, "Request body not received in time")
         except Exception:  # noqa: BLE001
             return self._err(500, "Internal error")
 
@@ -411,7 +423,7 @@ class Handler(BaseHTTPRequestHandler):
         f = (FRONTEND / rel).resolve()
         if FRONTEND.resolve() not in f.parents or not f.is_file():
             # client-side routes (extensionless, outside /api) get the app shell; missing files stay 404
-            if path.startswith("/api/") or "." in path.rsplit("/", 1)[-1]:
+            if path == "/api" or path.startswith("/api/") or "." in path.rsplit("/", 1)[-1]:
                 return self._err(404, "Not found")
             f = FRONTEND / "index.html"
         ctype = mimetypes.guess_type(f.name)[0] or "application/octet-stream"

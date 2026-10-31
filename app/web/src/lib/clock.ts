@@ -29,5 +29,16 @@ export const hhmm = (t: string) => t.slice(11, 16);
 const dayFmt = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 export const niceDate = (t: string) => dayFmt.format(new Date((toMinutes(t) ?? 0) * 60000));
 
+const CA = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+});
+
+/** The next 5-minute boundary on California clock time (the sensors' local time, which the model's time features use). */
+export function nextInterval(now: Date = new Date()): string {
+  const v = Object.fromEntries(CA.formatToParts(now).map((x) => [x.type, x.value]));
+  const min = toMinutes(`${v.year}-${v.month}-${v.day}T${v.hour}:${v.minute}`) ?? 0;
+  return fromMinutes(Math.ceil(min / STEP_MIN) * STEP_MIN);
+}
+
 /** True when any forecast step falls after the last held-out interval of the study. */
 export const beyondStudy = (start: string) => addSteps(start, HORIZON - 1) > STUDY_END;

@@ -53,12 +53,15 @@ export function useRequest<A extends unknown[], T>(fn: (...args: [...A, AbortSig
         if (!c.signal.aborted) setState({ loading: false, data, error: null });
         return data;
       } catch (e) {
-        if ((e as Error).name !== "AbortError") setState({ loading: false, data: null, error: (e as Error).message });
+        if ((e as Error).name !== "AbortError" && !c.signal.aborted) setState({ loading: false, data: null, error: (e as Error).message });
         return null;
       }
     },
     [fn],
   );
-  const reset = useCallback((error: string | null = null) => setState({ loading: false, data: null, error }), []);
+  const reset = useCallback((error: string | null = null) => {
+    ctrl.current?.abort(); // an in-flight request from before the reset must not land afterwards
+    setState({ loading: false, data: null, error });
+  }, []);
   return { ...state, run, reset };
 }
