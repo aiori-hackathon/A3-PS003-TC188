@@ -79,6 +79,15 @@ Every model forecasts the next 12 five-minute intervals (60 minutes) for 200 sen
   - Forecasts from 12 user readings use the original GRU.
 - **Labelling:** forecasts after September 2023 are marked as not validated.
 
+## System Architecture
+![AIORI Traffic Intelligence system architecture and data flow](architecture/aiori-system-architecture.png)
+
+The diagram shows the serving path (browser → React dashboard → `/api` → Python API server → ForecastGRU and the optional
+optimized MLP) and the offline research pipeline that produces the processed data, checkpoints and frozen results.
+There is no database server: all state is files loaded once at start-up.
+[Open the interactive version](architecture/aiori-system-architecture.html) (download the file and open it in a browser;
+GitHub shows HTML files as source).
+
 ## Repository layout
 ```
 src/aiori/                   data loading, preprocessing, windows, models, training, federated learning, metrics
