@@ -1,7 +1,7 @@
 #!/bin/sh
 # Download the private runtime artifacts into the code checkout (same relative paths as the repository), then serve.
 set -e
-cd /home/user/app
+cd /home/user/app/src
 python - <<'PY'
 import os
 from huggingface_hub import snapshot_download

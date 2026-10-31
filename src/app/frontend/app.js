@@ -26,7 +26,7 @@ const key = (k) => `<span class="key" style="background:${COLORS[k]}"></span>`;
 async function api(path, body) {
   const opts = body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {};
   let res;
-  try { res = await fetch(path, opts); } catch (e) { throw new Error("The model service is not reachable. Start it with .venv\\Scripts\\python.exe app\\backend\\server.py and reload."); }
+  try { res = await fetch(path, opts); } catch (e) { throw new Error("The model service is not reachable. Start it with .venv\\Scripts\\python.exe src\\app\\backend\\server.py and reload."); }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error((data.error && data.error.message) || `Request failed (${res.status}).`);
   return data;
@@ -472,8 +472,8 @@ function renderAbout(el) {
         <dt><code>GET /health</code></dt><dd>service status and device</dd><dt><code>GET /models</code></dt><dd>model provenance</dd><dt><code>GET /sensors</code></dt><dd>200 anonymised sensors</dd>
         <dt><code>GET /metrics</code></dt><dd>verified aggregate results</dd><dt><code>GET /demo</code></dt><dd>historical examples</dd><dt><code>POST /predict</code></dt><dd>12-step forecast</dd></dl></div></div>
       <div class="card"><div class="card-head"><h3>Reproduce</h3></div><div class="card-body prose">
-        <p>Start the service from the repository root with <code>.venv\\Scripts\\python.exe app\\backend\\server.py</code> and open <code>http://127.0.0.1:8000</code>.</p>
-        <p>Run the tests with <code>.venv\\Scripts\\python.exe -m pytest app\\tests</code>. Percentage errors come from <code>app/analysis/percentage_error.py</code>, read-only on the frozen test predictions.</p>
+        <p>Start the service from the repository root with <code>.venv\\Scripts\\python.exe src\\app\\backend\\server.py</code> and open <code>http://127.0.0.1:8000</code>.</p>
+        <p>Run the tests with <code>.venv\\Scripts\\python.exe -m pytest src\\app\\tests</code>. Percentage errors come from <code>app/analysis/percentage_error.py</code>, read-only on the frozen test predictions.</p>
         <p>Source: <a href="${REPO}" target="_blank" rel="noopener">${REPO.replace("https://", "")}</a>. Data: XTraffic 2023 (CC BY-NC 4.0); raw data, checkpoints and station identifiers are not published.</p></div></div>
     </section>
     <section class="callout"><h3>Acknowledgments</h3><p>Built on the XTraffic dataset and the AIORI Hackathon 3 problem statement PS-003. These are research findings from one historical dataset; no claim of state-of-the-art accuracy is made, because no comparable published benchmark uses this exact protocol.</p></section>`;

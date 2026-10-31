@@ -73,7 +73,7 @@ Every model forecasts the next 12 five-minute intervals (60 minutes) for 200 sen
   - Methodology;
   - About.
 - **Back end:** a Python standard-library HTTP API running real PyTorch inference (`app/backend`).
-- **Front end:** React 19, TypeScript, Vite, Tailwind CSS, React Router, Recharts and Lucide (`app/web`).
+- **Front end:** React 19, TypeScript, Vite, Tailwind CSS, React Router, Recharts and Lucide (`src/app/web`).
 - **Which model forecasts:**
   - Historical replay uses the optimized MLP when `AIORI_CANDIDATE=1` is set, because it needs one week of history.
   - Forecasts from 12 user readings use the original GRU.
@@ -81,13 +81,18 @@ Every model forecasts the next 12 five-minute intervals (60 minutes) for 200 sen
 
 ## Repository layout
 ```
-aiori/                       data loading, preprocessing, windows, models, training, federated learning, metrics
-experiments/                 study runners (Phase 6-9) and accuracy optimisation (experiments/accuracy_optimization)
-app/backend/                 inference API (server.py) and optional optimized model (candidate.py)
-app/web/                     React dashboard
-app/frontend/                earlier dependency-free dashboard (fallback)
-app/tests/, tests/           API, inference-equivalence, privacy and study tests
-docs/                        protocols, results, reproduction guide and reports
+src/aiori/                   data loading, preprocessing, windows, models, training, federated learning, metrics
+src/experiments/             study runners (Phase 6-9) and accuracy optimisation (src/experiments/accuracy_optimization)
+src/app/backend/             inference API (server.py) and optional optimized model (candidate.py)
+src/app/web/                 React dashboard
+src/app/frontend/            earlier dependency-free dashboard (fallback)
+src/app/tests/, src/tests/   API, inference-equivalence, privacy and study tests
+src/docs/                    protocols, results, reproduction guide and reports
+src/scripts/, src/deploy/    analysis/verification scripts and optional deployment files
+```
+Local data, checkpoints and results (git-ignored) live beside the code under `src/` (`src/data`, `src/results`,
+`src/year_2023`). The virtual environment `.venv` stays at the repository root, and every command below runs from there.
+```
 ```
 
 ## Setup and running (Windows)
@@ -101,25 +106,25 @@ docs/                        protocols, results, reproduction guide and reports
    ```
 2. Build the dashboard:
    ```powershell
-   cd app\web
+   cd src\app\web
    npm ci
    npm run build
-   cd ..\..
+   cd ..\..\..
    ```
 3. Start the service, then open http://127.0.0.1:8000:
    ```powershell
-   .venv\Scripts\python.exe app\backend\server.py
+   .venv\Scripts\python.exe src\app\backend\server.py
    ```
    To serve the optimized model for historical replay, set `AIORI_CANDIDATE=1` first (PowerShell: `$env:AIORI_CANDIDATE = "1"`).
 4. Run the tests:
    ```powershell
-   .venv\Scripts\python.exe -m pytest app\tests tests
-   cd app\web; npm test
+   .venv\Scripts\python.exe -m pytest src\app\tests src\tests
+   cd src\app\web; npm test
    ```
 
-**Front-end development:** with the API running, `npm run dev` in `app/web` serves the app on http://localhost:5173 and proxies `/api` to the API.
+**Front-end development:** with the API running, `npm run dev` in `src/app/web` serves the app on http://localhost:5173 and proxies `/api` to the API.
 
-**Configuration:** environment variables, endpoints and deployment options are listed in `app/README.md`.
+**Configuration:** environment variables, endpoints and deployment options are listed in `src/app/README.md`.
 
 ## Data and privacy
 - **Raw data:** XTraffic 2023 is licensed CC BY-NC 4.0. Raw data, processed arrays, model checkpoints, predictions and station identifiers are not included in this repository.

@@ -1,6 +1,6 @@
 """AIORI Traffic Intelligence API: real inference with the frozen Phase 9 GRU checkpoints (standard library only).
 
-    .venv\\Scripts\\python.exe app/backend/server.py            # http://127.0.0.1:8000
+    .venv\\Scripts\\python.exe src/app/backend/server.py            # http://127.0.0.1:8000
 
 Endpoints: GET /health, /models, /sensors, /metrics, /demo; POST /predict (also under /api/). The front end is served at /:
 the React build (app/web/dist) when it exists, otherwise the original static front end (app/frontend).
@@ -19,6 +19,7 @@ import hashlib
 import json
 import mimetypes
 import os
+import re
 import sys
 import threading
 import time
@@ -43,7 +44,6 @@ RUNS = Path(os.environ.get("AIORI_RUNS_DIR", ROOT / "results" / "phase9" / "runs
 FINAL = Path(os.environ.get("AIORI_FINAL_DIR", ROOT / "results" / "phase9" / "final"))
 FRONTEND = Path(os.environ.get("AIORI_FRONTEND_DIR") or next(
     (d for d in (ROOT / "app" / "web" / "dist", ROOT / "app" / "frontend") if (d / "index.html").is_file()), ROOT / "app" / "frontend"))
-SPA_ROUTES = {"/forecast", "/performance", "/federated", "/methodology", "/about"}  # client-side routes of the React app
 CORS = [o.strip() for o in os.environ.get("AIORI_CORS_ORIGINS", "").split(",") if o.strip()]
 PCT = ROOT / "app" / "data" / "percentage_error.json"
 OPT = ROOT / "results" / "accuracy_optimization"   # accuracy-optimisation artifacts (aggregate metrics only are served)
@@ -69,8 +69,10 @@ def ts(step):
 
 
 def parse_time(s):
+    if not isinstance(s, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:00)?", s):
+        raise ApiError(400, "time must look like 2023-09-12T17:00 (local clock time, 5-minute steps)")
     try:
-        t = datetime.strptime(str(s)[:16], "%Y-%m-%dT%H:%M")
+        t = datetime.strptime(s[:16], "%Y-%m-%dT%H:%M")
     except ValueError:
         raise ApiError(400, "time must look like 2023-09-12T17:00 (local clock time, 5-minute steps)")
     if t.minute % 5:
@@ -100,7 +102,8 @@ class Engine:
             counters[code] = counters.get(code, 0) + 1
             sid = f"{code}-{counters[code]:02d}"
             flow = self.run.flow_raw[pos, self.split_cfg["boundaries"]["test"][0]:]
-            s = dict(id=sid, client=client, client_name=name, type_group=str(tg), median_test_flow=round(float(np.nanmedian(flow)), 1))
+            med = float(np.nanmedian(flow)) if np.isfinite(flow).any() else None  # null, never a bare NaN token, in JSON
+            s = dict(id=sid, client=client, client_name=name, type_group=str(tg), median_test_flow=None if med is None else round(med, 1))
             self.sensors.append(s)
             self.by_id[sid] = pos
         self.models = {"final": self._load("local", 1, clip=True), "centralised": self._load("centralised", 0, clip=False)}
@@ -119,6 +122,8 @@ class Engine:
         meta = json.loads((d / "run_meta.json").read_text(encoding="utf-8"))
         cfg = json.loads((d / "config.json").read_text(encoding="utf-8"))
         files = sorted(d.glob("best_model*.pt"))
+        if not files:
+            raise FileNotFoundError(f"No best_model*.pt checkpoints in {d}")
         nets, sha = {}, {}
         for f in files:
             key = "all" if f.name == "best_model.pt" else f.stem.replace("best_model_", "")
@@ -126,6 +131,8 @@ class Engine:
             net.load_state_dict(torch.load(f, map_location="cpu", weights_only=True), strict=True)
             nets[key] = net.to(self.device).eval()
             sha[key] = hashlib.sha256(f.read_bytes()).hexdigest()
+        if "all" not in nets and set(CLIENTS) - set(nets):
+            raise FileNotFoundError(f"{d} lacks checkpoints for {sorted(set(CLIENTS) - set(nets))}")
         val = json.loads((d / "COMPLETE.json").read_text(encoding="utf-8"))
         test = json.loads((FINAL / "test" / f"{arm}_seed{seed}" / "metrics_test.json").read_text(encoding="utf-8"))
         return dict(arm=arm, seed=seed, clip=clip, nets=nets, label=ARM_LABEL[arm], config=cfg, meta=meta,
@@ -133,7 +140,7 @@ class Engine:
                                     selection=("local-only seed with the lowest validation MAE; the local-only arm was the pre-declared final "
                                                "model (lowest validation MAE, fixed before the held-out test)") if arm == "local" else
                                     "centralised seed with the lowest validation MAE (comparison model)",
-                                    routing="each sensor uses its own client's model" if key != "all" else "one model for all sensors",
+                                    routing="one model for all sensors" if "all" in nets else "each sensor uses its own client's model",
                                     negative_clipping=clip, validation_mae=val["val_mae"], validation_rmse=val["val_rmse"],
                                     test_mae_this_seed=test["pooled"]["mae"], test_rmse_this_seed=test["pooled"]["rmse"],
                                     checkpoint_sha256={k: v[:16] for k, v in sha.items()}, units=UNITS))
@@ -187,7 +194,7 @@ class Engine:
         if not isinstance(body, dict):
             raise ApiError(400, "Send a JSON object")
         sid = body.get("sensor")
-        if sid not in self.by_id:
+        if not isinstance(sid, str) or sid not in self.by_id:
             raise ApiError(404, "Unknown sensor. Use an id from GET /sensors, for example LA-01.")
         pos = self.by_id[sid]
         wanted = body.get("models", ["final", "centralised"])
@@ -210,7 +217,7 @@ class Engine:
             for v in obs:
                 if v is None:
                     clean.append(None)
-                elif isinstance(v, (int, float)) and not isinstance(v, bool) and np.isfinite(v) and 0 <= v <= MAX_FLOW:
+                elif isinstance(v, (int, float)) and not isinstance(v, bool) and 0 <= v <= MAX_FLOW:  # also rejects NaN and huge ints
                     clean.append(float(v))
                 else:
                     raise ApiError(400, f"each observation must be null or a number between 0 and {MAX_FLOW:g}")
@@ -225,8 +232,10 @@ class Engine:
         forecasts = {}
         for m in wanted:
             if m == "candidate":
+                with self.lock:
+                    values = self.candidate.forecast(pos, t0).tolist()
                 forecasts[m] = dict(label="Optimized MLP (1-day context, not federated)",
-                                    values=[round(v, 2) for v in self.candidate.forecast(pos, t0).tolist()], negative_clipping=True)
+                                    values=[round(v, 2) for v in values], negative_clipping=True)
                 continue
             raw, _ = self._forecast(self.models[m], pos, x)
             forecasts[m] = dict(label=self.models[m]["label"], values=[round(v, 2) for v in raw.tolist()],
@@ -326,7 +335,7 @@ class Engine:
                     self.historical(self.by_id[sid], parse_time(t))
                 except ApiError:
                     continue
-                out.append(dict(sensor=sid, client_name=self.by_id and self.sensors[self.by_id[sid]]["client_name"], time=t, label=label))
+                out.append(dict(sensor=sid, client_name=self.sensors[self.by_id[sid]]["client_name"], time=t, label=label))
         return dict(note="All examples are historical windows from the held-out test period; nothing is live.", examples=out)
 
 
@@ -335,6 +344,8 @@ ENGINE = None
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "AIORI/1.0"
+    sys_version = ""      # no Python version in the Server header
+    timeout = 10          # seconds; a client that stalls mid-request releases its thread
 
     def log_message(self, fmt, *args):  # quieter console; no request bodies are logged
         sys.stderr.write(f"{self.command} {urlparse(self.path).path} {args[1] if len(args) > 1 else ''}\n")
@@ -388,24 +399,33 @@ class Handler(BaseHTTPRequestHandler):
         if path not in ("/predict", "/api/predict"):
             return self._err(404, "Not found")
         try:
-            n = int(self.headers.get("Content-Length") or 0)
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+            except ValueError:
+                n = 0
             if n <= 0 or n > 20_000:
                 raise ApiError(400, "Send a JSON body under 20 kB")
             try:
                 body = json.loads(self.rfile.read(n))
-            except json.JSONDecodeError:
+            except ValueError:  # JSONDecodeError and UnicodeDecodeError
                 raise ApiError(400, "Body is not valid JSON")
             return self._send(200, ENGINE.predict(body))
         except ApiError as e:
             return self._err(e.status, e.message)
+        except TimeoutError:
+            self.close_connection = True
+            return self._err(408, "Request body not received in time")
         except Exception:  # noqa: BLE001
             return self._err(500, "Internal error")
 
     def _static(self, path):
-        rel = "index.html" if path == "/" or path in SPA_ROUTES else "favicon.svg" if path == "/favicon.ico" else path.lstrip("/")
+        rel = "index.html" if path == "/" else "favicon.svg" if path == "/favicon.ico" else path.lstrip("/")
         f = (FRONTEND / rel).resolve()
         if FRONTEND.resolve() not in f.parents or not f.is_file():
-            return self._err(404, "Not found")
+            # client-side routes (extensionless, outside /api) get the app shell; missing files stay 404
+            if path == "/api" or path.startswith("/api/") or "." in path.rsplit("/", 1)[-1]:
+                return self._err(404, "Not found")
+            f = FRONTEND / "index.html"
         ctype = mimetypes.guess_type(f.name)[0] or "application/octet-stream"
         if ctype.startswith("text/") or ctype.endswith("javascript"):
             ctype += "; charset=utf-8"

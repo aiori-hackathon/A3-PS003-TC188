@@ -2,9 +2,9 @@
 
 A demo and results dashboard for AIORI PS-003. It makes real next-hour traffic-flow forecasts with the study's frozen Phase 9 GRU checkpoints. It shows only results verified on the held-out test.
 
-- **Back end:** `app/backend/server.py`, a Python standard-library HTTP server running real PyTorch inference.
-- **Front end:** `app/web`, built with React 19, TypeScript, Vite, Tailwind CSS 4, React Router, Recharts and Lucide icons.
-- **Earlier front end:** the dependency-free version stays in `app/frontend` as a fallback.
+- **Back end:** `src/app/backend/server.py`, a Python standard-library HTTP server running real PyTorch inference.
+- **Front end:** `src/app/web`, built with React 19, TypeScript, Vite, Tailwind CSS 4, React Router, Recharts and Lucide icons.
+- **Earlier front end:** the dependency-free version stays in `src/app/frontend` as a fallback.
 
 ## Run locally (Windows)
 **Prerequisites:**
@@ -13,30 +13,30 @@ A demo and results dashboard for AIORI PS-003. It makes real next-hour traffic-f
 
 Build the front end once:
 ```powershell
-cd app\web
+cd src\app\web
 npm ci
 npm run build
 ```
 
 Then start the service from the repository root:
 ```powershell
-.venv\Scripts\python.exe app\backend\server.py
+.venv\Scripts\python.exe src\app\backend\server.py
 ```
 Open http://127.0.0.1:8000.
-- The server serves `app/web/dist` when that build exists, and falls back to `app/frontend` when it does not.
+- The server serves `src/app/web/dist` when that build exists, and falls back to `src/app/frontend` when it does not.
 - To force the earlier front end, set `AIORI_FRONTEND_DIR=app\frontend`.
 
 **Front-end development** (hot reload; the Vite dev server proxies `/api` to the Python server on port 8000). Start the Python server first, then:
 ```powershell
-cd app\web
+cd src\app\web
 npm run dev
 ```
 The app opens on http://localhost:5173.
 
 **Tests:**
 ```powershell
-.venv\Scripts\python.exe -m pytest app\tests     # API, inference equivalence, privacy, future-forecast labelling
-cd app\web; npm test                              # CSV parsing, clock arithmetic, chart series
+.venv\Scripts\python.exe -m pytest src\app\tests     # API, inference equivalence, privacy, future-forecast labelling
+cd src\app\web; npm test                              # CSV parsing, clock arithmetic, chart series
 npm run typecheck
 ```
 
@@ -52,7 +52,7 @@ npm run typecheck
 | `AIORI_HOST` | `127.0.0.1` | bind address |
 | `AIORI_PORT` | `8000` | port |
 | `AIORI_DATA_DIR`, `AIORI_RUNS_DIR`, `AIORI_FINAL_DIR` | the paths above | artifact locations |
-| `AIORI_FRONTEND_DIR` | `app/web/dist`, else `app/frontend` | folder served at `/` |
+| `AIORI_FRONTEND_DIR` | `src/app/web/dist`, else `src/app/frontend` | folder served at `/` |
 | `AIORI_CORS_ORIGINS` | none (cross-origin calls refused) | comma-separated origins allowed to call the API, needed only when the front end is hosted elsewhere |
 | `AIORI_DEVICE` | `cpu` | `cuda` is optional; CPU needs about 1–3 ms per forecast |
 | `AIORI_THREADS` | `2` | PyTorch CPU threads |
@@ -114,23 +114,23 @@ The Forecasting page has two modes, kept visibly separate.
 
 ## Design
 - **Direction:** a calm, premium developer-platform dark interface, set by the project lead with the Supabase site and dashboard as the quality reference. No layouts, logos or assets were copied.
-- **Design system:** tokens, type scale, components and breakpoints are in `DESIGN.md`; product context is in `PRODUCT.md`. The React app keeps these tokens as Tailwind theme variables in `app/web/src/index.css`.
+- **Design system:** tokens, type scale, components and breakpoints are in `DESIGN.md`; product context is in `PRODUCT.md`. The React app keeps these tokens as Tailwind theme variables in `src/app/web/src/index.css`.
 - **Look:**
   - near-black and charcoal surfaces with 1px borders;
   - one muted emerald accent for the highlighted model, the primary action and the active route;
   - amber for real observations shown afterwards, and for the "not validated" caution on future forecasts;
   - Geist (self-hosted, SIL Open Font License) with tabular numerals for data.
-- **Components:** shadcn/ui-style primitives in `app/web/src/components/ui` (buttons, cards, tags, fields, switch, segmented control, tables, skeleton, error and empty states). Charts are built with Recharts and follow the same palette.
+- **Components:** shadcn/ui-style primitives in `src/app/web/src/components/ui` (buttons, cards, tags, fields, switch, segmented control, tables, skeleton, error and empty states). Charts are built with Recharts and follow the same palette.
 - **Checked at:** 375, 768 and 1280 px with no horizontal overflow; keyboard navigation (skip link, focus moves to the page heading on navigation, focusable charts, a drawer that is inert when closed); loading, error and empty states. The Impeccable detector reports no findings.
 
 ## Deployment
 **Not publicly deployed.** A public deployment needs the project lead's approval: the API host must hold the private model checkpoints and processed data, and those must never be published. Two supported layouts:
 
-1. **Single host (simplest).** Build `app/web`, then run the Python server on a small VM or container with the artifacts. It serves the API and the React build on one origin.
-   - `app/backend/Dockerfile` builds an image that **mounts** the artifacts read-only at run time instead of copying them in. It has not been built here, because Docker is not installed on this workstation.
+1. **Single host (simplest).** Build `src/app/web`, then run the Python server on a small VM or container with the artifacts. It serves the API and the React build on one origin.
+   - `src/app/backend/Dockerfile` builds an image that **mounts** the artifacts read-only at run time instead of copying them in. It has not been built here, because Docker is not installed on this workstation.
    - Put it behind HTTPS (for example a reverse proxy), and set `AIORI_HOST=0.0.0.0` when not using the image.
 2. **Static front end plus separate API.**
-   - Build with `VITE_API_BASE=https://<api-host>` and publish `app/web/dist` to any static host. SPA rewrites are included for Netlify (`public/_redirects`) and Vercel (`vercel.json`).
+   - Build with `VITE_API_BASE=https://<api-host>` and publish `src/app/web/dist` to any static host. SPA rewrites are included for Netlify (`public/_redirects`) and Vercel (`vercel.json`).
    - Run the API as in option 1 with `AIORI_CORS_ORIGINS=https://<front-end-host>`.
 
 The static front end alone contains no data or checkpoints; every number comes from the API at run time.

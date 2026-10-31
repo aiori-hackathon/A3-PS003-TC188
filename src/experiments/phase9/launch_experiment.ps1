@@ -1,12 +1,13 @@
 # Phase 9 launcher: records the deadline, registers the per-user scheduled task that runs the watchdog
 # (at logon and every 5 minutes; no elevation; no system setting changed) and starts it.
-#   powershell -NoProfile -File experiments\phase9\launch_experiment.ps1 -DeadlineUtc 2026-10-29T03:38:10Z
+#   powershell -NoProfile -File src\experiments\phase9\launch_experiment.ps1 -DeadlineUtc 2026-10-29T03:38:10Z
 param([Parameter(Mandatory = $true)][string]$DeadlineUtc)
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = Split-Path -Parent (Split-Path -Parent $here)
-$py = Join-Path $root ".venv\Scripts\python.exe"
-$pyw = Join-Path $root ".venv\Scripts\pythonw.exe"
+$venv = Join-Path (Split-Path -Parent $root) ".venv\Scripts"   # virtual environment stays at the repository root
+$py = Join-Path $venv "python.exe"
+$pyw = Join-Path $venv "pythonw.exe"
 
 & $py (Join-Path $here "run_nine_month_experiment.py") --init-only --deadline-utc $DeadlineUtc
 

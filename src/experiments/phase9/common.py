@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-PY = ROOT / ".venv" / "Scripts" / "python.exe"
+PY = ROOT.parent / ".venv" / "Scripts" / "python.exe"  # the virtual environment stays at the repository root
 R = Path(os.environ.get("PHASE9_RESULTS", ROOT / "results" / "phase9"))
 DATA = Path(os.environ.get("PHASE9_DATA", ROOT / "data" / "processed" / "nine_month"))
 YEAR = Path(os.environ.get("PHASE9_YEAR", ROOT / "year_2023"))

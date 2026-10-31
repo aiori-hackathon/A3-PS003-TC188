@@ -1,9 +1,0 @@
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "https://corsenabled-aiori-traffic.hf.space/api/:path*" },
-    { "source": "/((?!assets/|favicon.svg).*)", "destination": "/index.html" }
-  ]
-}
