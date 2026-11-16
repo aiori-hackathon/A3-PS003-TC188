@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HLD-04 · AIORI Machine Learning and Federated Learning (offline)",
+    "output": "docs/architecture/final/diagrams/hld-04-ml-federated/aiori-hld-04-ml-federated.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "components": [
+    { "id": "raw", "type": "external", "label": "XTraffic files", "sublabel": "2022–2024, monthly", "pos": [40, 40], "size": [160, 64] },
+    { "id": "pipeline", "type": "backend", "label": "aiori2.pipeline", "sublabel": "extract, masks, scalers", "pos": [290, 40], "size": [160, 64] },
+    { "id": "arrays", "type": "database", "label": "aiori2_3yr arrays", "sublabel": "200 x 315,648, windows", "pos": [540, 40], "size": [160, 64] },
+    { "id": "arms", "type": "backend", "label": "aiori2.arms", "sublabel": "4 arms, client streams", "pos": [790, 40], "size": [160, 64] },
+
+    { "id": "server", "type": "backend", "label": "Server rule", "sublabel": "8 FL algorithms", "pos": [290, 230], "size": [160, 64] },
+    { "id": "clients", "type": "backend", "label": "4 clients", "sublabel": "geo or IID partition", "pos": [540, 230], "size": [160, 64] },
+    { "id": "runner", "type": "backend", "label": "aiori2.run Runner", "sublabel": "5 models, A/B history", "pos": [790, 230], "size": [160, 64] },
+
+    { "id": "frozen", "type": "database", "label": "Frozen results", "sublabel": "manifest + test JSON", "pos": [40, 420], "size": [160, 64] },
+    { "id": "final", "type": "backend", "label": "aiori2.final_eval", "sublabel": "freeze, test once", "pos": [290, 420], "size": [160, 64] },
+    { "id": "plan", "type": "backend", "label": "aiori2.plan", "sublabel": "Stage 1 → 2 → 3", "pos": [540, 420], "size": [160, 64] },
+    { "id": "rundirs", "type": "database", "label": "Run folders", "sublabel": "best.pt, metrics.jsonl", "pos": [790, 420], "size": [160, 64] },
+
+    { "id": "serve", "type": "backend", "label": "replay.Replay", "sublabel": "serves seed 20261027", "pos": [40, 600], "size": [160, 64] },
+    { "id": "orig", "type": "backend", "label": "2023 GRU study", "sublabel": "aiori package, 4 arms", "pos": [290, 600], "size": [160, 64] },
+    { "id": "runs9", "type": "database", "label": "phase9 runs", "sublabel": "GRU checkpoints", "pos": [540, 600], "size": [160, 64] },
+    { "id": "engine", "type": "backend", "label": "server.Engine", "sublabel": "serves on :8000", "pos": [790, 600], "size": [160, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Federated simulation: one process, no networking", "wraps": ["server", "clients", "runner"] }
+  ],
+  "connections": [
+    { "id": "ingest", "from": "raw", "to": "pipeline", "label": "monthly" },
+    { "id": "write-arrays", "from": "pipeline", "to": "arrays", "label": "writes" },
+    { "id": "streams", "from": "arrays", "to": "arms", "label": "windows" },
+    { "id": "configure", "from": "arms", "to": "runner", "label": "train streams only" },
+    { "id": "fl-arms", "from": "runner", "to": "clients", "label": "FL arms" },
+    { "id": "updates", "from": "clients", "to": "server", "label": "updates Δ", "variant": "emphasis" },
+    { "id": "checkpoint", "from": "runner", "to": "rundirs", "label": "best.pt by val WAPE" },
+    { "id": "val-results", "from": "rundirs", "to": "plan", "label": "val WAPE" },
+    { "id": "finalists", "from": "plan", "to": "final", "label": "finalists" },
+    { "id": "freeze", "from": "final", "to": "frozen", "label": "manifest" },
+    { "id": "deploy", "from": "frozen", "to": "serve", "label": "hash-checked load", "variant": "emphasis" },
+    { "id": "orig-train", "from": "orig", "to": "runs9", "label": "trains" },
+    { "id": "orig-serve", "from": "runs9", "to": "engine", "label": "loads" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Experiment design (validation-driven)", "items": ["Arms: centralised (pooled scaler), local (4 geographic models), IID FedAvg, geographic Non-IID FedAvg", "Models: MLP, GRU, TCN, PatchTST, N-HiTS; inputs 12 x 5 min, outputs 12 steps (60 min)", "History A trains on 2023, B on 2022–2023; both validate Jan–Jun 2024, test Jul–Dec 2024"] },
+    { "dot": "violet", "title": "Federated round", "items": ["Each client runs 100 local SGD steps (lr 0.01, batch 128) on its own stream and returns Δi = wi − w", "Server rules: FedAvg, FedProx, FedAdam, FedYogi, FedAdagrad, SCAFFOLD, FedNova, FedAvgM", "All four clients take part every round; updates are weighted by training windows; FedAvgM uses server momentum 0.9. 20 epochs of 2M sampled windows, early stopping patience 3"] },
+    { "dot": "amber", "title": "Selection and frozen test", "items": ["Stage 1: 40 runs; Stage 2: 56 new runs; Stage 3: 4 finalists x 2 partitions x 3 seeds = 24 runs", "Winner: MLP + FedAvgM, history A. Test WAPE (3-seed mean): IID 10.506%, geographic 10.546%", "final_eval refuses to run twice or on a changed manifest"] },
+    { "dot": "slate", "title": "Two model generations, one platform", "items": ["The 2023 GRU study (aiori package) still powers the Forecast API on :8000", "The three-year MLP + FedAvgM powers Replay and the Explorer on :8010", "An opt-in optimised MLP (candidate v1, not federated) can be added to :8000"] }
+  ]
+}

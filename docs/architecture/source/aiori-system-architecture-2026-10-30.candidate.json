@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "AIORI Traffic Intelligence: system architecture and data flow",
+    "output": ".archify/architecture-aiori-system-20261030-140100/aiori-architecture.html",
+    "quality_profile": "showcase",
+    "locale": "en",
+    "repository": {
+      "url": "https://github.com/aiori-hackathon/a3-ps003-tc188.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "31eb14b1ff540de94c68507439ced392cef5439f"
+    }
+  },
+  "components": [
+    { "id": "results", "type": "database", "label": "Frozen results", "sublabel": "analysis.json, frozen", "pos": [655, 40], "size": [125, 60],
+      "sources": [
+        { "path": "experiments/phase9/final.py", "line": 215, "end_line": 219, "label": "analysis.json writer" },
+        { "path": "app/backend/server.py", "line": 112, "end_line": 113, "label": "read at start-up" },
+        { "path": "app/backend/server.py", "line": 294, "end_line": 300, "label": "optimisation results read" }
+      ] },
+    { "id": "final", "type": "backend", "label": "Frozen evaluation", "sublabel": "final.py, test once", "pos": [860, 40], "size": [125, 60],
+      "sources": [
+        { "path": "experiments/phase9/final.py", "line": 158, "end_line": 189, "label": "stage_test" },
+        { "path": "experiments/phase9/final.py", "line": 105, "end_line": 112, "label": "loads best_model*.pt" }
+      ] },
+    { "id": "user", "type": "external", "label": "Analyst", "sublabel": "web browser", "pos": [40, 200], "size": [125, 60] },
+    { "id": "spa", "type": "frontend", "label": "React dashboard", "sublabel": "app/web, Vite build", "tag": "6 routes", "pos": [245, 200], "size": [125, 60],
+      "sources": [
+        { "path": "app/web/src/App.tsx", "line": 15, "end_line": 35, "label": "router" },
+        { "path": "app/web/src/lib/data.tsx", "line": 18, "end_line": 33, "label": "loads study data" },
+        { "path": "app/web/src/lib/api.ts", "line": 3, "end_line": 15, "label": "fetch /api" }
+      ] },
+    { "id": "proxy", "type": "cloud", "label": "/api proxy", "sublabel": "Vite dev, Vercel", "pos": [450, 200], "size": [125, 60],
+      "sources": [
+        { "path": "app/web/vite.config.ts", "line": 5, "end_line": 11, "label": "dev proxy" },
+        { "path": "app/web/vercel.json", "line": 5, "end_line": 8, "label": "Vercel rewrite" }
+      ] },
+    { "id": "server", "type": "backend", "label": "Python API server", "sublabel": "stdlib HTTP :8000", "tag": "Engine", "pos": [655, 200], "size": [125, 60],
+      "sources": [
+        { "path": "app/backend/server.py", "line": 359, "end_line": 412, "label": "GET/POST routes" },
+        { "path": "app/backend/server.py", "line": 83, "end_line": 115, "label": "Engine start-up" },
+        { "path": "app/backend/server.py", "line": 415, "end_line": 424, "label": "ThreadingHTTPServer" }
+      ] },
+    { "id": "gru", "type": "backend", "label": "ForecastGRU", "sublabel": "PyTorch CPU", "tag": "AI model", "pos": [860, 200], "size": [125, 60],
+      "sources": [
+        { "path": "aiori/model.py", "line": 12, "end_line": 20, "label": "GRU 4→64→12" },
+        { "path": "app/backend/server.py", "line": 117, "end_line": 130, "label": "loaded per client" }
+      ] },
+    { "id": "ckpts", "type": "database", "label": "GRU checkpoints", "sublabel": "best_model*.pt", "pos": [1065, 200], "size": [125, 60],
+      "sources": [
+        { "path": "experiments/phase9/worker.py", "line": 244, "end_line": 245, "label": "atomic save" },
+        { "path": "app/backend/server.py", "line": 118, "end_line": 121, "label": "results/phase9/runs" }
+      ] },
+    { "id": "processed", "type": "database", "label": "Processed data", "sublabel": "npz + scaler JSON", "pos": [655, 360], "size": [125, 60],
+      "sources": [
+        { "path": "aiori/nine_month.py", "line": 266, "end_line": 272, "label": "writes checkpoint" },
+        { "path": "app/backend/server.py", "line": 91, "end_line": 94, "label": "loaded by Engine" }
+      ] },
+    { "id": "mlp", "type": "backend", "label": "Optimized MLP", "sublabel": "1-day context", "tag": "AI model, opt-in", "pos": [860, 360], "size": [125, 60],
+      "sources": [
+        { "path": "app/backend/candidate.py", "line": 31, "end_line": 56, "label": "Candidate.forecast" },
+        { "path": "app/backend/server.py", "line": 107, "end_line": 111, "label": "AIORI_CANDIDATE=1" }
+      ] },
+    { "id": "candidate", "type": "database", "label": "Candidate v1", "sublabel": "mlp_models.pt", "pos": [1065, 360], "size": [125, 60],
+      "sources": [
+        { "path": "experiments/accuracy_optimization/finalize_candidate.py", "line": 72, "end_line": 76, "label": "writes candidate_v1" },
+        { "path": "app/backend/candidate.py", "line": 22, "end_line": 22, "label": "read path" }
+      ] },
+    { "id": "raw", "type": "database", "label": "XTraffic 2023", "sublabel": "monthly .npy files", "pos": [40, 520], "size": [125, 60],
+      "sources": [
+        { "path": "aiori/nine_month.py", "line": 32, "end_line": 35, "label": "Jan–Sep only" },
+        { "path": "experiments/accuracy_optimization/eval_untouched.py", "line": 53, "end_line": 53, "label": "Oct–Dec, once" }
+      ] },
+    { "id": "prep", "type": "backend", "label": "Preprocessing", "sublabel": "split, scale, fill", "pos": [245, 520], "size": [125, 60],
+      "sources": [
+        { "path": "aiori/nine_month.py", "line": 234, "end_line": 272, "label": "prepare + checkpoint" },
+        { "path": "experiments/phase9/worker.py", "line": 66, "end_line": 97, "label": "task_prepare" }
+      ] },
+    { "id": "train", "type": "backend", "label": "GRU training", "sublabel": "FedAvg, local, central", "pos": [450, 520], "size": [125, 60],
+      "sources": [
+        { "path": "experiments/phase9/worker.py", "line": 188, "end_line": 245, "label": "task_train" },
+        { "path": "aiori/federated.py", "line": 238, "end_line": 283, "label": "run_fedavg" },
+        { "path": "aiori/resumable.py", "line": 97, "end_line": 157, "label": "resumable FedAvg" }
+      ] },
+    { "id": "aopt", "type": "backend", "label": "MLP optimisation", "sublabel": "accuracy search", "pos": [860, 520], "size": [125, 60],
+      "sources": [
+        { "path": "experiments/accuracy_optimization/run.py", "line": 29, "end_line": 45, "label": "experiment runner" },
+        { "path": "experiments/accuracy_optimization/finalize_candidate.py", "line": 34, "end_line": 76, "label": "select + save" }
+      ] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Offline research pipeline (experiments/, aiori/)", "wraps": ["raw", "prep", "train", "aopt"] }
+  ],
+  "connections": [
+    { "id": "browse", "from": "user", "to": "spa", "label": "browse", "variant": "emphasis" },
+    { "id": "api-call", "from": "spa", "to": "proxy", "label": "/api/*", "variant": "emphasis" },
+    { "id": "forward", "from": "proxy", "to": "server", "label": "HTTP", "variant": "emphasis" },
+    { "id": "infer-gru", "from": "server", "to": "gru", "label": "infer", "variant": "emphasis" },
+    { "id": "infer-mlp", "from": "server", "to": "mlp", "label": "opt-in", "fromSide": "right", "toSide": "left" },
+    { "id": "load-gru", "from": "ckpts", "to": "gru", "label": "load" },
+    { "id": "load-mlp", "from": "candidate", "to": "mlp", "label": "load" },
+    { "id": "read-processed", "from": "processed", "to": "server", "label": "read npz" },
+    { "id": "read-results", "from": "results", "to": "server", "label": "/metrics" },
+    { "id": "eval-writes", "from": "final", "to": "results", "label": "writes" },
+    { "id": "eval-reads", "from": "ckpts", "to": "final", "label": "test once", "fromSide": "top", "toSide": "right" },
+    { "id": "read-raw", "from": "raw", "to": "prep", "label": "read" },
+    { "id": "write-processed", "from": "prep", "to": "processed", "label": "write npz", "fromSide": "top", "toSide": "left" },
+    { "id": "train-reads", "from": "processed", "to": "train", "label": "windows", "fromSide": "bottom", "toSide": "right" },
+    { "id": "aopt-reads", "from": "processed", "to": "aopt", "label": "store", "fromSide": "bottom", "toSide": "left" },
+    { "id": "train-writes", "from": "train", "to": "ckpts", "label": "best .pt", "variant": "dashed", "fromSide": "bottom", "toSide": "right", "via": [[512.5, 640], [1215, 640], [1215, 230]] },
+    { "id": "aopt-writes", "from": "aopt", "to": "candidate", "label": "save", "fromSide": "right", "toSide": "bottom" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Frontend", "items": [
+      "React 19 + TypeScript + Vite + Tailwind + Recharts SPA",
+      "Loads /health, /metrics, /sensors, /demo, /models on start; POST /predict from the Forecasting page",
+      "Built to app/web/dist; the Python server also serves that build at / (SPA routes fall back to index.html)"
+    ] },
+    { "dot": "emerald", "title": "API (app/backend/server.py)", "items": [
+      "GET /health /models /sensors /metrics /demo, POST /predict (also under /api/)",
+      "Historical replay, or a 12-reading future forecast; JSON body under 20 kB",
+      "CORS only for AIORI_CORS_ORIGINS; anonymised sensor ids, no station ids or paths returned"
+    ] },
+    { "dot": "violet", "title": "AI / ML models", "items": [
+      "Served: local-only GRU (seed 1, one model per client) and centralised GRU",
+      "Optimized MLP serves historical replay only when AIORI_CANDIDATE=1 (needs a week of history)",
+      "Training compares centralised, local-only, IID FedAvg and geographic FedAvg"
+    ] },
+    { "dot": "amber", "title": "Storage", "items": [
+      "No database server: all state is files (.npy, .npz, .json, .pt) loaded once at start-up",
+      "Artifacts are git-ignored; a deployment downloads them from a private Hugging Face dataset (deploy/hf-space/start.sh)"
+    ] },
+    { "dot": "slate", "title": "Hosting", "items": [
+      "Local: server on 127.0.0.1:8000, Vite dev proxy on :5173",
+      "Vercel rewrites /api/* to a Hugging Face Space URL; that Space was never created, so this route has no backend yet"
+    ] }
+  ]
+}

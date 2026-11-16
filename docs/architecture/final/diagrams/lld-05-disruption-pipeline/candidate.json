@@ -1,0 +1,263 @@
+{
+ "schema_version": 1,
+ "diagram_type": "dataflow",
+ "meta": {
+  "title": "LLD-05 · Disruption Detection and Catalog Pipeline (offline, disruption_detect.py build)",
+  "output": "docs/architecture/final/diagrams/lld-05-disruption-pipeline/aiori-lld-05-disruption-pipeline.html",
+  "quality_profile": "showcase",
+  "locale": "en"
+ },
+ "stages": [
+  {
+   "label": "Inputs (read-only)"
+  },
+  {
+   "label": "Baseline + calibration (2023 only)"
+  },
+  {
+   "label": "Scoring"
+  },
+  {
+   "label": "Grouping"
+  },
+  {
+   "label": "Versioned outputs"
+  }
+ ],
+ "nodes": [
+  {
+   "id": "cal",
+   "type": "database",
+   "label": "timestamp.npy",
+   "sublabel": "+ sensors.csv",
+   "stage": 0,
+   "row": 2
+  },
+  {
+   "id": "obs",
+   "type": "database",
+   "label": "flow + valid mask",
+   "sublabel": "200 x 315,648",
+   "stage": 0,
+   "row": 1
+  },
+  {
+   "id": "daytypes",
+   "type": "backend",
+   "label": "day_types()",
+   "sublabel": "holidays by level",
+   "stage": 1,
+   "row": 2
+  },
+  {
+   "id": "baseline",
+   "type": "backend",
+   "label": "build_baseline()",
+   "sublabel": "median, 1.4826·MAD",
+   "stage": 1,
+   "row": 1
+  },
+  {
+   "id": "thresholds",
+   "type": "backend",
+   "label": "z thresholds",
+   "sublabel": "median of sensors",
+   "stage": 1,
+   "row": 0
+  },
+  {
+   "id": "quality",
+   "type": "backend",
+   "label": "slot_quality()",
+   "sublabel": "zero, stuck, gaps",
+   "stage": 2,
+   "row": 2
+  },
+  {
+   "id": "score",
+   "type": "backend",
+   "label": "score() + flag()",
+   "sublabel": "z and ≥25% change",
+   "stage": 2,
+   "row": 1
+  },
+  {
+   "id": "segments",
+   "type": "backend",
+   "label": "segments()",
+   "sublabel": "gap ≤ 2, ≥ 3 readings",
+   "stage": 3,
+   "row": 1
+  },
+  {
+   "id": "group",
+   "type": "backend",
+   "label": "group() by region",
+   "sublabel": "15-min join",
+   "stage": 3,
+   "row": 2
+  },
+  {
+   "id": "chance",
+   "type": "backend",
+   "label": "chance check",
+   "sublabel": "random day shifts",
+   "stage": 3,
+   "row": 3
+  },
+  {
+   "id": "bl",
+   "type": "database",
+   "label": "baseline.npz",
+   "sublabel": "build_baseline() output",
+   "stage": 4,
+   "row": 0
+  },
+  {
+   "id": "catalog",
+   "type": "database",
+   "label": "catalog.json",
+   "sublabel": "16,445 events + sha256",
+   "stage": 4,
+   "row": 2
+  },
+  {
+   "id": "robust",
+   "type": "database",
+   "label": "robustness_summary",
+   "sublabel": "optional, separate CLI",
+   "stage": 4,
+   "row": 3
+  }
+ ],
+ "flows": [
+  {
+   "id": "c-days",
+   "from": "cal",
+   "to": "daytypes",
+   "label": "dates"
+  },
+  {
+   "id": "o-base",
+   "from": "obs",
+   "to": "baseline",
+   "label": "valid 2023 flow",
+   "variant": "emphasis"
+  },
+  {
+   "id": "d-base",
+   "from": "daytypes",
+   "to": "baseline",
+   "label": "day type"
+  },
+  {
+   "id": "b-thr",
+   "from": "baseline",
+   "to": "thresholds",
+   "label": "clean 2023 z"
+  },
+  {
+   "id": "b-score",
+   "from": "baseline",
+   "to": "score",
+   "label": "median, spread",
+   "variant": "emphasis"
+  },
+  {
+   "id": "t-score",
+   "from": "thresholds",
+   "to": "score",
+   "label": "−4.93 / +5.33"
+  },
+  {
+   "id": "o-qual",
+   "from": "obs",
+   "to": "quality",
+   "label": "readings + mask"
+  },
+  {
+   "id": "q-seg",
+   "from": "quality",
+   "to": "segments",
+   "label": "quality bits"
+  },
+  {
+   "id": "s-seg",
+   "from": "score",
+   "to": "segments",
+   "label": "anomaly flags",
+   "variant": "emphasis"
+  },
+  {
+   "id": "seg-grp",
+   "from": "segments",
+   "to": "group",
+   "label": "segments"
+  },
+  {
+   "id": "grp-chance",
+   "from": "group",
+   "to": "chance",
+   "label": "clean groups"
+  },
+  {
+   "id": "grp-cat",
+   "from": "group",
+   "to": "catalog",
+   "label": "events + ids",
+   "variant": "emphasis"
+  },
+  {
+   "id": "chance-cat",
+   "from": "chance",
+   "to": "catalog",
+   "label": "audit"
+  },
+  {
+   "id": "cat-rob",
+   "from": "catalog",
+   "to": "robust",
+   "label": "robustness CLI",
+   "variant": "dashed"
+  }
+ ],
+ "cards": [
+  {
+   "dot": "emerald",
+   "title": "Detection rule",
+   "items": [
+    "Scored only for valid readings with a typical flow ≥ 5 vehicles per 5 min",
+    "Anomalous: z ≤ −4.93 or z ≥ +5.33 AND at least 25% from typical",
+    "Thresholds = median over sensors of each sensor's 0.1% / 99.9% z quantile on clean 2023 readings"
+   ]
+  },
+  {
+   "dot": "violet",
+   "title": "Grouping and ids",
+   "items": [
+    "Clean segments of one direction in one dataset region overlapping within 15 min → one event",
+    "Quality-dominated segments: per-sensor episodes joined within 24 h, never across sensors",
+    "Event id = start time, region, direction, hash of config + sensors + interval (deterministic)"
+   ]
+  },
+  {
+   "dot": "amber",
+   "title": "Quality flags",
+   "items": [
+    "zero_reading, stuck_run (≥ 1 h same value), near_missing (≤ 1 h from a gap), level_shift (> 5% of a month anomalous)",
+    "≥ 50% flagged readings → sensor_quality category",
+    "Categories describe shape only; causes are never inferred"
+   ]
+  },
+  {
+   "dot": "slate",
+   "title": "Reproducibility",
+   "items": [
+    "baseline.npz stores the build_baseline() median, spread, support and day types used by the API",
+    "Build ~14 s on CPU; catalog, baseline and sha256 written atomically",
+    "Rebuild gives an identical event list (events_sha256) and baseline file",
+    "Retrospective: whole days are used; not a live detector"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "AIORI System Architecture",
+    "output": "docs/architecture/AIORI_SYSTEM_ARCHITECTURE.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "components": [
+    { "id": "users", "type": "external", "label": "Users", "sublabel": "web browser", "pos": [460, 40], "size": [200, 60] },
+
+    { "id": "fe_study", "type": "frontend", "label": "Study pages", "sublabel": "Overview, Forecast, Performance", "tag": "Federated, Methodology, About", "pos": [180, 200], "size": [200, 70] },
+    { "id": "fe_replay", "type": "frontend", "label": "Replay & Explorer pages", "sublabel": "/replay, /disruptions", "tag": "Leaflet sensor map", "pos": [740, 200], "size": [200, 70] },
+    { "id": "tiles", "type": "external", "label": "OpenStreetMap tiles", "sublabel": "map background", "pos": [1020, 205], "size": [180, 60] },
+
+    { "id": "cl_study", "type": "frontend", "label": "Study API client", "sublabel": "lib/api.ts, StudyProvider", "pos": [180, 360], "size": [200, 60] },
+    { "id": "cl_replay", "type": "frontend", "label": "Replay API clients", "sublabel": "replay.ts, disruptions.ts", "pos": [740, 360], "size": [200, 60] },
+
+    { "id": "h_main", "type": "backend", "label": "Study API", "sublabel": "server.py Handler", "tag": "/api/* forecast, metrics", "pos": [180, 520], "size": [200, 70] },
+    { "id": "h_replay", "type": "backend", "label": "Replay & Disruption API", "sublabel": "replay_server.py Handler", "tag": "adds /api/replay/*", "pos": [740, 520], "size": [200, 70] },
+
+    { "id": "s_engine", "type": "backend", "label": "Forecast engine", "sublabel": "2023 GRU inference", "pos": [40, 690], "size": [200, 60] },
+    { "id": "s_cand", "type": "backend", "label": "Candidate model", "sublabel": "optimised MLP, opt-in", "pos": [320, 690], "size": [200, 60] },
+    { "id": "s_replay", "type": "backend", "label": "Replay service", "sublabel": "frames, series, forecasts", "pos": [600, 690], "size": [200, 60] },
+    { "id": "s_dis", "type": "backend", "label": "Disruption service", "sublabel": "catalog, robustness", "pos": [880, 690], "size": [200, 60] },
+
+    { "id": "d_nine", "type": "database", "label": "2023 study artifacts", "sublabel": "nine-month data, GRU runs", "pos": [40, 850], "size": [200, 60] },
+    { "id": "d_aopt", "type": "database", "label": "Candidate v1 files", "sublabel": "accuracy optimisation", "pos": [320, 850], "size": [200, 60] },
+    { "id": "d_3yr", "type": "database", "label": "3-year arrays + frozen model", "sublabel": "MLP + FedAvgM, 15 checkpoints", "pos": [600, 850], "size": [200, 60] },
+    { "id": "d_cat", "type": "database", "label": "Disruption catalog v1", "sublabel": "16,445 candidates", "pos": [880, 850], "size": [200, 60] },
+
+    { "id": "o_study", "type": "backend", "label": "2023 study training", "sublabel": "GRU arms + candidate MLP", "pos": [320, 1010], "size": [200, 60] },
+    { "id": "o_fed", "type": "backend", "label": "3-year federated research", "sublabel": "aiori2: Stages 1–3", "tag": "8 algorithms, 5 models", "pos": [600, 1010], "size": [200, 70] },
+    { "id": "o_cat", "type": "backend", "label": "Catalog build", "sublabel": "disruption_detect build", "pos": [880, 1010], "size": [200, 60] },
+
+    { "id": "raw", "type": "external", "label": "XTraffic data", "sublabel": "2022–2024, 5-minute flow", "pos": [460, 1190], "size": [200, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "React web application (browser)", "wraps": ["fe_study", "fe_replay", "cl_study", "cl_replay"] },
+    { "kind": "region", "label": "Python API services (read-only at request time)", "wraps": ["h_main", "h_replay", "s_engine", "s_cand", "s_replay", "s_dis"] },
+    { "kind": "region", "label": "Local artifact files", "wraps": ["d_nine", "d_aopt", "d_3yr", "d_cat"] },
+    { "kind": "region", "label": "Offline pipelines (never run by the website)", "wraps": ["o_study", "o_fed", "o_cat"] }
+  ],
+  "connections": [
+    { "id": "use-study", "from": "users", "to": "fe_study", "label": "browse", "variant": "emphasis" },
+    { "id": "use-replay", "from": "users", "to": "fe_replay", "label": "browse", "variant": "emphasis" },
+    { "id": "map-tiles", "from": "fe_replay", "to": "tiles", "label": "map tiles", "variant": "dashed" },
+
+    { "id": "study-client", "from": "fe_study", "to": "cl_study" },
+    { "id": "replay-client", "from": "fe_replay", "to": "cl_replay" },
+    { "id": "study-http", "from": "cl_study", "to": "h_main", "label": "JSON over HTTP", "variant": "emphasis" },
+    { "id": "replay-http", "from": "cl_replay", "to": "h_replay", "label": "JSON over HTTP", "variant": "emphasis" },
+    { "id": "inherit", "from": "h_replay", "to": "h_main", "label": "subclass: shared routes" },
+
+    { "id": "main-engine", "from": "h_main", "to": "s_engine" },
+    { "id": "engine-cand", "from": "s_engine", "to": "s_cand", "label": "opt-in" },
+    { "id": "replay-svc", "from": "h_replay", "to": "s_replay" },
+    { "id": "dis-svc", "from": "h_replay", "to": "s_dis" },
+    { "id": "dis-reuse", "from": "s_dis", "to": "s_replay", "label": "reuses" },
+
+    { "id": "engine-data", "from": "s_engine", "to": "d_nine", "label": "load once" },
+    { "id": "cand-data", "from": "s_cand", "to": "d_aopt", "label": "load once" },
+    { "id": "replay-data", "from": "s_replay", "to": "d_3yr", "label": "hash-check, mmap" },
+    { "id": "dis-data", "from": "s_dis", "to": "d_cat", "label": "hash-check, load" },
+
+    { "id": "study-writes-nine", "from": "o_study", "to": "d_nine", "label": "writes", "variant": "dashed" },
+    { "id": "study-writes-cand", "from": "o_study", "to": "d_aopt", "label": "writes", "variant": "dashed" },
+    { "id": "fed-writes", "from": "o_fed", "to": "d_3yr", "label": "freezes model", "variant": "dashed" },
+    { "id": "fed-cat", "from": "o_fed", "to": "o_cat", "label": "arrays" },
+    { "id": "cat-writes", "from": "o_cat", "to": "d_cat", "label": "writes", "variant": "dashed" },
+
+    { "id": "raw-study", "from": "raw", "to": "o_study", "label": "2023 months" },
+    { "id": "raw-fed", "from": "raw", "to": "o_fed", "label": "2022–2024" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "One web application, two APIs", "items": ["Study pages call the Study API: 2023 GRU forecasts, metrics and federated evidence", "Replay and Explorer pages call the Replay & Disruption API, which also serves every Study API route", "useRemote caches responses and cancels stale requests"] },
+    { "dot": "emerald", "title": "Selected federated model", "items": ["MLP + FedAvgM, history A, chosen on validation data only", "Test WAPE Jul–Dec 2024: 10.506% IID, 10.546% geographic (naive persistence 12.495%)", "Replay refuses to start unless every frozen checkpoint hash matches"] },
+    { "dot": "amber", "title": "Offline, not at request time", "items": ["Preprocessing, federated training, model selection and the anomaly catalog are batch jobs", "Federated learning is a single-process simulation with four clients", "The APIs only read frozen files; disruptions are statistical candidates, not confirmed incidents"] }
+  ]
+}

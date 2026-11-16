@@ -1,0 +1,1600 @@
+{
+ "directed": true,
+ "multigraph": false,
+ "graph": {
+  "name": "AIORI",
+  "about": "Curated presentation graph of the completed AIORI platform. Node-link format readable by Graphify (graphify export html --graph). 'pos' gives each node's centre per view; 'view' on a link says which view draws it.",
+  "views": [
+   {
+    "id": "system",
+    "title": "Complete system",
+    "question": "What AIORI is made of, and what runs when",
+    "width": 1440,
+    "height": 500,
+    "bands": [
+     {
+      "label": "Runtime · while the website is in use",
+      "x": 20,
+      "y": 20,
+      "w": 770,
+      "h": 470,
+      "tone": "runtime"
+     },
+     {
+      "label": "Stored on disk",
+      "x": 805,
+      "y": 20,
+      "w": 200,
+      "h": 470,
+      "tone": "store"
+     },
+     {
+      "label": "Offline · batch jobs, never started by the website",
+      "x": 1020,
+      "y": 20,
+      "w": 410,
+      "h": 470,
+      "tone": "offline"
+     }
+    ],
+    "cards": []
+   },
+   {
+    "id": "training",
+    "title": "Training & experimentation",
+    "question": "What was trained, compared and selected",
+    "width": 1440,
+    "height": 560,
+    "bands": [
+     {
+      "label": "Data",
+      "x": 20,
+      "y": 20,
+      "w": 180,
+      "h": 530,
+      "tone": "store"
+     },
+     {
+      "label": "What was compared",
+      "x": 270,
+      "y": 20,
+      "w": 220,
+      "h": 530,
+      "tone": "count"
+     },
+     {
+      "label": "Staged search on the local GPU",
+      "x": 545,
+      "y": 20,
+      "w": 455,
+      "h": 530,
+      "tone": "offline"
+     },
+     {
+      "label": "Model choice",
+      "x": 1015,
+      "y": 360,
+      "w": 415,
+      "h": 190,
+      "tone": "metric"
+     }
+    ],
+    "cards": [
+     {
+      "x": 1030,
+      "y": 40,
+      "w": 395,
+      "title": "Stage 3 by the numbers",
+      "lines": [
+       "24 finalist runs: 4 configurations × 2 partitions × 3 seeds",
+       "18,920 federated rounds",
+       "7,568,000 local training steps",
+       "10.15 GPU-hours on one local RTX PRO 4000",
+       "Up to 20 epochs each, early stopping (patience 3)"
+      ],
+      "note": "Stage 3 only. Not whole-project totals."
+     }
+    ]
+   },
+   {
+    "id": "forecast",
+    "title": "Forecasting & data flow",
+    "question": "How one 60-minute forecast is made and checked",
+    "width": 1560,
+    "height": 520,
+    "bands": [
+     {
+      "label": "Dataset",
+      "x": 15,
+      "y": 150,
+      "w": 182,
+      "h": 160,
+      "tone": "store"
+     },
+     {
+      "label": "Prepared offline",
+      "x": 202,
+      "y": 150,
+      "w": 378,
+      "h": 160,
+      "tone": "offline"
+     },
+     {
+      "label": "At request time",
+      "x": 585,
+      "y": 20,
+      "w": 965,
+      "h": 470,
+      "tone": "runtime"
+     }
+    ],
+    "cards": [
+     {
+      "x": 30,
+      "y": 360,
+      "w": 520,
+      "title": "Forecast contract",
+      "lines": [
+       "12 past five-minute readings in, 12 future steps out (60 min)",
+       "Inputs end at issue time T; the first forecast is for T + 5 min",
+       "Readings after T are never model inputs",
+       "A window whose 12 inputs are all imputed is refused"
+      ],
+      "note": "The Forecasting page uses the 2023 GRU study models with the same 12-in, 12-out contract."
+     }
+    ]
+   },
+   {
+    "id": "results",
+    "title": "Engineering & verified results",
+    "question": "What was built, what was run, what was measured",
+    "width": 1440,
+    "height": 640,
+    "bands": [
+     {
+      "label": "Built · implementation counts",
+      "x": 20,
+      "y": 20,
+      "w": 460,
+      "h": 560,
+      "tone": "count"
+     },
+     {
+      "label": "Trained & selected",
+      "x": 500,
+      "y": 20,
+      "w": 460,
+      "h": 560,
+      "tone": "offline"
+     },
+     {
+      "label": "Measured · scientific results",
+      "x": 980,
+      "y": 20,
+      "w": 450,
+      "h": 560,
+      "tone": "metric"
+     }
+    ],
+    "cards": [
+     {
+      "x": 980,
+      "y": 590,
+      "w": 450,
+      "title": "",
+      "lines": [
+       "WAPE = total absolute error ÷ total actual flow. Lower is better.",
+       "It is an error measure, not an accuracy percentage."
+      ],
+      "note": ""
+     },
+     {
+      "x": 20,
+      "y": 590,
+      "w": 460,
+      "title": "",
+      "lines": [
+       "Candidate anomalies are statistical deviations, not confirmed incidents."
+      ],
+      "note": ""
+     }
+    ]
+   }
+  ]
+ },
+ "nodes": [
+  {
+   "id": "user",
+   "label": "Judges & users",
+   "sub": "in a web browser",
+   "kind": "person",
+   "community": 0,
+   "pos": {
+    "system": [
+     100,
+     260
+    ]
+   },
+   "detail": "People open the AIORI web application in a browser on the workstation (127.0.0.1). No public URL is active today.",
+   "evidence": [
+    "docs/architecture/final/AIORI_DEPLOYMENT_ARCHITECTURE.md"
+   ]
+  },
+  {
+   "id": "webapp",
+   "label": "Web application",
+   "sub": "React · 2 builds",
+   "kind": "ui",
+   "community": 0,
+   "pos": {
+    "system": [
+     275,
+     260
+    ]
+   },
+   "detail": "React 19 + Vite single-page app. The production build (6 routes) is served by the study API on :8000. The extended build (8 routes, adds Replay and Disruption Explorer) is served by the extended API on :8010.",
+   "evidence": [
+    "src/app/web/src/App.tsx:7-35",
+    "src/app/web/package.json"
+   ],
+   "source_file": "src/app/web/src/App.tsx"
+  },
+  {
+   "id": "api8000",
+   "label": "Study API",
+   "sub": "server.py · port 8000",
+   "kind": "service",
+   "community": 0,
+   "pos": {
+    "system": [
+     470,
+     150
+    ]
+   },
+   "detail": "Python HTTP server: study data, metrics and the forecast endpoint. Loads the 2023 GRU study models (plus the opt-in optimised MLP candidate) at start-up. Running locally.",
+   "evidence": [
+    "src/app/backend/server.py:85-146",
+    "src/app/backend/server.py:345-432"
+   ],
+   "source_file": "src/app/backend/server.py"
+  },
+  {
+   "id": "api8010",
+   "label": "Extended API",
+   "sub": "replay_server.py · port 8010",
+   "kind": "service",
+   "community": 0,
+   "pos": {
+    "system": [
+     470,
+     355
+    ]
+   },
+   "detail": "A separate process. Its handler subclasses the study handler, so it answers every study endpoint and adds /api/replay/* and the disruption endpoints. Running locally.",
+   "evidence": [
+    "src/app/backend/replay_server.py:46-47, 109, 133-143",
+    "Graphify: replay_server.py imports server.py"
+   ],
+   "source_file": "src/app/backend/replay_server.py"
+  },
+  {
+   "id": "forecast",
+   "label": "Forecasting",
+   "sub": "2023 GRU study models",
+   "kind": "feature",
+   "community": 1,
+   "pos": {
+    "system": [
+     680,
+     150
+    ]
+   },
+   "detail": "Forecasting page: pick a sensor and time (or type 12 readings) and get a 60-minute forecast from the 2023 study GRUs, plus the optimised candidate when enabled.",
+   "evidence": [
+    "src/app/backend/server.py:168-268",
+    "src/app/web/src/pages/Forecast.tsx"
+   ],
+   "source_file": "src/app/backend/server.py"
+  },
+  {
+   "id": "replay",
+   "label": "Traffic Replay",
+   "sub": "frozen MLP + FedAvgM",
+   "kind": "feature",
+   "community": 1,
+   "pos": {
+    "system": [
+     680,
+     290
+    ]
+   },
+   "detail": "Replays 2022–2024 traffic for all 200 sensors at 5-minute steps on a map, and runs the frozen federated winner for any past moment, compared with what was actually observed.",
+   "evidence": [
+    "src/app/backend/replay.py:94-204, 328-401",
+    "src/app/web/src/pages/Replay.tsx"
+   ],
+   "source_file": "src/app/backend/replay.py"
+  },
+  {
+   "id": "explorer",
+   "label": "Disruption Explorer",
+   "sub": "16,445 candidate events",
+   "kind": "feature",
+   "community": 1,
+   "pos": {
+    "system": [
+     680,
+     420
+    ]
+   },
+   "detail": "Browse, filter and inspect statistically unusual traffic periods from the offline catalog, open any event in Replay, and compare forecast errors during the event with nearby normal days.",
+   "evidence": [
+    "src/app/backend/disruptions.py:79-430",
+    "Graphify: disruptions.py calls replay.py (13 call sites)"
+   ],
+   "source_file": "src/app/backend/disruptions.py"
+  },
+  {
+   "id": "results",
+   "label": "Experiment results",
+   "sub": "metrics & reports",
+   "kind": "store",
+   "community": 2,
+   "pos": {
+    "system": [
+     905,
+     80
+    ]
+   },
+   "detail": "Saved metrics, tables and reports from the 2023 study and from the three-year federated study. The study API reads the study metrics shown on the evidence pages.",
+   "evidence": [
+    "src/results/phase9",
+    "src/results/aiori2/phase8c_stage3/analysis"
+   ]
+  },
+  {
+   "id": "models",
+   "label": "Saved models",
+   "sub": "hash-checked checkpoints",
+   "kind": "store",
+   "community": 2,
+   "pos": {
+    "system": [
+     905,
+     190
+    ]
+   },
+   "detail": "2023 GRU study checkpoints (used by Forecasting) and the frozen MLP + FedAvgM checkpoints (used by Replay). Replay refuses to start if a checkpoint, scaler or config differs from the frozen manifest's SHA-256.",
+   "evidence": [
+    "src/app/backend/replay.py:161-204",
+    "src/results/aiori2/phase8c_stage3/analysis/final_manifest.json"
+   ]
+  },
+  {
+   "id": "arrays",
+   "label": "Traffic arrays",
+   "sub": "2022–2024 · 200 sensors",
+   "kind": "store",
+   "community": 2,
+   "pos": {
+    "system": [
+     905,
+     300
+    ]
+   },
+   "detail": "Processed three-year arrays: 315,648 five-minute steps × 200 sensors, with validity mask, gap-filled inputs, imputed flags and per-client scalers. Read memory-mapped by Replay.",
+   "evidence": [
+    "src/data/processed/aiori2_3yr",
+    "src/app/backend/replay.py:43-45, 117-121"
+   ]
+  },
+  {
+   "id": "catalog",
+   "label": "Anomaly catalog",
+   "sub": "versioned, built offline",
+   "kind": "store",
+   "community": 2,
+   "pos": {
+    "system": [
+     905,
+     420
+    ]
+   },
+   "detail": "disruption-detector-v1: 16,445 candidate events with sensors, timing, scores and quality flags. The explorer returns 503 if it is missing or stale.",
+   "evidence": [
+    "src/results/aiori2/phase9b_disruptions/disruption-detector-v1/catalog.json",
+    "src/app/backend/disruptions.py:54-63"
+   ]
+  },
+  {
+   "id": "evaluate",
+   "label": "Selection & test",
+   "sub": "validation only, test once",
+   "kind": "offline",
+   "community": 3,
+   "pos": {
+    "system": [
+     1120,
+     135
+    ]
+   },
+   "detail": "Ranks finalist configurations on validation data only, freezes the winner in a hashed manifest, then scores the July–December 2024 test period exactly once.",
+   "evidence": [
+    "src/aiori2/final_eval.py:1-12",
+    "Graphify: final_eval.py calls run.py and baseline.py"
+   ],
+   "source_file": "src/aiori2/final_eval.py"
+  },
+  {
+   "id": "prep",
+   "label": "Preprocessing",
+   "sub": "validity, gap filling, scalers",
+   "kind": "offline",
+   "community": 3,
+   "pos": {
+    "system": [
+     1120,
+     300
+    ]
+   },
+   "detail": "Builds the continuous 2022–2024 timeline for the fixed 200 sensors: validity mask, causal gap filling (≤ 6 steps, then the 2023 training time-of-day median) with imputed flags, time-ordered splits and training-only scalers.",
+   "evidence": [
+    "src/aiori2/pipeline.py",
+    "src/aiori2/__init__.py:1"
+   ],
+   "source_file": "src/aiori2/pipeline.py"
+  },
+  {
+   "id": "detect",
+   "label": "Anomaly detection",
+   "sub": "2023 baseline, z-scores",
+   "kind": "offline",
+   "community": 3,
+   "pos": {
+    "system": [
+     1120,
+     420
+    ]
+   },
+   "detail": "Scores every reading against a 2023 per-sensor, day-type and time-of-day baseline (thresholds z −4.93 / +5.33 and ≥ 25% deviation), joins runs into events and groups them by region. Builds the catalog in about 14 s.",
+   "evidence": [
+    "src/app/backend/disruption_detect.py:89-487"
+   ],
+   "source_file": "src/app/backend/disruption_detect.py"
+  },
+  {
+   "id": "fltrain",
+   "label": "Federated training",
+   "sub": "4 simulated clients",
+   "kind": "offline",
+   "community": 3,
+   "pos": {
+    "system": [
+     1330,
+     135
+    ]
+   },
+   "detail": "Offline experiment runner. Federated arms simulate four regional clients inside one Python process (no networking): each round the global model goes to each client for 100 local steps, and a server rule aggregates the updates. Checkpoints and early stopping per run.",
+   "evidence": [
+    "src/aiori2/fl/engine.py:1-7, 126-160",
+    "src/aiori2/run.py:218-460",
+    "Graphify: run.py calls fl/engine.py, models/factory.py, arms.py"
+   ],
+   "source_file": "src/aiori2/fl/engine.py"
+  },
+  {
+   "id": "xtraffic",
+   "label": "XTraffic dataset",
+   "sub": "5-min flow, 2022–2024",
+   "kind": "store",
+   "community": 2,
+   "pos": {
+    "system": [
+     1330,
+     300
+    ],
+    "training": [
+     110,
+     90
+    ]
+   },
+   "detail": "Public XTraffic loop-detector data: vehicle counts per five-minute interval, 2022-01-01 00:00 to 2024-12-31 23:55. A historical dataset, not a live feed.",
+   "evidence": [
+    "docs/architecture/final/AIORI_ARCHITECTURE_VERIFICATION.md §5"
+   ]
+  },
+  {
+   "id": "t_sensors",
+   "label": "200 sensors",
+   "sub": "fixed set, 315,648 steps",
+   "kind": "store",
+   "community": 4,
+   "pos": {
+    "training": [
+     110,
+     190
+    ]
+   },
+   "detail": "The same 200 sensors throughout, on a continuous 2022–2024 timeline of 315,648 five-minute steps.",
+   "evidence": [
+    "src/aiori2/__init__.py:1",
+    "src/app/backend/replay.py:134"
+   ]
+  },
+  {
+   "id": "t_clients",
+   "label": "Four clients",
+   "sub": "50 sensors each",
+   "kind": "store",
+   "community": 4,
+   "pos": {
+    "training": [
+     110,
+     290
+    ]
+   },
+   "detail": "Sensors are assigned to four clients of 50. A client only ever reads its own sensors' windows, and its scaler is fitted on its own training data.",
+   "evidence": [
+    "src/aiori2/arms.py:1-7, 30-40"
+   ]
+  },
+  {
+   "id": "t_parts",
+   "label": "IID & geographic",
+   "sub": "two client partitions",
+   "kind": "store",
+   "community": 4,
+   "pos": {
+    "training": [
+     110,
+     390
+    ]
+   },
+   "detail": "Two ways to form the clients: geographic (non-IID: each client is one region) and IID (sensors mixed across clients).",
+   "evidence": [
+    "src/aiori2/arms.py:18-22"
+   ]
+  },
+  {
+   "id": "t_split",
+   "label": "Time-ordered splits",
+   "sub": "val H1 2024 · test H2 2024",
+   "kind": "store",
+   "community": 4,
+   "pos": {
+    "training": [
+     110,
+     490
+    ]
+   },
+   "detail": "Training up to 2023-12-31, validation January–June 2024, test July–December 2024. Validation and test windows are identical for both histories.",
+   "evidence": [
+    "src/data/processed/aiori2_3yr/experiments/conservative/A/experiment.json",
+    "src/aiori2/validate.py:118-125"
+   ]
+  },
+  {
+   "id": "t_arms",
+   "label": "4 training approaches",
+   "sub": "central · local · IID FL · geo FL",
+   "kind": "count",
+   "community": 4,
+   "pos": {
+    "training": [
+     380,
+     80
+    ]
+   },
+   "detail": "Centralised (one pooled model), local (four independent regional models), IID federated and geographic (non-IID) federated.",
+   "evidence": [
+    "src/aiori2/arms.py:18-22"
+   ]
+  },
+  {
+   "id": "t_models",
+   "label": "5 architectures",
+   "sub": "MLP · GRU · TCN · PatchTST · N-HiTS",
+   "kind": "count",
+   "community": 4,
+   "pos": {
+    "training": [
+     380,
+     175
+    ]
+   },
+   "detail": "Five forecasting architectures behind one factory, each mapping 12 input steps to 12 output steps.",
+   "evidence": [
+    "src/aiori2/models/factory.py:19, 36"
+   ]
+  },
+  {
+   "id": "t_algos",
+   "label": "8 FL algorithms",
+   "sub": "FedAvg, FedAvgM, FedAdam …",
+   "kind": "count",
+   "community": 4,
+   "pos": {
+    "training": [
+     380,
+     270
+    ]
+   },
+   "detail": "FedAvg, FedProx, FedAdam, FedYogi, FedAdagrad, SCAFFOLD, FedNova and FedAvgM server rules.",
+   "evidence": [
+    "src/aiori2/fl/algorithms.py:89-206"
+   ]
+  },
+  {
+   "id": "t_hist",
+   "label": "2 training histories",
+   "sub": "A: 2023 · B: 2022–2023",
+   "kind": "count",
+   "community": 4,
+   "pos": {
+    "training": [
+     380,
+     365
+    ]
+   },
+   "detail": "History A trains on 2023 only; history B trains on 2022–2023. Both use the same validation and test windows.",
+   "evidence": [
+    "src/aiori2/validate.py:118-120"
+   ]
+  },
+  {
+   "id": "t_runner",
+   "label": "Training runner",
+   "sub": "rounds · checkpoints · early stop",
+   "kind": "offline",
+   "community": 4,
+   "pos": {
+    "training": [
+     650,
+     490
+    ]
+   },
+   "detail": "One runner executes every run: client streams, federated rounds (100 local SGD steps per client per round in Stage 3), validation each epoch, best.pt by validation WAPE, resumable from latest.pt.",
+   "evidence": [
+    "src/aiori2/run.py:1-10, 218-460",
+    "src/results/aiori2/phase8c_stage3/fedavg_geo-A-mlp-medium-fedavgm-s20261027-ba24d6a0a6/config.json"
+   ],
+   "source_file": "src/aiori2/run.py"
+  },
+  {
+   "id": "t_s1",
+   "label": "Stage 1",
+   "sub": "40 configurations",
+   "kind": "offline",
+   "community": 4,
+   "pos": {
+    "training": [
+     880,
+     120
+    ]
+   },
+   "detail": "Model screening: 5 models × 4 training approaches × 2 histories = 40 runs.",
+   "evidence": [
+    "src/aiori2/plan.py:3"
+   ]
+  },
+  {
+   "id": "t_s2",
+   "label": "Stage 2",
+   "sub": "64 configs · 8 reused",
+   "kind": "offline",
+   "community": 4,
+   "pos": {
+    "training": [
+     880,
+     270
+    ]
+   },
+   "detail": "FL comparison: top 2 Stage 1 models × 8 algorithms × 2 partitions × 2 histories = 64 configurations. The 8 FedAvg configurations are the same runs as Stage 1, so 56 were newly trained.",
+   "evidence": [
+    "src/aiori2/plan.py:4-5",
+    "src/results/aiori2/phase7_stage1/stage2_results.csv (64 rows, 8 reused)"
+   ]
+  },
+  {
+   "id": "t_s3",
+   "label": "Stage 3",
+   "sub": "24 new finalist runs",
+   "kind": "offline",
+   "community": 4,
+   "pos": {
+    "training": [
+     880,
+     420
+    ]
+   },
+   "detail": "Four Stage 2 finalists × IID and geographic × 3 seeds, all retrained from scratch under a 20-epoch budget. Finalists were registered before training.",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/PHASE8C_REPORT.md §3-5"
+   ]
+  },
+  {
+   "id": "t_select",
+   "label": "Validation selection",
+   "sub": "test data untouched",
+   "kind": "metric",
+   "community": 4,
+   "pos": {
+    "training": [
+     1110,
+     420
+    ]
+   },
+   "detail": "Configurations ranked by mean full-validation WAPE over seeds and partitions. Winner: MLP + FedAvgM, history A (10.866 validation score).",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/PHASE8C_REPORT.md §7",
+    "selection.json"
+   ]
+  },
+  {
+   "id": "t_test",
+   "label": "Frozen final test",
+   "sub": "Jul–Dec 2024, run once",
+   "kind": "metric",
+   "community": 4,
+   "pos": {
+    "training": [
+     1320,
+     420
+    ]
+   },
+   "detail": "The frozen manifest's checkpoints are scored once on the test period. Evaluation refuses to run if any hash differs or a result already exists.",
+   "evidence": [
+    "src/aiori2/final_eval.py:1-12"
+   ]
+  },
+  {
+   "id": "f_obs",
+   "label": "Historical readings",
+   "sub": "5-min flow, 200 sensors",
+   "kind": "store",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     105,
+     230
+    ]
+   },
+   "detail": "Observed vehicle counts per five-minute interval from the three-year arrays.",
+   "evidence": [
+    "src/app/backend/replay.py:9-10, 117"
+   ]
+  },
+  {
+   "id": "f_valid",
+   "label": "Validity checks",
+   "sub": "mask: missing / invalid",
+   "kind": "offline",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     295,
+     230
+    ]
+   },
+   "detail": "A validity mask marks missing or invalid readings. Invalid values are shown as gaps in Replay and are never scored.",
+   "evidence": [
+    "src/aiori2/pipeline.py",
+    "docs/architecture/final/AIORI_DATA_FLOW.md Flow 2"
+   ]
+  },
+  {
+   "id": "f_fill",
+   "label": "Gap filling",
+   "sub": "causal ≤ 6 steps · flagged",
+   "kind": "offline",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     485,
+     230
+    ]
+   },
+   "detail": "Model inputs use causal forward fill up to 6 steps, then the 2023 training time-of-day median. Every filled value carries an imputed flag.",
+   "evidence": [
+    "src/app/backend/replay.py:9-10, 117-118"
+   ]
+  },
+  {
+   "id": "f_window",
+   "label": "Input window",
+   "sub": "12 × 5 min up to time T",
+   "kind": "feature",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     675,
+     230
+    ]
+   },
+   "detail": "The 12 filled readings ending at issue time T (inputs[e−12:e]). Causal: nothing after T is read.",
+   "evidence": [
+    "src/app/backend/replay.py:328-401"
+   ]
+  },
+  {
+   "id": "f_scale",
+   "label": "Scaling",
+   "sub": "training-only statistics",
+   "kind": "feature",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     865,
+     230
+    ]
+   },
+   "detail": "z = (x − mean) / std with the client scope's training-period statistics.",
+   "evidence": [
+    "src/app/backend/replay.py:192-193"
+   ]
+  },
+  {
+   "id": "f_model",
+   "label": "Frozen model",
+   "sub": "MLP + FedAvgM, history A",
+   "kind": "feature",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     1055,
+     230
+    ]
+   },
+   "detail": "The selected federated model (seed 20261027) for the chosen partition, geographic or IID.",
+   "evidence": [
+    "src/app/backend/replay.py:161-204"
+   ]
+  },
+  {
+   "id": "f_pred",
+   "label": "Forecast",
+   "sub": "12 × 5 min = 60 min",
+   "kind": "feature",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     1245,
+     230
+    ]
+   },
+   "detail": "12 values for T + 5 min … T + 60 min, inverse-scaled back to vehicles per five minutes.",
+   "evidence": [
+    "src/app/backend/replay.py:328-401"
+   ]
+  },
+  {
+   "id": "f_cmp",
+   "label": "Actual vs predicted",
+   "sub": "errors per lead time",
+   "kind": "feature",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     1435,
+     230
+    ]
+   },
+   "detail": "Each forecast step is paired with the observed value, its status and the absolute error, with MAE and WAPE for that hour. Steps past the dataset end are reported as beyond_dataset.",
+   "evidence": [
+    "src/app/backend/replay.py:328-401"
+   ]
+  },
+  {
+   "id": "f_ui",
+   "label": "Charts in the app",
+   "sub": "Replay · Explorer",
+   "kind": "ui",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     1435,
+     400
+    ]
+   },
+   "detail": "The Replay sensor panel and the Explorer's forecast card draw forecast against observed.",
+   "evidence": [
+    "src/app/web/src/components/replay/ForecastView.tsx",
+    "Graphify: Replay.tsx and Disruptions.tsx both call ForecastView.tsx"
+   ]
+  },
+  {
+   "id": "f_scaler",
+   "label": "Client scalers",
+   "sub": "training data only",
+   "kind": "store",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     865,
+     80
+    ]
+   },
+   "detail": "scalers.json: mean and std per scope, fitted only on training observations; its SHA-256 must match the frozen manifest.",
+   "evidence": [
+    "src/aiori2/arms.py:5-6",
+    "src/app/backend/replay.py:120-121, 178-179"
+   ]
+  },
+  {
+   "id": "f_ckpt",
+   "label": "Checkpoint + manifest",
+   "sub": "SHA-256 checked at start",
+   "kind": "store",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     1055,
+     80
+    ]
+   },
+   "detail": "best.pt, run.json and config are checked against final_manifest.json, which is itself checked against final_manifest.sha256. Any mismatch stops the server at start-up.",
+   "evidence": [
+    "src/app/backend/replay.py:161-182"
+   ]
+  },
+  {
+   "id": "f_future",
+   "label": "Readings after T",
+   "sub": "comparison only",
+   "kind": "store",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     1435,
+     80
+    ]
+   },
+   "detail": "Observed values after the issue time are read separately and only for comparison; they are never model inputs.",
+   "evidence": [
+    "src/app/backend/replay.py:328-401",
+    "src/app/tests/test_replay.py (no-leakage test)"
+   ]
+  },
+  {
+   "id": "f_catalog",
+   "label": "Candidate event",
+   "sub": "from the anomaly catalog",
+   "kind": "store",
+   "community": 5,
+   "pos": {
+    "forecast": [
+     675,
+     400
+    ]
+   },
+   "detail": "For an event, the explorer issues forecasts every 5 minutes from one hour before the anomaly to its end (up to 72), and repeats them on up to 4 nearby normal days of the same type.",
+   "evidence": [
+    "src/app/backend/disruptions.py:149-430"
+   ]
+  },
+  {
+   "id": "r_models",
+   "label": "5 model architectures",
+   "sub": "one shared factory",
+   "kind": "count",
+   "community": 6,
+   "pos": {
+    "results": [
+     250,
+     100
+    ]
+   },
+   "detail": "MLP, GRU, TCN, PatchTST and N-HiTS.",
+   "evidence": [
+    "src/aiori2/models/factory.py:19, 36"
+   ]
+  },
+  {
+   "id": "r_algos",
+   "label": "8 FL algorithms",
+   "sub": "server aggregation rules",
+   "kind": "count",
+   "community": 6,
+   "pos": {
+    "results": [
+     250,
+     200
+    ]
+   },
+   "detail": "FedAvg, FedProx, FedAdam, FedYogi, FedAdagrad, SCAFFOLD, FedNova, FedAvgM; explored across Stage 2 (64 configurations).",
+   "evidence": [
+    "src/aiori2/fl/algorithms.py:89-206",
+    "src/aiori2/plan.py:4-5"
+   ]
+  },
+  {
+   "id": "r_gpu",
+   "label": "Local GPU training",
+   "sub": "one RTX PRO 4000, no cloud",
+   "kind": "count",
+   "community": 6,
+   "pos": {
+    "results": [
+     250,
+     300
+    ]
+   },
+   "detail": "All training ran on one workstation GPU. Stage 3 peak GPU memory was about 77 MB per run.",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/PHASE8C_REPORT.md §6"
+   ]
+  },
+  {
+   "id": "r_replay",
+   "label": "Historical Replay",
+   "sub": "3 years · 200 sensors",
+   "kind": "count",
+   "community": 6,
+   "pos": {
+    "results": [
+     250,
+     420
+    ]
+   },
+   "detail": "Playback of 2022–2024 at five-minute resolution with forecasts from the frozen winner. Implemented and running locally on :8010.",
+   "evidence": [
+    "src/app/backend/replay.py",
+    "src/app/web/src/pages/Replay.tsx"
+   ]
+  },
+  {
+   "id": "r_explorer",
+   "label": "Disruption Explorer",
+   "sub": "16,445 candidate anomalies",
+   "kind": "count",
+   "community": 6,
+   "pos": {
+    "results": [
+     250,
+     520
+    ]
+   },
+   "detail": "Offline catalog of 16,445 candidate anomaly events. 718 events involve 3 or more sensors; shifting each sensor's timing at random still gives about 256, so roughly a third of those could be coincidence.",
+   "evidence": [
+    "src/results/aiori2/phase9b_disruptions/disruption-detector-v1/catalog.json"
+   ]
+  },
+  {
+   "id": "r_stage3",
+   "label": "Stage 3 training",
+   "sub": "24 runs · 10.15 GPU-hours",
+   "kind": "offline",
+   "community": 6,
+   "pos": {
+    "results": [
+     730,
+     200
+    ]
+   },
+   "detail": "24 finalist runs, 18,920 federated rounds, 7,568,000 local steps, no failed runs. Two runs resumed from checkpoints after power interruptions; resumes are bit-equivalent.",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/PHASE8C_REPORT.md §4-6"
+   ]
+  },
+  {
+   "id": "r_select",
+   "label": "Frozen selection",
+   "sub": "chosen on validation only",
+   "kind": "offline",
+   "community": 6,
+   "pos": {
+    "results": [
+     730,
+     320
+    ]
+   },
+   "detail": "Winner fixed from validation results and frozen in a SHA-256-hashed manifest before the test period was touched.",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/final_manifest.json",
+    "final_manifest.sha256"
+   ]
+  },
+  {
+   "id": "r_eval",
+   "label": "Final evaluation",
+   "sub": "Jul–Dec 2024, scored once",
+   "kind": "offline",
+   "community": 6,
+   "pos": {
+    "results": [
+     730,
+     440
+    ]
+   },
+   "detail": "One-time test scoring with the same masks and raw-flow metrics as validation.",
+   "evidence": [
+    "src/aiori2/final_eval.py:1-12",
+    "src/results/aiori2/phase8c_stage3/analysis/final_test_summary.json"
+   ]
+  },
+  {
+   "id": "r_winner",
+   "label": "MLP + FedAvgM",
+   "sub": "history A · federated winner",
+   "kind": "metric",
+   "community": 6,
+   "pos": {
+    "results": [
+     1205,
+     200
+    ]
+   },
+   "detail": "Rank 1 of 4 finalists on validation (score 10.866). Served in Replay with seed 20261027, the first pre-registered seed, not picked by test results.",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/PHASE8C_REPORT.md §7",
+    "src/app/backend/replay.py:171-174"
+   ]
+  },
+  {
+   "id": "r_iid",
+   "label": "IID test WAPE 10.506%",
+   "sub": "3-seed mean, all sensors",
+   "kind": "metric",
+   "community": 6,
+   "pos": {
+    "results": [
+     1205,
+     320
+    ]
+   },
+   "detail": "Aggregate test WAPE on July–December 2024, IID partition, mean of three seeds.",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/PHASE8C_REPORT.md",
+    "src/app/backend/replay.py:51"
+   ]
+  },
+  {
+   "id": "r_geo",
+   "label": "Geographic WAPE 10.546%",
+   "sub": "non-IID, 3-seed mean",
+   "kind": "metric",
+   "community": 6,
+   "pos": {
+    "results": [
+     1205,
+     430
+    ]
+   },
+   "detail": "Aggregate test WAPE on July–December 2024, geographic (non-IID) partition, mean of three seeds.",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/PHASE8C_REPORT.md",
+    "src/app/backend/replay.py:51"
+   ]
+  },
+  {
+   "id": "r_persist",
+   "label": "Persistence 12.495%",
+   "sub": "naive baseline, same test",
+   "kind": "metric",
+   "community": 6,
+   "pos": {
+    "results": [
+     1205,
+     530
+    ]
+   },
+   "detail": "Test WAPE of repeating the last observed value, on the same test windows. Lower is better, so the federated model's error is about 16% lower.",
+   "evidence": [
+    "src/results/aiori2/phase8c_stage3/analysis/PHASE8C_REPORT.md",
+    "src/aiori2/baseline.py"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "source": "user",
+   "target": "webapp",
+   "relation": "uses",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "webapp",
+   "target": "api8000",
+   "relation": "calls",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "webapp",
+   "target": "api8010",
+   "relation": "calls",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "api8010",
+   "target": "api8000",
+   "relation": "inherits",
+   "view": "system",
+   "style": "reuse",
+   "label": "reuses its code · own process"
+  },
+  {
+   "source": "api8000",
+   "target": "forecast",
+   "relation": "serves",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "api8000",
+   "target": "results",
+   "relation": "reads",
+   "view": "system",
+   "style": "runtime",
+   "bend": -70
+  },
+  {
+   "source": "api8010",
+   "target": "replay",
+   "relation": "serves",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "api8010",
+   "target": "explorer",
+   "relation": "serves",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "explorer",
+   "target": "replay",
+   "relation": "links_to",
+   "view": "system",
+   "style": "reuse",
+   "label": "open event"
+  },
+  {
+   "source": "forecast",
+   "target": "models",
+   "relation": "loads",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "replay",
+   "target": "models",
+   "relation": "loads",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "replay",
+   "target": "arrays",
+   "relation": "reads",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "explorer",
+   "target": "catalog",
+   "relation": "reads",
+   "view": "system",
+   "style": "runtime"
+  },
+  {
+   "source": "xtraffic",
+   "target": "prep",
+   "relation": "feeds",
+   "view": "system",
+   "style": "offline"
+  },
+  {
+   "source": "prep",
+   "target": "arrays",
+   "relation": "writes",
+   "view": "system",
+   "style": "offline"
+  },
+  {
+   "source": "prep",
+   "target": "fltrain",
+   "relation": "feeds",
+   "view": "system",
+   "style": "offline",
+   "label": "training windows"
+  },
+  {
+   "source": "prep",
+   "target": "detect",
+   "relation": "feeds",
+   "view": "system",
+   "style": "offline"
+  },
+  {
+   "source": "detect",
+   "target": "catalog",
+   "relation": "writes",
+   "view": "system",
+   "style": "offline"
+  },
+  {
+   "source": "fltrain",
+   "target": "evaluate",
+   "relation": "feeds",
+   "view": "system",
+   "style": "offline"
+  },
+  {
+   "source": "evaluate",
+   "target": "models",
+   "relation": "writes",
+   "view": "system",
+   "style": "offline"
+  },
+  {
+   "source": "evaluate",
+   "target": "results",
+   "relation": "writes",
+   "view": "system",
+   "style": "offline"
+  },
+  {
+   "source": "xtraffic",
+   "target": "t_sensors",
+   "relation": "feeds",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_sensors",
+   "target": "t_clients",
+   "relation": "feeds",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_clients",
+   "target": "t_parts",
+   "relation": "feeds",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_parts",
+   "target": "t_runner",
+   "relation": "feeds",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_split",
+   "target": "t_runner",
+   "relation": "feeds",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_arms",
+   "target": "t_runner",
+   "relation": "configures",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_models",
+   "target": "t_runner",
+   "relation": "configures",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_algos",
+   "target": "t_runner",
+   "relation": "configures",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_hist",
+   "target": "t_runner",
+   "relation": "configures",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_runner",
+   "target": "t_s1",
+   "relation": "runs",
+   "view": "training",
+   "style": "offline",
+   "label": "runs every stage"
+  },
+  {
+   "source": "t_s1",
+   "target": "t_s2",
+   "relation": "shortlists",
+   "view": "training",
+   "style": "offline",
+   "label": "top 2 models"
+  },
+  {
+   "source": "t_s2",
+   "target": "t_s3",
+   "relation": "shortlists",
+   "view": "training",
+   "style": "offline",
+   "label": "4 finalists"
+  },
+  {
+   "source": "t_s3",
+   "target": "t_select",
+   "relation": "feeds",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "t_select",
+   "target": "t_test",
+   "relation": "freezes",
+   "view": "training",
+   "style": "offline"
+  },
+  {
+   "source": "f_obs",
+   "target": "f_valid",
+   "relation": "feeds",
+   "view": "forecast",
+   "style": "offline"
+  },
+  {
+   "source": "f_valid",
+   "target": "f_fill",
+   "relation": "feeds",
+   "view": "forecast",
+   "style": "offline"
+  },
+  {
+   "source": "f_fill",
+   "target": "f_window",
+   "relation": "feeds",
+   "view": "forecast",
+   "style": "runtime"
+  },
+  {
+   "source": "f_window",
+   "target": "f_scale",
+   "relation": "feeds",
+   "view": "forecast",
+   "style": "runtime"
+  },
+  {
+   "source": "f_scale",
+   "target": "f_model",
+   "relation": "feeds",
+   "view": "forecast",
+   "style": "runtime"
+  },
+  {
+   "source": "f_model",
+   "target": "f_pred",
+   "relation": "produces",
+   "view": "forecast",
+   "style": "runtime"
+  },
+  {
+   "source": "f_pred",
+   "target": "f_cmp",
+   "relation": "feeds",
+   "view": "forecast",
+   "style": "runtime"
+  },
+  {
+   "source": "f_cmp",
+   "target": "f_ui",
+   "relation": "feeds",
+   "view": "forecast",
+   "style": "runtime"
+  },
+  {
+   "source": "f_scaler",
+   "target": "f_scale",
+   "relation": "configures",
+   "view": "forecast",
+   "style": "runtime"
+  },
+  {
+   "source": "f_ckpt",
+   "target": "f_model",
+   "relation": "loads",
+   "view": "forecast",
+   "style": "runtime",
+   "label": "loaded at start-up"
+  },
+  {
+   "source": "f_future",
+   "target": "f_cmp",
+   "relation": "compares",
+   "view": "forecast",
+   "style": "reuse",
+   "label": "not an input"
+  },
+  {
+   "source": "f_catalog",
+   "target": "f_window",
+   "relation": "sets",
+   "view": "forecast",
+   "style": "runtime",
+   "label": "issue times around the event"
+  },
+  {
+   "source": "r_models",
+   "target": "r_stage3",
+   "relation": "feeds",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_algos",
+   "target": "r_stage3",
+   "relation": "feeds",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_gpu",
+   "target": "r_stage3",
+   "relation": "runs",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_stage3",
+   "target": "r_select",
+   "relation": "feeds",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_select",
+   "target": "r_eval",
+   "relation": "freezes",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_select",
+   "target": "r_winner",
+   "relation": "selects",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_eval",
+   "target": "r_iid",
+   "relation": "measures",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_eval",
+   "target": "r_geo",
+   "relation": "measures",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_eval",
+   "target": "r_persist",
+   "relation": "measures",
+   "view": "results",
+   "style": "offline"
+  },
+  {
+   "source": "r_explorer",
+   "target": "r_replay",
+   "relation": "links_to",
+   "view": "results",
+   "style": "reuse",
+   "label": "open in Replay"
+  }
+ ]
+}

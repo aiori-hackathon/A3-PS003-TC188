@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HLD-02 · AIORI Layered Platform Architecture",
+    "output": "docs/architecture/final/diagrams/hld-02-layered-platform/aiori-hld-02-layered-platform.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "components": [
+    { "id": "pg_core", "type": "frontend", "label": "Overview · Forecasting", "sublabel": "Performance pages", "pos": [40, 40], "size": [200, 60] },
+    { "id": "pg_research", "type": "frontend", "label": "Federated · Methodology", "sublabel": "About pages", "pos": [310, 40], "size": [200, 60] },
+    { "id": "pg_replay", "type": "frontend", "label": "Historical Traffic Replay", "sublabel": "/replay (replay build)", "pos": [580, 40], "size": [200, 60] },
+    { "id": "pg_dis", "type": "frontend", "label": "Disruption Explorer", "sublabel": "/disruptions (replay build)", "pos": [850, 40], "size": [200, 60] },
+
+    { "id": "cl_study", "type": "frontend", "label": "Study API client", "sublabel": "lib/api.ts + StudyProvider", "pos": [40, 200], "size": [200, 60] },
+    { "id": "cl_replay", "type": "frontend", "label": "Replay API clients", "sublabel": "lib/replay.ts, disruptions.ts", "pos": [580, 200], "size": [200, 60] },
+
+    { "id": "h_main", "type": "backend", "label": "server.Handler", "sublabel": "GET /api/*, POST /api/predict", "pos": [40, 360], "size": [200, 60] },
+    { "id": "h_replay", "type": "backend", "label": "replay_server.Handler", "sublabel": "adds GET /api/replay/*", "pos": [580, 360], "size": [200, 60] },
+
+    { "id": "s_engine", "type": "backend", "label": "server.Engine", "sublabel": "GRU inference, metrics", "pos": [40, 520], "size": [200, 60] },
+    { "id": "s_cand", "type": "backend", "label": "Candidate", "sublabel": "optimised MLP, opt-in", "pos": [310, 520], "size": [200, 60] },
+    { "id": "s_replay", "type": "backend", "label": "replay.Replay", "sublabel": "frames, series, forecasts", "pos": [580, 520], "size": [200, 60] },
+    { "id": "s_dis", "type": "backend", "label": "disruptions.Disruptions", "sublabel": "catalog, series, robustness", "pos": [850, 520], "size": [200, 60] },
+
+    { "id": "d_nine", "type": "database", "label": "2023 study artifacts", "sublabel": "nine_month data, GRU runs", "pos": [40, 680], "size": [200, 60] },
+    { "id": "d_aopt", "type": "database", "label": "Candidate v1 files", "sublabel": "accuracy_optimization", "pos": [310, 680], "size": [200, 60] },
+    { "id": "d_3yr", "type": "database", "label": "3-year arrays + Stage 3", "sublabel": "aiori2_3yr, MLP checkpoints", "pos": [580, 680], "size": [200, 60] },
+    { "id": "d_cat", "type": "database", "label": "Disruption catalog v1", "sublabel": "catalog.json, baseline.npz", "pos": [850, 680], "size": [200, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Presentation: React pages", "wraps": ["pg_core", "pg_research", "pg_replay", "pg_dis"] },
+    { "kind": "region", "label": "Frontend clients (fetch + AbortController)", "wraps": ["cl_study", "cl_replay"] },
+    { "kind": "region", "label": "HTTP layer (standard-library servers)", "wraps": ["h_main", "h_replay"] },
+    { "kind": "region", "label": "In-process services: inference + analysis", "wraps": ["s_engine", "s_cand", "s_replay", "s_dis"] },
+    { "kind": "region", "label": "Read-only artifact files", "wraps": ["d_nine", "d_aopt", "d_3yr", "d_cat"] }
+  ],
+  "connections": [
+    { "id": "core-client", "from": "pg_core", "to": "cl_study" },
+    { "id": "research-client", "from": "pg_research", "to": "cl_study", "label": "study data" },
+    { "id": "replay-client", "from": "pg_replay", "to": "cl_replay" },
+    { "id": "dis-client", "from": "pg_dis", "to": "cl_replay", "label": "events, forecasts" },
+    { "id": "study-http", "from": "cl_study", "to": "h_main", "label": "JSON over HTTP", "variant": "emphasis" },
+    { "id": "replay-http", "from": "cl_replay", "to": "h_replay", "label": "JSON over HTTP", "variant": "emphasis" },
+    { "id": "inherit", "from": "h_replay", "to": "h_main", "label": "subclass: other routes" },
+    { "id": "main-engine", "from": "h_main", "to": "s_engine" },
+    { "id": "engine-cand", "from": "s_engine", "to": "s_cand", "label": "opt-in" },
+    { "id": "replay-svc", "from": "h_replay", "to": "s_replay" },
+    { "id": "dis-svc", "from": "h_replay", "to": "s_dis" },
+    { "id": "dis-reuse", "from": "s_dis", "to": "s_replay", "label": "reuses" },
+    { "id": "engine-data", "from": "s_engine", "to": "d_nine", "label": "load once" },
+    { "id": "cand-data", "from": "s_cand", "to": "d_aopt", "label": "load once" },
+    { "id": "replay-data", "from": "s_replay", "to": "d_3yr", "label": "hash-check, mmap" },
+    { "id": "dis-data", "from": "s_dis", "to": "d_cat", "label": "hash-check, load" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Shared shell", "items": ["main.tsx → App (BrowserRouter, StudyProvider, Shell, lazy routes)", "Replay and Explorer routes exist only in builds made with vite --mode replay", "useRemote caches responses in bounded LRUs and aborts stale requests"] },
+    { "dot": "emerald", "title": "Services", "items": ["Engine: local-only GRU (final) + centralised GRU (comparison), 2023 study", "Replay: frozen MLP + FedAvgM, geo and IID partitions, seed 20261027", "Disruptions: offline catalog, read at start-up; 503 if missing or stale"] },
+    { "dot": "slate", "title": "Persistence", "items": ["Only local files: NumPy arrays, JSON, CSV, PyTorch .pt", "Services never write at request time", "No database server"] }
+  ]
+}

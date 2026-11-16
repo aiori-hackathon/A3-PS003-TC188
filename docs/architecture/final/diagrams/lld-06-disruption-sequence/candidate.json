@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "LLD-06 · Disruption Investigation, Replay Link and Forecast Comparison",
+    "output": "docs/architecture/final/diagrams/lld-06-disruption-sequence/aiori-lld-06-disruption-sequence.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "participants": [
+    { "id": "user", "type": "external", "label": "User", "sublabel": "/disruptions" },
+    { "id": "ex", "type": "frontend", "label": "Explorer page", "sublabel": "filters, ?event=" },
+    { "id": "rp", "type": "frontend", "label": "Replay page", "sublabel": "parseReplayLink" },
+    { "id": "rs", "type": "backend", "label": "replay_server", "sublabel": "disruption_route()" },
+    { "id": "dis", "type": "backend", "label": "Disruptions", "sublabel": "catalog in memory" },
+    { "id": "svc", "type": "backend", "label": "replay.Replay", "sublabel": "arrays + frozen MLP" }
+  ],
+  "segments": [
+    { "from": 150, "to": 330, "label": "Find events" },
+    { "from": 340, "to": 700, "label": "Inspect one event" },
+    { "from": 710, "to": 780, "label": "Open in Replay" },
+    { "from": 790, "to": 1000, "label": "Forecast comparison (exploratory)" }
+  ],
+  "messages": [
+    { "id": "filter", "from": "user", "to": "ex", "y": 170, "label": "set filters, sort, page" },
+    { "id": "list", "from": "ex", "to": "rs", "y": 205, "label": "GET /api/replay/disruptions?…", "variant": "emphasis", "note": "page_size ≤ 100; unknown params → 400" },
+    { "id": "listfn", "from": "rs", "to": "dis", "y": 260, "label": "list(p)", "note": "array masks, deterministic order" },
+    { "id": "listret", "from": "dis", "to": "ex", "y": 310, "label": "total, page of events", "variant": "return" },
+    { "id": "open", "from": "user", "to": "ex", "y": 360, "label": "open event" },
+    { "id": "detail", "from": "ex", "to": "rs", "y": 395, "label": "GET …/disruptions/<id>", "note": "malformed or unknown id → 404" },
+    { "id": "detailfn", "from": "rs", "to": "dis", "y": 450, "label": "detail(id)" },
+    { "id": "detailret", "from": "dis", "to": "ex", "y": 485, "label": "summary, why flagged, sensors", "variant": "return" },
+    { "id": "series", "from": "ex", "to": "rs", "y": 525, "label": "GET …/<id>/series?sensor" },
+    { "id": "seriesfn", "from": "rs", "to": "dis", "y": 560, "label": "series()", "note": "event ± 2 h, at most 3 days" },
+    { "id": "read", "from": "dis", "to": "svc", "y": 615, "label": "flow, valid (mmap)" },
+    { "id": "seriesret", "from": "dis", "to": "ex", "y": 660, "label": "observed, typical, band, z", "variant": "return" },
+    { "id": "deeplink", "from": "ex", "to": "rp", "y": 740, "label": "navigate ?date&time&sensor&event", "variant": "dashed" },
+    { "id": "compare", "from": "user", "to": "ex", "y": 810, "label": "Compare forecast errors" },
+    { "id": "rob", "from": "ex", "to": "rs", "y": 845, "label": "GET …/<id>/robustness?sensor", "variant": "emphasis" },
+    { "id": "robfn", "from": "rs", "to": "dis", "y": 880, "label": "robustness()", "note": "≤ 72 issue times; causal inputs" },
+    { "id": "pred", "from": "dis", "to": "svc", "y": 935, "label": "_predict (event + reference days)" },
+    { "id": "predret", "from": "svc", "to": "dis", "y": 965, "label": "12-step forecasts", "variant": "return" },
+    { "id": "robret", "from": "dis", "to": "ex", "y": 995, "label": "MAE, WAPE, n vs reference", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "ex", "from": 165, "to": 1000, "type": "frontend" },
+    { "participant": "rs", "from": 205, "to": 265, "type": "backend" },
+    { "participant": "dis", "from": 260, "to": 315, "type": "backend" },
+    { "participant": "dis", "from": 450, "to": 665, "type": "backend" },
+    { "participant": "svc", "from": 615, "to": 640, "type": "backend" },
+    { "participant": "dis", "from": 880, "to": 1000, "type": "backend" },
+    { "participant": "svc", "from": 935, "to": 970, "type": "backend" }
+  ],
+  "cards": [
+    { "dot": "amber", "title": "What an event is", "items": ["A statistical departure from the 2023 typical flow, found retrospectively", "Not a confirmed accident, closure, earthquake or other disaster", "Category, confidence and quality flags come from the offline catalog"] },
+    { "dot": "violet", "title": "Forecast comparison", "items": ["Errors scored only on valid targets inside the sensor's anomaly interval", "Reference: same issue times on up to 4 nearby same-day-type days without a catalog event", "Exploratory; not a test score and not causal evidence"] },
+    { "dot": "slate", "title": "Other calls", "items": ["GET …/meta (catalog summary, limitations) and GET …/<id>/compare (flow ÷ typical, up to 12 sensors)", "Single forecasts reuse GET /api/replay/forecast", "Catalog missing or stale → 503 on these routes only"] }
+  ]
+}

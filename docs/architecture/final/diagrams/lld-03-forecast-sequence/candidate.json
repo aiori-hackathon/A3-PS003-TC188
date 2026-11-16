@@ -1,0 +1,211 @@
+{
+ "schema_version": 1,
+ "diagram_type": "sequence",
+ "meta": {
+  "title": "LLD-03 · Historical Forecast Request (POST /api/predict)",
+  "output": "docs/architecture/final/diagrams/lld-03-forecast-sequence/aiori-lld-03-forecast-sequence.html",
+  "quality_profile": "showcase",
+  "locale": "en"
+ },
+ "participants": [
+  {
+   "id": "user",
+   "type": "external",
+   "label": "User",
+   "sublabel": "Forecasting page"
+  },
+  {
+   "id": "page",
+   "type": "frontend",
+   "label": "ForecastWorkspace",
+   "sublabel": "useRequest(api.predict)"
+  },
+  {
+   "id": "handler",
+   "type": "backend",
+   "label": "server.Handler",
+   "sublabel": "do_POST"
+  },
+  {
+   "id": "engine",
+   "type": "backend",
+   "label": "server.Engine",
+   "sublabel": "predict()"
+  },
+  {
+   "id": "data",
+   "type": "database",
+   "label": "nine_month run",
+   "sublabel": "WindowDataset, flow_raw"
+  },
+  {
+   "id": "gru",
+   "type": "backend",
+   "label": "ForecastGRU",
+   "sublabel": "client's checkpoint"
+  }
+ ],
+ "segments": [
+  {
+   "from": 150,
+   "to": 265,
+   "label": "Request + validation"
+  },
+  {
+   "from": 275,
+   "to": 495,
+   "label": "Inference"
+  },
+  {
+   "from": 505,
+   "to": 620,
+   "label": "Response + chart"
+  }
+ ],
+ "messages": [
+  {
+   "id": "pick",
+   "from": "user",
+   "to": "page",
+   "y": 170,
+   "label": "sensor, date, time"
+  },
+  {
+   "id": "post",
+   "from": "page",
+   "to": "handler",
+   "y": 200,
+   "label": "POST {sensor, time, models}",
+   "variant": "emphasis",
+   "note": "fetch with AbortSignal; body < 20 kB"
+  },
+  {
+   "id": "predict",
+   "from": "handler",
+   "to": "engine",
+   "y": 250,
+   "label": "ENGINE.predict(body)",
+   "note": "400/404 on bad sensor, models, time"
+  },
+  {
+   "id": "window",
+   "from": "engine",
+   "to": "data",
+   "y": 300,
+   "label": "historical(pos, t0)",
+   "note": "binary search over val/test windows"
+  },
+  {
+   "id": "x",
+   "from": "data",
+   "to": "engine",
+   "y": 360,
+   "label": "x (1, 12, 4) scaled",
+   "variant": "return",
+   "note": "flow z, observed flag, time-of-day sin/cos"
+  },
+  {
+   "id": "fwd",
+   "from": "engine",
+   "to": "gru",
+   "y": 420,
+   "label": "forward under lock",
+   "variant": "emphasis"
+  },
+  {
+   "id": "z",
+   "from": "gru",
+   "to": "engine",
+   "y": 460,
+   "label": "z (1, 12)",
+   "variant": "return",
+   "note": "to_raw: z·std + mean; final model clipped at 0"
+  },
+  {
+   "id": "resp",
+   "from": "engine",
+   "to": "handler",
+   "y": 520,
+   "label": "history, forecasts, actual",
+   "variant": "return",
+   "note": "12 past + 12 future 5-min timestamps"
+  },
+  {
+   "id": "json",
+   "from": "handler",
+   "to": "page",
+   "y": 575,
+   "label": "200 JSON",
+   "variant": "return"
+  },
+  {
+   "id": "draw",
+   "from": "page",
+   "to": "user",
+   "y": 605,
+   "label": "ForecastChart + table",
+   "variant": "return"
+  }
+ ],
+ "activations": [
+  {
+   "participant": "page",
+   "from": 195,
+   "to": 610,
+   "type": "frontend"
+  },
+  {
+   "participant": "handler",
+   "from": 200,
+   "to": 580,
+   "type": "backend"
+  },
+  {
+   "participant": "engine",
+   "from": 250,
+   "to": 525,
+   "type": "backend"
+  },
+  {
+   "participant": "data",
+   "from": 300,
+   "to": 365,
+   "type": "database"
+  },
+  {
+   "participant": "gru",
+   "from": 420,
+   "to": 465,
+   "type": "backend"
+  }
+ ],
+ "cards": [
+  {
+   "dot": "emerald",
+   "title": "Models on this path",
+   "items": [
+    "final: local-only GRU seed 1, one checkpoint per client, negative values clipped to 0",
+    "centralised: GRU seed 0, one checkpoint, unclipped (comparison)",
+    "candidate (opt-in): optimised MLP; historical requests only"
+   ]
+  },
+  {
+   "dot": "amber",
+   "title": "Custom readings branch",
+   "items": [
+    "observations: 12 values or null, 0–5000 vehicles",
+    "custom_features(): forward-fill ≤ 6 steps, then training time-of-day median, then scale",
+    "No actual values; accuracy note says it is unmeasured"
+   ]
+  },
+  {
+   "dot": "slate",
+   "title": "Data window",
+   "items": [
+    "Historical windows exist only for the validation (Jul 11–Aug 7) and test (Aug 8–Sep 30, 2023) periods",
+    "Otherwise 404 with the valid range",
+    "Units: vehicles per 5-minute interval"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "LLD-09 · Data and Artifact Dependencies",
+    "output": "docs/architecture/final/diagrams/lld-09-data-artifacts/aiori-lld-09-data-artifacts.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "stages": [
+    { "label": "Source data" },
+    { "label": "Processed data (read-only)" },
+    { "label": "Frozen training outputs" },
+    { "label": "Runtime services" },
+    { "label": "Served to the browser" }
+  ],
+  "nodes": [
+    { "id": "raw3", "type": "external", "label": "XTraffic 2022–2024", "sublabel": "year_* monthly files", "stage": 0, "row": 0 },
+    { "id": "raw23", "type": "external", "label": "XTraffic 2023", "sublabel": "same 200 sensors", "stage": 0, "row": 2 },
+    { "id": "d3yr", "type": "database", "label": "aiori2_3yr", "sublabel": "4.2 GB arrays, masks", "stage": 1, "row": 0 },
+    { "id": "nine", "type": "database", "label": "nine_month", "sublabel": "2023 windows, scalers", "stage": 1, "row": 2 },
+    { "id": "stage3", "type": "database", "label": "phase8c_stage3", "sublabel": "24 runs, manifest", "stage": 2, "row": 0 },
+    { "id": "catalog", "type": "database", "label": "phase9b catalog", "sublabel": "catalog + baseline", "stage": 2, "row": 1 },
+    { "id": "phase9", "type": "database", "label": "phase9 runs + final", "sublabel": "GRU .pt, test JSON", "stage": 2, "row": 2 },
+    { "id": "aopt", "type": "database", "label": "candidate_v1", "sublabel": "mlp_models.pt", "stage": 2, "row": 3 },
+    { "id": "replay", "type": "backend", "label": "replay.Replay", "sublabel": "MLP + FedAvgM", "stage": 3, "row": 0 },
+    { "id": "dis", "type": "backend", "label": "Disruptions", "sublabel": "event API", "stage": 3, "row": 1 },
+    { "id": "engine", "type": "backend", "label": "server.Engine", "sublabel": "GRU models", "stage": 3, "row": 2 },
+    { "id": "cand", "type": "backend", "label": "Candidate", "sublabel": "opt-in MLP", "stage": 3, "row": 3 },
+    { "id": "out8010", "type": "frontend", "label": ":8010 JSON", "sublabel": "+ web/dist-replay", "stage": 4, "row": 0 },
+    { "id": "out8000", "type": "frontend", "label": ":8000 JSON", "sublabel": "+ web/dist", "stage": 4, "row": 2 }
+  ],
+  "flows": [
+    { "id": "p3", "from": "raw3", "to": "d3yr", "label": "aiori2.pipeline", "variant": "dashed" },
+    { "id": "p23", "from": "raw23", "to": "nine", "label": "aiori preprocessing", "variant": "dashed" },
+    { "id": "t3", "from": "d3yr", "to": "stage3", "label": "aiori2.run", "variant": "dashed" },
+    { "id": "cat", "from": "d3yr", "to": "catalog", "label": "detector build", "variant": "dashed" },
+    { "id": "t9", "from": "nine", "to": "phase9", "label": "GRU training", "variant": "dashed" },
+    { "id": "ta", "from": "nine", "to": "aopt", "label": "aopt study", "variant": "dashed" },
+    { "id": "l3", "from": "stage3", "to": "replay", "label": "hash-checked", "variant": "emphasis" },
+    { "id": "lc", "from": "catalog", "to": "dis", "label": "hash-checked" },
+    { "id": "l9", "from": "phase9", "to": "engine", "label": "load once", "variant": "emphasis" },
+    { "id": "la", "from": "aopt", "to": "cand", "label": "load once" },
+    { "id": "ce", "from": "cand", "to": "engine", "label": "opt-in model" },
+    { "id": "r8010", "from": "replay", "to": "out8010", "label": "replay JSON", "variant": "emphasis" },
+    { "id": "d8010", "from": "dis", "to": "out8010", "label": "event JSON" },
+    { "id": "e8000", "from": "engine", "to": "out8000", "label": "study JSON", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Runtime reads (not drawn as separate flows)", "items": ["Replay also memory-maps aiori2_3yr arrays (flow, mask, filled inputs, typical flow) and reads sensor_meta_feature.csv for provisional coordinates", "Engine also reads nine_month windows and frozen Phase 9 aggregate metrics", ":8010 additionally serves every :8000 endpoint (same Engine in the same process)"] },
+    { "dot": "amber", "title": "Generated vs read-only", "items": ["Dashed: offline jobs that wrote the artifacts (never run by a server)", "All files read by the servers are treated as read-only and several are hash-checked", "Backups of app source live in src/app/backups/ (not read at runtime)"] },
+    { "dot": "slate", "title": "Formats", "items": ["NumPy .npy/.npz (memory-mapped where large), JSON, CSV, PyTorch .pt (weights_only load)", "No database server; no object store"] }
+  ]
+}

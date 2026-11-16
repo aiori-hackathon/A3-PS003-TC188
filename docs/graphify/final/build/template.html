@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIORI System Graph</title>
+<style>
+:root{
+  --paper:#eef1f5; --panel:#ffffff; --ink:#152033; --muted:#566275; --line:#c3ccd8; --focus:#2557a7;
+  --person:#5f6b7a; --ui:#0c7a83; --feature:#0c7a83; --service:#2557a7; --store:#9a6410;
+  --offline:#6a4fb0; --count:#44546a; --metric:#1d7448; --hover:#e3e8ef;
+  --canvas:#ffffff; --edge:#4a5568; --edge-reuse:#7a8597; --halo:#ffffff; --node-bg:#ffffff; --card-bg:#ffffff;
+  --band-base:#f5f7fa; --band-stroke:#dfe4eb; --band-runtime:#f1f5fb; --band-offline:#f5f2fb; --band-store:#fbf6ee; --band-metric:#eff7f2; --band-count:#f3f5f8;
+  --shadow:rgba(21,32,51,.14); color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --person:#9aa6b6; --ui:#45b9c2; --feature:#45b9c2; --service:#7aa6ee; --store:#dba64a;
+  --offline:#ad94f5; --count:#9fb0c6; --metric:#55c58f;
+  --paper:#0f141c; --panel:#171e29; --ink:#e4e9f1; --muted:#9aa6b7; --line:#2f3a4a; --focus:#7aa6ee; --hover:#222b38;
+  --canvas:#141a24; --edge:#a5b1c2; --edge-reuse:#7f8b9c; --halo:#141a24; --node-bg:#1b2330; --card-bg:#1b2330;
+  --band-base:#1a212c; --band-stroke:#2b3544; --band-runtime:#172133; --band-offline:#1f1a30; --band-store:#272013; --band-metric:#152820; --band-count:#1c222c;
+  --shadow:rgba(0,0,0,.45); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --person:#9aa6b6; --ui:#45b9c2; --feature:#45b9c2; --service:#7aa6ee; --store:#dba64a;
+  --offline:#ad94f5; --count:#9fb0c6; --metric:#55c58f;
+  --paper:#0f141c; --panel:#171e29; --ink:#e4e9f1; --muted:#9aa6b7; --line:#2f3a4a; --focus:#7aa6ee; --hover:#222b38;
+  --canvas:#141a24; --edge:#a5b1c2; --edge-reuse:#7f8b9c; --halo:#141a24; --node-bg:#1b2330; --card-bg:#1b2330;
+  --band-base:#1a212c; --band-stroke:#2b3544; --band-runtime:#172133; --band-offline:#1f1a30; --band-store:#272013; --band-metric:#152820; --band-count:#1c222c;
+  --shadow:rgba(0,0,0,.45); color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.45}
+.app{display:grid;grid-template-rows:auto auto 1fr auto;height:100vh}
+header{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;padding:14px 24px 6px}
+header h1{margin:0;font-size:26px;letter-spacing:.5px;font-weight:700}
+header p{margin:0;color:var(--muted);max-width:76ch}
+header a{margin-left:auto;color:var(--focus);font-size:14px}
+nav{display:flex;gap:6px;padding:6px 24px 10px;flex-wrap:wrap;align-items:stretch}
+nav button{all:unset;cursor:pointer;padding:8px 14px 9px;border-radius:8px;border:1px solid transparent;color:var(--muted)}
+nav button b{display:block;color:var(--ink);font-weight:650;font-size:15px}
+nav button span{font-size:12.5px}
+nav button:hover{background:var(--hover)}
+nav button[aria-selected="true"]{background:var(--panel);border-color:var(--line);box-shadow:0 1px 0 var(--line)}
+nav button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.tools{margin-left:auto;display:flex;gap:6px;align-items:center}
+.tools button{all:unset;cursor:pointer;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font-size:13px}
+.tools button:hover{border-color:var(--muted)}
+.tools button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+main{position:relative;min-height:0;margin:0 24px}
+.stage{position:absolute;inset:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-height:0;cursor:grab;touch-action:none}
+.stage.dragging{cursor:grabbing}
+.stage svg{width:100%;height:100%;display:block}
+aside{position:absolute;top:12px;right:12px;width:340px;max-height:calc(100% - 24px);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow:auto;box-shadow:0 6px 24px var(--shadow)}
+aside[hidden]{display:none}
+aside .x{all:unset;cursor:pointer;position:absolute;top:10px;right:12px;font-size:20px;color:var(--muted);padding:0 4px}
+aside .x:focus-visible{outline:2px solid var(--focus)}
+.hint{position:absolute;left:14px;bottom:10px;font-size:13px;color:var(--muted);pointer-events:none}
+aside h2{margin:0 0 2px;font-size:18px}
+aside .kind{font-size:12.5px;font-weight:600;margin-bottom:10px}
+aside p{margin:0 0 12px}
+aside h3{font-size:13px;margin:14px 0 4px;color:var(--muted);font-weight:600}
+aside ul{margin:0;padding-left:18px}
+aside li{margin:2px 0;font-size:13.5px}
+aside code{font-family:"Cascadia Code",Consolas,monospace;font-size:12px;word-break:break-all}
+aside .hint{color:var(--muted)}
+aside button.jump{all:unset;cursor:pointer;color:var(--focus);text-decoration:underline}
+footer{display:flex;gap:18px;flex-wrap:wrap;align-items:center;padding:10px 24px 14px;font-size:13px;color:var(--muted)}
+.key{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:3px;border:2px solid currentColor;background:var(--panel)}
+.ln{width:26px;height:0;border-top:2px solid var(--ink)}
+@media (max-width:900px){main{min-height:70vh}aside{width:auto;left:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>AIORI</h1>
+    <p>Federated traffic forecasting on three years of real sensor data, and a web app to replay, forecast and explore it.</p>
+    <a href="AIORI_GRAPH_GRAPHIFY.html">All nodes in Graphify's explorer</a>
+  </header>
+  <nav role="tablist" aria-label="Graph views" id="tabs">
+    <div class="tools">
+      <button id="zout" aria-label="Zoom out">−</button>
+      <button id="zin" aria-label="Zoom in">+</button>
+      <button id="fit">Fit</button>
+      <button id="svgx">Export SVG</button>
+      <button id="pngx">Export PNG</button>
+      <button id="theme" aria-label="Colour theme: follows system">Theme: System</button>
+    </div>
+  </nav>
+  <main>
+    <div class="stage" id="stage"><svg id="svg" xmlns="http://www.w3.org/2000/svg" role="img"></svg></div>
+    <div class="hint">Select a box for details and code evidence · drag to pan · scroll to zoom · Esc clears</div>
+    <aside id="panel" aria-live="polite" hidden></aside>
+  </main>
+  <footer id="legend"></footer>
+</div>
+<script>
+const DATA = /*__DATA__*/null;
+const KIND = {
+  person:["Person","--person"], ui:["Web interface","--ui"], feature:["App feature","--feature"],
+  service:["Running service","--service"], store:["Stored data","--store"], offline:["Offline batch job","--offline"],
+  count:["Implementation count","--count"], metric:["Measured result","--metric"]
+};
+const STYLE_NAMES = {runtime:"Request or read at runtime", offline:"Offline: produces or feeds", reuse:"Reuse, link or comparison only"};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const views = DATA.graph.views, nodes = Object.fromEntries(DATA.nodes.map(n => [n.id, n]));
+const svg = document.getElementById("svg"), stage = document.getElementById("stage"), panel = document.getElementById("panel");
+let view = null, box = null, sel = null, geo = {};
+
+function svgStyle(){
+  const c = k => css(KIND[k][1]);
+  return `text{font-family:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;fill:${css("--ink")}}
+  .band rect{fill:${css("--band-base")};stroke:${css("--band-stroke")}}${["runtime","offline","store","metric","count"].map(t => `.band.${t} rect{fill:${css("--band-" + t)}}`).join("")}
+  .band text{font-size:14px;font-weight:600;fill:${css("--muted")}}
+  .node rect.b{fill:${css("--node-bg")};stroke-width:1.6}.node .lab{font-size:15px;font-weight:650}.node .sub{font-size:12px;fill:${css("--muted")}}
+  .node{cursor:pointer}.node:focus{outline:none}.node:focus-visible rect.b,.node.sel rect.b{stroke-width:3}
+  .edge path{fill:none;stroke-width:1.6}.edge.runtime path{stroke:${css("--edge")}}.edge.offline path{stroke:${c("offline")};stroke-dasharray:7 5}.edge.reuse path{stroke:${css("--edge-reuse")};stroke-dasharray:2 4}
+  .edge text{font-size:12.5px;fill:${css("--muted")};paint-order:stroke;stroke:${css("--halo")};stroke-width:4px;stroke-linejoin:round}
+  .dim{opacity:.18}.card rect{fill:${css("--card-bg")};stroke:${css("--line")}}.card .t{font-size:14.5px;font-weight:650}.card .l{font-size:13.5px}.card .n{font-size:12.5px;font-style:italic;fill:${css("--muted")}}`;
+}
+
+function textWidth(str, size, weight){
+  const t = el("text", {"font-size": size, "font-weight": weight, x: -9999, y: -9999}, svg); t.textContent = str;
+  const w = t.getComputedTextLength(); t.remove(); return w;
+}
+
+function clip(p, q, g){ // point on node g's border along p->q
+  const dx = q[0] - p[0], dy = q[1] - p[1], hw = g.w / 2, hh = g.h / 2;
+  const s = Math.min(dx ? hw / Math.abs(dx) : Infinity, dy ? hh / Math.abs(dy) : Infinity);
+  return [p[0] + dx * s, p[1] + dy * s];
+}
+
+function render(v){
+  view = v; sel = null; svg.innerHTML = ""; geo = {};
+  el("style", {}, svg).textContent = svgStyle();
+  const defs = el("defs", {}, svg);
+  [["runtime", css("--edge")], ["offline", css("--offline")], ["reuse", css("--edge-reuse")]].forEach(([k, c]) => {
+    const m = el("marker", {id: "a-" + k, viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse"}, defs);
+    el("path", {d: "M0,0 L10,5 L0,10 z", fill: c}, m);
+  });
+  el("rect", {x: 0, y: 0, width: v.width, height: v.height, fill: css("--canvas")}, svg);
+  const root = el("g", {id: "root"}, svg);
+  v.bands.forEach(b => { const g = el("g", {class: "band " + b.tone}, root);
+    el("rect", {x: b.x, y: b.y, width: b.w, height: b.h, rx: 10}, g);
+    el("text", {x: b.x + 14, y: b.y + 22}, g).textContent = b.label; });
+  const vn = DATA.nodes.filter(n => n.pos[v.id]);
+  vn.forEach(n => { const [x, y] = n.pos[v.id];
+    const w = Math.max(150, textWidth(n.label, 15, 650) + 36, textWidth(n.sub || "", 12, 400) + 36);
+    geo[n.id] = {x, y, w, h: 60}; });
+  const eg = el("g", {}, root), ng = el("g", {}, root);
+  DATA.links.filter(l => l.view === v.id).forEach((l, i) => {
+    const a = geo[l.source], b = geo[l.target]; if (!a || !b) return;
+    const g = el("g", {class: "edge " + l.style, "data-s": l.source, "data-t": l.target}, eg);
+    let p0 = [a.x, a.y], p1 = [b.x, b.y], d, mid;
+    if (l.bend){ const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2, len = Math.hypot(b.x - a.x, b.y - a.y);
+      const c = [mx - (b.y - a.y) / len * l.bend, my + (b.x - a.x) / len * l.bend];
+      const s = clip(p0, c, a), e = clip(p1, c, b); d = `M${s} Q${c} ${e}`; mid = [(s[0] + 2 * c[0] + e[0]) / 4, (s[1] + 2 * c[1] + e[1]) / 4]; }
+    else { const s = clip(p0, p1, a), e = clip(p1, p0, b); d = `M${s} L${e}`; mid = [(s[0] + e[0]) / 2, (s[1] + e[1]) / 2]; }
+    el("path", {d, "marker-end": `url(#a-${l.style})`}, g);
+    const tt = el("title", {}, g); tt.textContent = `${nodes[l.source].label} → ${nodes[l.target].label}: ${l.relation.replace("_", " ")}`;
+    const vert = Math.abs(b.y - a.y) > Math.abs(b.x - a.x); // labels sit beside steep edges, above flat ones
+    if (l.label) el("text", vert ? {x: mid[0] + 8, y: mid[1] + 4} : {x: mid[0], y: mid[1] - 7, "text-anchor": "middle"}, g).textContent = l.label;
+  });
+  vn.forEach(n => { const q = geo[n.id], col = css(KIND[n.kind][1]);
+    const g = el("g", {class: "node", tabindex: 0, role: "button", "aria-label": `${n.label}, ${n.sub}. ${KIND[n.kind][0]}`, "data-id": n.id,
+      transform: `translate(${q.x - q.w / 2},${q.y - q.h / 2})`}, ng);
+    const rx = n.kind === "person" ? 29 : n.kind === "store" ? 4 : 10;
+    el("rect", {class: "b", width: q.w, height: q.h, rx, stroke: col}, g);
+    if (n.kind === "store") el("line", {x1: 0, x2: q.w, y1: 9, y2: 9, stroke: col, "stroke-width": 1.2}, g);
+    else if (n.kind !== "person") el("rect", {width: 5, height: q.h - 16, x: 7, y: 8, rx: 2, fill: col}, g);
+    el("text", {class: "lab", x: q.w / 2, y: 27, "text-anchor": "middle"}, g).textContent = n.label;
+    el("text", {class: "sub", x: q.w / 2, y: 46, "text-anchor": "middle"}, g).textContent = n.sub || "";
+    g.addEventListener("click", ev => { ev.stopPropagation(); select(n.id); });
+    g.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); select(n.id); } });
+  });
+  v.cards.forEach(c => { const g = el("g", {class: "card"}, root); let y = c.y + (c.title ? 25 : 22), mw = c.w;
+    const r = el("rect", {x: c.x, y: c.y, width: c.w, rx: 8}, g);
+    const put = (cls, s, yy) => { const t = el("text", {class: cls, x: c.x + 14, y: yy}, g); t.textContent = s; mw = Math.max(mw, t.getComputedTextLength() + 28); };
+    if (c.title){ put("t", c.title, y); y += 23; }
+    c.lines.forEach(s => { put("l", s, y); y += 20; });
+    if (c.note){ put("n", c.note, y + 2); y += 22; }
+    r.setAttribute("height", y - c.y - 4); r.setAttribute("width", mw); });
+  svg.setAttribute("aria-label", `${v.title}: ${v.question}`);
+  fit(); info();
+}
+
+function setBox(b){ box = b; svg.setAttribute("viewBox", b.join(" ")); }
+function fit(){ const v = view, r = stage.getBoundingClientRect(), pad = 16;
+  const s = Math.max(v.width / (r.width - pad * 2), v.height / (r.height - pad * 2 - 24));
+  const w = r.width * s, h = r.height * s; setBox([(v.width - w) / 2, (v.height - h) / 2, w, h]); }
+function zoom(f, cx, cy){ const [x, y, w, h] = box; cx ??= x + w / 2; cy ??= y + h / 2;
+  const nw = Math.min(Math.max(w * f, view.width / 6), view.width * 4), k = nw / w;
+  setBox([cx - (cx - x) * k, cy - (cy - y) * k, nw, h * k]); }
+
+function select(id){
+  sel = id; const nb = new Set([id]);
+  svg.querySelectorAll(".edge").forEach(e => { const on = e.dataset.s === id || e.dataset.t === id;
+    if (on){ nb.add(e.dataset.s); nb.add(e.dataset.t); } e.classList.toggle("dim", id && !on); });
+  svg.querySelectorAll(".node").forEach(n => { n.classList.toggle("dim", id && !nb.has(n.dataset.id)); n.classList.toggle("sel", n.dataset.id === id); });
+  id ? detail(nodes[id]) : info();
+}
+
+function info(){ panel.hidden = true; panel.innerHTML = ""; }
+function detail(n){
+  const [kname, kvar] = KIND[n.kind];
+  const ls = DATA.links.filter(l => l.view === view.id && (l.source === n.id || l.target === n.id));
+  const other = Object.keys(n.pos).filter(k => k !== view.id);
+  panel.hidden = false;
+  panel.innerHTML = `<button class="x" aria-label="Close details">×</button><h2>${n.label}</h2><div class="kind" style="color:var(${kvar})">${kname} · ${n.sub}</div><p>${n.detail}</p>
+  ${ls.length ? `<h3>Connections in this view</h3><ul>${ls.map(l => l.source === n.id
+      ? `<li>${l.relation.replace("_", " ")} → ${nodes[l.target].label}</li>` : `<li>${nodes[l.source].label} ${l.relation.replace("_", " ")} this</li>`).join("")}</ul>` : ""}
+  <h3>Evidence</h3><ul>${n.evidence.map(e => `<li><code>${e}</code></li>`).join("")}</ul>
+  ${other.length ? `<h3>Also shown in</h3><ul>${other.map(k => `<li><button class="jump" data-v="${k}">${views.find(v => v.id === k).title}</button></li>`).join("")}</ul>` : ""}`;
+  panel.querySelector(".x").onclick = () => select(null);
+  panel.querySelectorAll(".jump").forEach(b => b.onclick = () => { go(b.dataset.v); select(n.id); });
+}
+
+function go(id){ const v = views.find(x => x.id === id) || views[0];
+  document.querySelectorAll("nav [role=tab]").forEach(b => { const on = b.dataset.v === v.id; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; });
+  if (location.hash !== "#" + v.id) history.replaceState(null, "", "#" + v.id);
+  render(v); }
+
+const tabs = document.getElementById("tabs"), tools = tabs.querySelector(".tools");
+views.forEach((v, i) => { const b = document.createElement("button"); b.setAttribute("role", "tab"); b.dataset.v = v.id;
+  b.innerHTML = `<b>${i + 1}. ${v.title}</b><span>${v.question}</span>`; b.onclick = () => go(v.id);
+  b.onkeydown = e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft"){ const j = (i + (e.key === "ArrowRight" ? 1 : views.length - 1)) % views.length;
+    go(views[j].id); tabs.querySelector(`[data-v=${views[j].id}]`).focus(); } };
+  tabs.insertBefore(b, tools); });
+
+document.getElementById("legend").innerHTML =
+  ["person", "ui", "service", "store", "offline", "count", "metric"].map(k => `<span class="key"><span class="sw" style="color:var(${KIND[k][1]})"></span>${k === "ui" ? "Web interface / app feature" : KIND[k][0]}</span>`).join("") +
+  Object.entries(STYLE_NAMES).map(([k, t]) => `<span class="key"><span class="ln" style="border-top-style:${k === "runtime" ? "solid" : k === "offline" ? "dashed" : "dotted"};border-color:${k === "offline" ? "var(--offline)" : "var(--edge)"}"></span>${t}</span>`).join("");
+
+let drag = null;
+stage.addEventListener("pointerdown", e => { if (e.target.closest(".node")) return; drag = [e.clientX, e.clientY, box.slice()]; stage.setPointerCapture(e.pointerId); stage.classList.add("dragging"); });
+stage.addEventListener("pointermove", e => { if (!drag) return; const r = stage.getBoundingClientRect(), s = drag[2][2] / r.width;
+  setBox([drag[2][0] - (e.clientX - drag[0]) * s, drag[2][1] - (e.clientY - drag[1]) * s, drag[2][2], drag[2][3]]); });
+stage.addEventListener("pointerup", e => { if (drag && Math.hypot(e.clientX - drag[0], e.clientY - drag[1]) < 4) select(null); drag = null; stage.classList.remove("dragging"); });
+stage.addEventListener("wheel", e => { e.preventDefault(); const r = stage.getBoundingClientRect();
+  zoom(e.deltaY > 0 ? 1.12 : 1 / 1.12, box[0] + (e.clientX - r.left) / r.width * box[2], box[1] + (e.clientY - r.top) / r.height * box[3]); }, {passive: false});
+document.getElementById("zin").onclick = () => zoom(1 / 1.25);
+document.getElementById("zout").onclick = () => zoom(1.25);
+document.getElementById("fit").onclick = fit;
+addEventListener("keydown", e => { if (e.key === "Escape") select(null); });
+addEventListener("resize", fit);
+
+function exported(){ const c = svg.cloneNode(true); c.setAttribute("viewBox", `0 0 ${view.width} ${view.height}`);
+  c.setAttribute("width", view.width); c.setAttribute("height", view.height); c.querySelectorAll(".dim,.sel").forEach(x => x.classList.remove("dim", "sel"));
+  return new XMLSerializer().serializeToString(c); }
+function save(blob, name){ const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }
+document.getElementById("svgx").onclick = () => save(new Blob([exported()], {type: "image/svg+xml"}), `AIORI_${view.id}.svg`);
+document.getElementById("pngx").onclick = () => { const img = new Image(), s = 2;
+  img.onload = () => { const cv = document.createElement("canvas"); cv.width = view.width * s; cv.height = view.height * s;
+    const x = cv.getContext("2d"); x.scale(s, s); x.drawImage(img, 0, 0); cv.toBlob(b => save(b, `AIORI_${view.id}.png`)); };
+  img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(exported()); };
+
+// theme: system (default) -> light -> dark; the choice is a per-viewer convenience, so storage failures are ignored
+const MODES = ["system", "light", "dark"], themeBtn = document.getElementById("theme");
+let mode = "system"; try { mode = localStorage.getItem("aiori-graph-theme") || "system"; } catch (e) {}
+function applyTheme(m){ mode = MODES.includes(m) ? m : "system";
+  if (mode === "system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.dataset.theme = mode;
+  const name = mode[0].toUpperCase() + mode.slice(1); themeBtn.textContent = "Theme: " + name;
+  themeBtn.setAttribute("aria-label", "Colour theme: " + (mode === "system" ? "follows system" : name) + ". Press to change.");
+  try { localStorage.setItem("aiori-graph-theme", mode); } catch (e) {}
+  if (view){ const keep = box.slice(), s = sel; render(view); setBox(keep); if (s) select(s); } }
+themeBtn.onclick = () => applyTheme(MODES[(MODES.indexOf(mode) + 1) % 3]);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (mode === "system") applyTheme("system"); });
+applyTheme(mode);
+go(location.hash.slice(1));
+</script>
+</body>
+</html>

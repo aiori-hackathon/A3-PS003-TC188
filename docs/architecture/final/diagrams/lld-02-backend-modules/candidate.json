@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "LLD-02 · AIORI Backend Modules and Service Dependencies",
+    "output": "docs/architecture/final/diagrams/lld-02-backend-modules/aiori-lld-02-backend-modules.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "components": [
+    { "id": "rs_handler", "type": "backend", "label": "replay_server.Handler", "sublabel": "/api/replay/* routing", "pos": [40, 40], "size": [190, 64] },
+    { "id": "replay", "type": "backend", "label": "replay.Replay", "sublabel": "data, frames, inference", "pos": [330, 40], "size": [190, 64] },
+    { "id": "factory", "type": "backend", "label": "aiori2.models.factory", "sublabel": "build_model, 5 models", "pos": [620, 40], "size": [190, 64] },
+    { "id": "aopt_models", "type": "backend", "label": "aopt/models.py", "sublabel": "MLP + GRU source", "pos": [910, 40], "size": [190, 64] },
+
+    { "id": "dis", "type": "backend", "label": "disruptions.Disruptions", "sublabel": "catalog API, robustness", "pos": [330, 200], "size": [190, 64] },
+    { "id": "detect", "type": "backend", "label": "disruption_detect", "sublabel": "detector + build CLI", "pos": [620, 200], "size": [190, 64] },
+
+    { "id": "s_handler", "type": "backend", "label": "server.Handler", "sublabel": "GET/POST/OPTIONS, static", "pos": [40, 360], "size": [190, 64] },
+    { "id": "engine", "type": "backend", "label": "server.Engine", "sublabel": "GRU models, metrics, demo", "pos": [330, 360], "size": [190, 64] },
+    { "id": "aiori", "type": "backend", "label": "aiori package", "sublabel": "dataset, evaluation, model", "pos": [620, 360], "size": [190, 64] },
+
+    { "id": "cand", "type": "backend", "label": "candidate.Candidate", "sublabel": "optimised MLP per client", "pos": [330, 520], "size": [190, 64] },
+    { "id": "aopt", "type": "backend", "label": "aopt package", "sublabel": "data, train.make_model", "pos": [620, 520], "size": [190, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "replay_server.py process (:8010) — also contains everything below", "wraps": ["rs_handler", "replay", "factory", "aopt_models", "dis", "detect"] },
+    { "kind": "region", "label": "server.py modules (:8000 and :8010)", "wraps": ["s_handler", "engine", "aiori", "cand", "aopt"] }
+  ],
+  "connections": [
+    { "id": "rs-replay", "from": "rs_handler", "to": "replay", "label": "Replay()", "variant": "emphasis" },
+    { "id": "rs-dis", "from": "rs_handler", "to": "dis", "label": "Disruptions()" },
+    { "id": "rs-super", "from": "rs_handler", "to": "s_handler", "label": "subclass: non-replay paths", "fromSide": "bottom", "toSide": "top" },
+    { "id": "replay-factory", "from": "replay", "to": "factory", "label": "build_model" },
+    { "id": "factory-aopt", "from": "factory", "to": "aopt_models", "label": "MLP, GRU" },
+    { "id": "dis-replay", "from": "dis", "to": "replay", "label": "_predict, _obs, ts", "fromSide": "top", "toSide": "bottom" },
+    { "id": "dis-detect", "from": "dis", "to": "detect", "label": "score, flag" },
+    { "id": "h-engine", "from": "s_handler", "to": "engine", "label": "ENGINE", "variant": "emphasis" },
+    { "id": "engine-aiori", "from": "engine", "to": "aiori", "label": "ForecastGRU" },
+    { "id": "engine-cand", "from": "engine", "to": "cand", "label": "if AIORI_CANDIDATE=1", "variant": "dashed" },
+    { "id": "cand-aopt", "from": "cand", "to": "aopt", "label": "make_model" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Request handling", "items": ["Both servers: ThreadingHTTPServer; one thread per request; torch calls serialised by a lock", "Errors: ApiError/ReplayError → JSON {error:{status,message}}; any other exception → 500 'Internal error'", "replay_server sets AIORI_FRONTEND_DIR to web/dist-replay before importing server"] },
+    { "dot": "violet", "title": "Validation", "items": ["Unknown or repeated query parameters → 400 (parse_qs, max fields)", "Times must be YYYY-MM-DDTHH:MM on a 5-minute boundary inside 2022-01-01 … 2024-12-31", "Event ids must match \\d{8}T\\d{4}-(LA|BA|CS|IC)-[DU]-[0-9a-f]{6}"] },
+    { "dot": "amber", "title": "Caching", "items": ["Replay: LRU of 512 frames and 2,048 forecasts", "Disruptions: LRU of 256 series/compare/robustness results", "Engine: everything loaded once at start-up; no per-request cache"] }
+  ]
+}

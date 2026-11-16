@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HLD-01 · AIORI System Context",
+    "output": "docs/architecture/final/diagrams/hld-01-system-context/aiori-hld-01-system-context.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "components": [
+    { "id": "users", "type": "external", "label": "Users", "sublabel": "web browser", "pos": [40, 300], "size": [130, 64] },
+    { "id": "web", "type": "frontend", "label": "AIORI Web Application", "sublabel": "React SPA, static bundle", "pos": [250, 300], "size": [180, 64] },
+    { "id": "tiles", "type": "external", "label": "OpenStreetMap tiles", "sublabel": "replay map background", "pos": [250, 110], "size": [180, 60] },
+    { "id": "api8000", "type": "backend", "label": "Forecast API", "sublabel": "server.py on :8000", "tag": "2023 GRU study models", "pos": [600, 200], "size": [190, 70] },
+    { "id": "api8010", "type": "backend", "label": "Replay & Disruption API", "sublabel": "replay_server.py on :8010", "tag": "MLP + FedAvgM (frozen)", "pos": [600, 400], "size": [190, 70] },
+    { "id": "artifacts", "type": "database", "label": "Local artifact files", "sublabel": "arrays, checkpoints, catalog", "pos": [960, 300], "size": [190, 64] },
+    { "id": "training", "type": "backend", "label": "Offline pipelines", "sublabel": "preprocess, train, evaluate", "tag": "never run by the website", "pos": [960, 520], "size": [190, 70] },
+    { "id": "raw", "type": "external", "label": "XTraffic source data", "sublabel": "2022–2024 monthly arrays", "pos": [600, 525], "size": [190, 60] },
+    { "id": "tunnel", "type": "cloud", "label": "Cloudflare quick tunnel", "sublabel": "configured; not running", "pos": [600, 40], "size": [190, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Windows workstation (localhost, CPU inference)", "wraps": ["api8000", "api8010", "artifacts", "training", "raw"] }
+  ],
+  "connections": [
+    { "id": "use-app", "from": "users", "to": "web", "label": "browse", "variant": "emphasis" },
+    { "id": "forecast-calls", "from": "web", "to": "api8000", "label": "/api/* JSON", "variant": "emphasis" },
+    { "id": "replay-calls", "from": "web", "to": "api8010", "label": "/api/replay/* JSON", "variant": "emphasis" },
+    { "id": "map-tiles", "from": "web", "to": "tiles", "label": "tile images", "variant": "dashed" },
+    { "id": "read-8000", "from": "api8000", "to": "artifacts", "label": "loads at start-up" },
+    { "id": "read-8010", "from": "api8010", "to": "artifacts", "label": "verifies + mmaps" },
+    { "id": "write-artifacts", "from": "training", "to": "artifacts", "label": "writes", "variant": "dashed" },
+    { "id": "ingest", "from": "raw", "to": "training", "label": "monthly arrays", "variant": "dashed" },
+    { "id": "public", "from": "tunnel", "to": "api8000", "label": "public URL (when running)", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "One application, two server processes", "items": ["Both servers serve the same React application as static files and answer its JSON calls", ":8000 is the original production entry: health, sensors, metrics, demo, predict", ":8010 runs the same handlers plus /api/replay/* (Historical Traffic Replay and Disruption Explorer)"] },
+    { "dot": "amber", "title": "Offline, not at request time", "items": ["Preprocessing, federated training, model selection and the anomaly catalog are batch jobs", "Federated learning is a single-process simulation with four clients, not separate devices", "The web servers only read frozen files; they never train"] },
+    { "dot": "slate", "title": "Not part of this system", "items": ["No database server, message queue or cloud service", "No live traffic feed: every reading is historical", "The tunnel and keep-alive task were not running when this was verified (2026-11-15)"] }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "LLD-04 · Historical Traffic Replay Interaction",
+    "output": "docs/architecture/final/diagrams/lld-04-replay-sequence/aiori-lld-04-replay-sequence.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "participants": [
+    { "id": "user", "type": "external", "label": "User", "sublabel": "/replay page" },
+    { "id": "view", "type": "frontend", "label": "ReplayView", "sublabel": "date, slot, playing, speed" },
+    { "id": "remote", "type": "frontend", "label": "useRemote + LRU", "sublabel": "abort stale requests" },
+    { "id": "rs", "type": "backend", "label": "replay_server", "sublabel": "route() + validation" },
+    { "id": "replay", "type": "backend", "label": "replay.Replay", "sublabel": "frame / forecast LRUs" },
+    { "id": "arrays", "type": "database", "label": "aiori2_3yr arrays", "sublabel": "mmap + frozen MLP" }
+  ],
+  "segments": [
+    { "from": 150, "to": 330, "label": "Day coverage" },
+    { "from": 340, "to": 700, "label": "Map frame (each playback step)" },
+    { "from": 710, "to": 900, "label": "Sensor forecast" }
+  ],
+  "messages": [
+    { "id": "choose", "from": "user", "to": "view", "y": 170, "label": "pick date / press Play" },
+    { "id": "day", "from": "view", "to": "rs", "y": 205, "label": "GET /api/replay/day?date", "note": "dates outside the dataset → 404" },
+    { "id": "dayfn", "from": "rs", "to": "replay", "y": 260, "label": "day(date)" },
+    { "id": "dayret", "from": "replay", "to": "view", "y": 295, "label": "valid sensors per slot, DST slots", "variant": "return" },
+    { "id": "key", "from": "view", "to": "remote", "y": 360, "label": "frame key time|layer", "note": "cache hit returns at once; else abort previous" },
+    { "id": "frame", "from": "remote", "to": "rs", "y": 420, "label": "GET /frame?time&layer", "variant": "emphasis" },
+    { "id": "framefn", "from": "rs", "to": "replay", "y": 455, "label": "frame()", "note": "forecast layer: one 200-sensor batch" },
+    { "id": "read", "from": "replay", "to": "arrays", "y": 515, "label": "flow, valid, typical" },
+    { "id": "readret", "from": "arrays", "to": "replay", "y": 550, "label": "200 readings", "variant": "return" },
+    { "id": "frameret", "from": "replay", "to": "rs", "y": 590, "label": "values, status, relative", "variant": "return", "note": "missing/invalid → null, never 0" },
+    { "id": "json", "from": "rs", "to": "remote", "y": 645, "label": "200 JSON", "variant": "return" },
+    { "id": "ready", "from": "remote", "to": "view", "y": 680, "label": "frame ready → next step", "variant": "return" },
+    { "id": "pick", "from": "user", "to": "view", "y": 730, "label": "click sensor, Forecast" },
+    { "id": "fc", "from": "view", "to": "rs", "y": 765, "label": "GET /forecast?sensor&time&partition", "variant": "emphasis", "note": "partition geo or iid" },
+    { "id": "fcfn", "from": "rs", "to": "replay", "y": 820, "label": "forecast(): t0 = T + 5 min", "note": "inputs T−55..T; all imputed → 422" },
+    { "id": "fcret", "from": "replay", "to": "view", "y": 880, "label": "forecast, actual, MAE, WAPE", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "view", "from": 165, "to": 885, "type": "frontend" },
+    { "participant": "remote", "from": 360, "to": 685, "type": "frontend" },
+    { "participant": "rs", "from": 205, "to": 650, "type": "backend" },
+    { "participant": "replay", "from": 260, "to": 595, "type": "backend" },
+    { "participant": "arrays", "from": 515, "to": 555, "type": "database" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Playback", "items": ["The next step is scheduled only after the current frame arrives (no overlapping requests)", "Speed 1, 2, 4 or 8 steps per second; steps skip slots with no valid reading", "At the last or first date playback stops with a notice"] },
+    { "dot": "amber", "title": "Boundaries and gaps", "items": ["Forecasts start 2023-01-01T00:55 (history A inputs); 2022 is observations only", "The skipped spring-forward hour has no readings", "Deep link /replay?date&time&sensor&event; invalid parameters are ignored with a notice"] },
+    { "dot": "slate", "title": "Map", "items": ["Leaflet canvas markers on OpenStreetMap tiles, colour = flow ÷ 2023 typical (not congestion)", "200 sensors, coordinates provisional (row-to-station mapping unconfirmed)"] }
+  ]
+}

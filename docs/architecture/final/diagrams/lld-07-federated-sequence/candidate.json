@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "LLD-07 · Federated Training Round and Epoch (offline, aiori2.run + aiori2.fl)",
+    "output": "docs/architecture/final/diagrams/lld-07-federated-sequence/aiori-lld-07-federated-sequence.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "participants": [
+    { "id": "runner", "type": "backend", "label": "Runner", "sublabel": "aiori2.run" },
+    { "id": "fr", "type": "backend", "label": "FederatedRun", "sublabel": "fl/engine.py" },
+    { "id": "client", "type": "backend", "label": "Client i (×4)", "sublabel": "local_train()" },
+    { "id": "stream", "type": "database", "label": "Training stream", "sublabel": "own sensors only" },
+    { "id": "alg", "type": "backend", "label": "Server rule", "sublabel": "fl/algorithms.py" },
+    { "id": "ev", "type": "backend", "label": "Evaluator", "sublabel": "validation split" },
+    { "id": "runs", "type": "database", "label": "Run folder", "sublabel": "<run_id>/" }
+  ],
+  "segments": [
+    { "from": 150, "to": 520, "label": "One round (repeated each epoch)" },
+    { "from": 530, "to": 720, "label": "End of epoch" }
+  ],
+  "messages": [
+    { "id": "rounds", "from": "runner", "to": "fr", "y": 170, "label": "run(rounds per epoch)", "variant": "emphasis" },
+    { "id": "global", "from": "fr", "to": "client", "y": 205, "label": "global w, round seed", "note": "fresh client SGD optimizer each round" },
+    { "id": "batches", "from": "client", "to": "stream", "y": 260, "label": "100 steps x batch 128" },
+    { "id": "data", "from": "stream", "to": "client", "y": 295, "label": "X (128,12,1), Y, mask", "variant": "return" },
+    { "id": "delta", "from": "client", "to": "fr", "y": 335, "label": "Δi = wi − w, steps τi", "variant": "return", "note": "SCAFFOLD also returns Δci" },
+    { "id": "rule", "from": "fr", "to": "alg", "y": 390, "label": "aggregate(Δ, weights)", "variant": "emphasis", "note": "weights ∝ training windows; float64" },
+    { "id": "neww", "from": "alg", "to": "fr", "y": 445, "label": "new w + server state", "variant": "return" },
+    { "id": "log", "from": "fr", "to": "runner", "y": 485, "label": "round log, payload bytes", "variant": "return" },
+    { "id": "val", "from": "runner", "to": "ev", "y": 550, "label": "validate global model", "note": "validation windows only, never test" },
+    { "id": "valret", "from": "ev", "to": "runner", "y": 605, "label": "val WAPE, MAE, RMSE", "variant": "return" },
+    { "id": "save", "from": "runner", "to": "runs", "y": 645, "label": "best.pt if improved, latest.pt", "note": "stop after 20 epochs or patience 3" }
+  ],
+  "activations": [
+    { "participant": "runner", "from": 165, "to": 650, "type": "backend" },
+    { "participant": "fr", "from": 170, "to": 490, "type": "backend" },
+    { "participant": "client", "from": 205, "to": 340, "type": "backend" },
+    { "participant": "stream", "from": 260, "to": 300, "type": "database" },
+    { "participant": "alg", "from": 390, "to": 450, "type": "backend" },
+    { "participant": "ev", "from": 550, "to": 610, "type": "backend" }
+  ],
+  "cards": [
+    { "dot": "violet", "title": "Server rules (one sign convention)", "items": ["FedAvg / FedProx: weighted mean of Δ (FedProx adds a proximal term in local training)", "FedAvgM: server momentum 0.9; FedAdam / FedYogi / FedAdagrad: adaptive server optimizers (FedOpt family)", "SCAFFOLD: control variates; FedNova: normalises by local step counts"] },
+    { "dot": "emerald", "title": "Simulation, not a network", "items": ["All four clients run in one Python process; no raw data or sockets are exchanged", "Partitions: geographic (LA, Bay Area, Coastal, Inland) or IID (random split, seed 20261027), 50 sensors each", "Each (round, client) derives its own seed, so a resumed run repeats exactly (CPU)"] },
+    { "dot": "slate", "title": "Non-federated arms", "items": ["Centralised: one model on all 200 sensors (pooled scaler)", "Local: four independent models, no aggregation", "Same sampled-window budget for every arm"] }
+  ]
+}
