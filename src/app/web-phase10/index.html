@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AIORI Traffic Intelligence</title>
+    <meta name="description" content="AIORI: next-hour traffic-flow forecasts, historical traffic replay and a candidate-anomaly explorer over recorded XTraffic data (2022–2024), with verified federated-learning results." />
+    <meta name="theme-color" content="#006a4e" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      // Set the theme before the first paint: the stored choice, else the system preference.
+      var t = null;
+      try {
+        t = localStorage.getItem("aiori-theme");
+      } catch (e) {}
+      document.documentElement.dataset.theme = t === "dark" || t === "light" ? t : matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
