@@ -1,1 +1,3 @@
-#### Link : https://promotions-dvds-wedding-with.trycloudflare.com/
+#### Live demo : served during the AIORI presentation from a temporary Cloudflare Quick Tunnel address.
+Quick Tunnel addresses change every time the tunnel restarts, so no permanent link is listed here.
+See deploy/aiori/PRESENTATION_DAY_RUNBOOK.md for how the demo is started and how to find the current address.

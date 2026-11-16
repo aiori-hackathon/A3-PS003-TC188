@@ -6,6 +6,10 @@ A demo and results dashboard for AIORI PS-003. It makes real next-hour traffic-f
 - **Front end:** `src/app/web`, built with React 19, TypeScript, Vite, Tailwind CSS 4, React Router, Recharts and Lucide icons.
 - **Earlier front end:** the dependency-free version stays in `src/app/frontend` as a fallback.
 
+> **The complete AIORI website** (Historical Traffic Replay, Historical Disruption Explorer and the final frontend in
+> `src/app/web-phase10`) is served by `src/app/backend/replay_server.py`. The recommended way to run it is Docker:
+> see [`deploy/aiori/README.md`](../../deploy/aiori/README.md). This file describes the original study server.
+
 ## Run locally (Windows)
 **Prerequisites:**
 - the project's virtual environment (Python 3.12, PyTorch 2.14.1 CPU, NumPy, pandas);
