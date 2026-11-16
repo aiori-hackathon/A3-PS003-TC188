@@ -1,0 +1,13 @@
+# Build context is the repository root. Only the source the backend needs may enter the image.
+*
+!src/rebuild_aiori_metadata.py
+!src/aiori/
+!src/aiori2/
+!src/experiments/accuracy_optimization/aopt/
+!src/app/backend/
+!src/app/data/percentage_error.json
+**/__pycache__
+**/*.npy
+**/*.npz
+**/*.pt
+**/*.log

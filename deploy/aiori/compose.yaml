@@ -1,0 +1,52 @@
+# AIORI: local Docker deployment of the complete website (forecasting, Historical Traffic Replay, Historical Disruption
+# Explorer) with frozen-model inference. Run from this folder:  docker compose up -d --build
+# Open http://127.0.0.1:8080. Only the web service publishes a port, and only on localhost.
+name: aiori
+
+services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: deploy/aiori/backend.Dockerfile
+    image: aiori-backend:local
+    restart: unless-stopped
+    environment:
+      AIORI_CANDIDATE: "1"          # also serve the optimized MLP on the Forecasting page, as the local services do
+      AIORI_THREADS: "4"
+    # Read-only inputs. Paths mirror the repository's src/ layout, so the code finds them with its default paths.
+    volumes:
+      - ../../src/data/processed/nine_month:/srv/src/data/processed/nine_month:ro
+      - ../../src/data/processed/aiori2_3yr:/srv/src/data/processed/aiori2_3yr:ro
+      - ../../src/results/phase9:/srv/src/results/phase9:ro
+      - ../../src/results/accuracy_optimization:/srv/src/results/accuracy_optimization:ro
+      - ../../src/results/aiori2/phase8c_stage3:/srv/src/results/aiori2/phase8c_stage3:ro
+      - ../../src/results/aiori2/phase9b_disruptions:/srv/src/results/aiori2/phase9b_disruptions:ro
+      - ../../src/sensor_meta_feature.csv:/srv/src/sensor_meta_feature.csv:ro
+    read_only: true                 # the service never writes at request time
+    tmpfs:
+      - /tmp
+    expose:
+      - "8010"                      # reachable only by the web service on the internal network
+    mem_limit: 6g
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8010/api/health', timeout=5)"]
+      interval: 15s
+      timeout: 6s
+      retries: 5
+      start_period: 180s            # startup hashes every frozen checkpoint and loads the arrays
+
+  web:
+    build:
+      context: ../..
+      dockerfile: deploy/aiori/web.Dockerfile
+    image: aiori-web:local
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"       # the single public entry point, bound to this machine only
+    read_only: true
+    tmpfs:
+      - /tmp
+    mem_limit: 256m
