@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HLD-05 · AIORI Runtime and Deployment (verified 2026-11-15)",
+    "output": "docs/architecture/final/diagrams/hld-05-runtime-deployment/aiori-hld-05-runtime-deployment.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "components": [
+    { "id": "browser", "type": "external", "label": "Browser", "sublabel": "127.0.0.1 only", "pos": [40, 190], "size": [150, 300] },
+    { "id": "tunnel", "type": "cloud", "label": "cloudflared quick tunnel", "sublabel": "configured; not running", "pos": [380, 40], "size": [210, 64] },
+    { "id": "keepalive", "type": "backend", "label": "keepalive.ps1", "sublabel": "watchdog; task not registered", "pos": [720, 40], "size": [210, 64] },
+    { "id": "p8000", "type": "backend", "label": "server.py process", "sublabel": "port 8000 · production entry", "tag": "running", "pos": [380, 190], "size": [210, 64] },
+    { "id": "p8010", "type": "backend", "label": "replay_server.py process", "sublabel": "port 8010 · extended app", "tag": "running", "pos": [380, 330], "size": [210, 64] },
+    { "id": "p8020", "type": "backend", "label": "replay_server.py process", "sublabel": "port 8020 · design preview", "tag": "running, isolated", "pos": [380, 470], "size": [210, 64] },
+    { "id": "dist", "type": "database", "label": "web/dist", "sublabel": "production bundle", "pos": [720, 190], "size": [210, 64] },
+    { "id": "distreplay", "type": "database", "label": "web/dist-replay", "sublabel": "bundle with Replay + Explorer", "pos": [720, 330], "size": [210, 64] },
+    { "id": "distp10", "type": "database", "label": "web-phase10/dist-phase10", "sublabel": "unapproved redesign build", "pos": [720, 470], "size": [210, 64] },
+    { "id": "watchdog", "type": "backend", "label": "AIORI2_Stage3_Watchdog", "sublabel": "scheduled task · auto_resume off", "pos": [720, 620], "size": [210, 64] },
+    { "id": "stage3", "type": "database", "label": "phase8c_stage3", "sublabel": "training runs + status", "pos": [1000, 620], "size": [200, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Windows 11 workstation · Python 3.12 · CPU inference (GPU env for training only)", "wraps": ["tunnel", "keepalive", "p8000", "p8010", "p8020", "dist", "distreplay", "distp10", "watchdog", "stage3"] }
+  ],
+  "connections": [
+    { "id": "b-8000", "from": "browser", "to": "p8000", "label": "HTTP :8000", "variant": "emphasis" },
+    { "id": "b-8010", "from": "browser", "to": "p8010", "label": "HTTP :8010", "variant": "emphasis" },
+    { "id": "b-8020", "from": "browser", "to": "p8020", "label": "HTTP :8020", "variant": "dashed" },
+    { "id": "t-8000", "from": "tunnel", "to": "p8000", "label": "would forward", "variant": "dashed" },
+    { "id": "ka-tunnel", "from": "keepalive", "to": "tunnel", "label": "restarts", "variant": "dashed" },
+    { "id": "s-dist", "from": "p8000", "to": "dist", "label": "serves /" },
+    { "id": "s-dr", "from": "p8010", "to": "distreplay", "label": "serves /" },
+    { "id": "s-dp10", "from": "p8020", "to": "distp10", "label": "serves /", "variant": "dashed" },
+    { "id": "wd-status", "from": "watchdog", "to": "stage3", "label": "checks status" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Running now", "items": [":8000 server.py with AIORI_CANDIDATE=1 (started manually; Forecast API + original pages)", ":8010 replay_server.py (all original routes + /api/replay/*)", ":8020 replay_server.py with AIORI_FRONTEND_DIR set to the Phase 10 preview build (not approved, not production)"] },
+    { "dot": "amber", "title": "Configured, not active", "items": ["Cloudflare quick tunnel to :8000: no cloudflared process", "AIORI keepalive scheduled task: not registered; keepalive.ps1 exists", "Stage 3 watchdog task: Ready, auto_resume false (cannot launch training)"] },
+    { "dot": "slate", "title": "Shared by all three processes", "items": ["Read-only artifact files under src/data and src/results", "Each process loads its own models into memory at start-up (CPU, torch threads)", "Other deployment files exist but were not verified as live: Dockerfile, deploy/hf_deploy.py (Hugging Face Space), web/vercel.json"] }
+  ]
+}

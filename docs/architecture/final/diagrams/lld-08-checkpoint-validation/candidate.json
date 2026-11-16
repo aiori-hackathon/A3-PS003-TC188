@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "LLD-08 · Frozen Checkpoint and Catalog Validation at Start-up (replay_server)",
+    "output": "docs/architecture/final/diagrams/lld-08-checkpoint-validation/aiori-lld-08-checkpoint-validation.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "lanes": [
+    { "id": "model", "label": "Replay._load_model (per partition: geo, iid)" },
+    { "id": "refuse", "label": "Model check fails", "variant": "exception" },
+    { "id": "cat", "label": "Disruptions.__init__ (catalog)" },
+    { "id": "unavail", "label": "Catalog check fails", "variant": "exception" }
+  ],
+  "mainPath": ["manifest", "entry", "files", "config", "weights", "ready"],
+  "nodes": [
+    { "id": "manifest", "lane": "model", "col": 0, "type": "database", "label": "final_manifest.json", "sublabel": "SHA-256 = .sha256 file" },
+    { "id": "entry", "lane": "model", "col": 1, "type": "backend", "label": "Winner entry", "sublabel": "unique arm + seed 20261027" },
+    { "id": "files", "lane": "model", "col": 2, "type": "security", "label": "File hashes", "sublabel": "best.pt, run.json, scalers" },
+    { "id": "config", "lane": "model", "col": 3, "type": "security", "label": "Config match", "sublabel": "mlp, A, conservative" },
+    { "id": "weights", "lane": "model", "col": 4, "type": "backend", "label": "Load weights", "sublabel": "global model, strict" },
+    { "id": "ready", "lane": "model", "col": 5, "type": "backend", "label": "Model ready", "sublabel": "eval, no grad, provenance" },
+    { "id": "stop", "lane": "refuse", "col": 2, "type": "security", "label": "ValueError", "sublabel": "server does not start" },
+    { "id": "c_hash", "lane": "cat", "col": 0, "type": "database", "label": "catalog.json", "sublabel": "SHA-256 = catalog.sha256" },
+    { "id": "c_ver", "lane": "cat", "col": 1, "type": "security", "label": "Version check", "sublabel": "schema, version, config" },
+    { "id": "c_events", "lane": "cat", "col": 2, "type": "security", "label": "Events hash", "sublabel": "events_sha256" },
+    { "id": "c_inputs", "lane": "cat", "col": 3, "type": "security", "label": "Input data hashes", "sublabel": "flow, mask, calendar" },
+    { "id": "c_base", "lane": "cat", "col": 4, "type": "security", "label": "Baseline hash", "sublabel": "baseline.npz" },
+    { "id": "c_ready", "lane": "cat", "col": 5, "type": "backend", "label": "Catalog in memory", "sublabel": "16,445 events, indexes" },
+    { "id": "c_503", "lane": "unavail", "col": 3, "type": "security", "label": "Unavailable", "sublabel": "503 on /disruptions only" }
+  ],
+  "edges": [
+    { "id": "m1", "from": "manifest", "to": "entry", "variant": "emphasis" },
+    { "id": "m2", "from": "entry", "to": "files", "variant": "emphasis" },
+    { "id": "m3", "from": "files", "to": "config", "variant": "emphasis" },
+    { "id": "m4", "from": "config", "to": "weights", "variant": "emphasis" },
+    { "id": "m5", "from": "weights", "to": "ready", "variant": "emphasis" },
+    { "id": "mfail", "from": "files", "to": "stop", "label": "any mismatch", "variant": "security", "role": "error" },
+    { "id": "c1", "from": "c_hash", "to": "c_ver" },
+    { "id": "c2", "from": "c_ver", "to": "c_events" },
+    { "id": "c3", "from": "c_events", "to": "c_inputs" },
+    { "id": "c4", "from": "c_inputs", "to": "c_base" },
+    { "id": "c5", "from": "c_base", "to": "c_ready" },
+    { "id": "cfail", "from": "c_inputs", "to": "c_503", "label": "any mismatch", "variant": "security", "role": "error" }
+  ],
+  "cards": [
+    { "dot": "rose", "title": "Model checks (each one raises ValueError)", "items": ["final_manifest.json hash differs from final_manifest.sha256", "No unique 'winner:' entry for the arm and seed, or it is not MLP + FedAvgM history A", "best.pt, run.json or scalers.json hash differs, scaler scope differs, config fields differ", "Checkpoint meta run_id differs or the checkpoint holds anything but the 'global' model"] },
+    { "dot": "amber", "title": "Catalog checks (each one marks the explorer unavailable)", "items": ["File missing, file hash, schema/version/config hash, events hash, live input-data hashes, baseline hash", "Message includes the rebuild command; replay endpoints keep working", "The catalog is never rebuilt during a request"] },
+    { "dot": "slate", "title": "Order and cost", "items": ["Replay loads both partitions first, then Disruptions(REPLAY)", "Measured start-up: replay data about 0.1 s, catalog about 0.6 s (with input hashing)"] }
+  ]
+}

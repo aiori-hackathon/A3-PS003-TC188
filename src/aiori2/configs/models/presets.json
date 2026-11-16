@@ -1,0 +1,29 @@
+{
+  "default_preset": "medium",
+  "note": "Capacity is kept in the same order of magnitude across architectures (see aiori2/models/README.md for counts); presets are starting points, not tuned values.",
+  "mlp": {
+    "small": {"hidden": 64, "layers": 2, "dropout": 0.0},
+    "medium": {"hidden": 128, "layers": 3, "dropout": 0.1},
+    "large": {"hidden": 256, "layers": 4, "dropout": 0.1}
+  },
+  "gru": {
+    "small": {"hidden": 64, "layers": 1, "dropout": 0.0},
+    "medium": {"hidden": 96, "layers": 2, "dropout": 0.1},
+    "large": {"hidden": 192, "layers": 2, "dropout": 0.1}
+  },
+  "tcn": {
+    "small": {"channels": 32, "layers": 3, "kernel_size": 3, "dilation_base": 2, "dropout": 0.0},
+    "medium": {"channels": 96, "layers": 3, "kernel_size": 3, "dilation_base": 2, "dropout": 0.1},
+    "large": {"channels": 160, "layers": 4, "kernel_size": 3, "dilation_base": 2, "dropout": 0.1}
+  },
+  "patchtst": {
+    "small": {"patch_len": 4, "stride": 2, "d_model": 32, "heads": 4, "layers": 2, "ff": 64, "dropout": 0.1},
+    "medium": {"patch_len": 4, "stride": 2, "d_model": 64, "heads": 4, "layers": 2, "ff": 128, "dropout": 0.1},
+    "large": {"patch_len": 4, "stride": 2, "d_model": 128, "heads": 8, "layers": 3, "ff": 256, "dropout": 0.1}
+  },
+  "nhits": {
+    "small": {"hidden": 64, "mlp_layers": 2, "pool": [2, 2, 1], "freq": [4, 2, 1], "blocks_per_stack": 1, "dropout": 0.0},
+    "medium": {"hidden": 128, "mlp_layers": 2, "pool": [2, 2, 1], "freq": [4, 2, 1], "blocks_per_stack": 1, "dropout": 0.1},
+    "large": {"hidden": 256, "mlp_layers": 2, "pool": [2, 2, 1], "freq": [4, 2, 1], "blocks_per_stack": 2, "dropout": 0.1}
+  }
+}

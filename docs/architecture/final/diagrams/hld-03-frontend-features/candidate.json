@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HLD-03 · AIORI Frontend Features and Backend Capabilities",
+    "output": "docs/architecture/final/diagrams/hld-03-frontend-features/aiori-hld-03-frontend-features.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "components": [
+    { "id": "f_overview", "type": "frontend", "label": "Overview", "sublabel": "headline metrics, example forecast", "pos": [40, 40], "size": [230, 64] },
+    { "id": "f_forecast", "type": "frontend", "label": "Forecasting", "sublabel": "historical hour or 12 own readings", "pos": [40, 180], "size": [230, 64] },
+    { "id": "f_evidence", "type": "frontend", "label": "Performance · Federated", "sublabel": "Methodology · About", "pos": [40, 320], "size": [230, 64] },
+    { "id": "f_replay", "type": "frontend", "label": "Historical Traffic Replay", "sublabel": "map, timeline, playback", "pos": [40, 460], "size": [230, 64] },
+    { "id": "f_dis", "type": "frontend", "label": "Disruption Explorer", "sublabel": "events, charts, robustness", "pos": [40, 640], "size": [230, 64] },
+    { "id": "provider", "type": "frontend", "label": "StudyProvider", "sublabel": "loads study data once", "pos": [440, 320], "size": [200, 64] },
+    { "id": "b_predict", "type": "backend", "label": "Forecast endpoint", "sublabel": "POST /api/predict", "pos": [820, 110], "size": [230, 64] },
+    { "id": "b_study", "type": "backend", "label": "Study data endpoints", "sublabel": "GET health, metrics, sensors, demo, models", "pos": [820, 320], "size": [230, 64] },
+    { "id": "b_replay", "type": "backend", "label": "Replay endpoints", "sublabel": "meta, sensors, day, frame, series, forecast", "pos": [820, 460], "size": [230, 64] },
+    { "id": "b_dis", "type": "backend", "label": "Disruption endpoints", "sublabel": "list, meta, event, series, compare, robustness", "pos": [820, 640], "size": [230, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Served by :8000 and :8010", "wraps": ["b_predict", "b_study"] },
+    { "kind": "region", "label": "Served by :8010 only", "wraps": ["b_replay", "b_dis"] }
+  ],
+  "connections": [
+    { "id": "ov-predict", "from": "f_overview", "to": "b_predict", "label": "example forecast" },
+    { "id": "fc-predict", "from": "f_forecast", "to": "b_predict", "label": "run forecast", "variant": "emphasis" },
+    { "id": "ev-provider", "from": "f_evidence", "to": "provider", "label": "StudyGate" },
+    { "id": "provider-study", "from": "provider", "to": "b_study", "label": "5 GETs in parallel" },
+    { "id": "rp-api", "from": "f_replay", "to": "b_replay", "label": "frames, series, forecasts", "variant": "emphasis" },
+    { "id": "dis-api", "from": "f_dis", "to": "b_dis", "label": "events, series, robustness", "variant": "emphasis" },
+    { "id": "dis-forecast", "from": "f_dis", "to": "b_replay", "label": "forecast, sensors" },
+    { "id": "deep-link", "from": "f_dis", "to": "f_replay", "label": "open in Replay", "variant": "dashed", "fromSide": "top", "toSide": "bottom" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "How pages get data", "items": ["Every study page renders inside StudyGate, which waits for StudyProvider (health, metrics, sensors, demo, models)", "Replay and Explorer use their own clients (lib/replay.ts, lib/disruptions.ts) and useRemote caches", "Deep link: /replay?date&time&sensor&event, validated by parseReplayLink; Replay shows a link back to the event"] },
+    { "dot": "amber", "title": "Build variants", "items": ["Production build (dist, :8000): six routes, no Replay or Explorer code", "Replay build (dist-replay, :8010): eight routes", "A Phase 10 redesign exists only as an isolated preview build and is not part of either"] },
+    { "dot": "slate", "title": "Third-party at runtime", "items": ["OpenStreetMap tiles for the Replay map (Leaflet)", "No analytics, no authentication, no live data feed"] }
+  ]
+}

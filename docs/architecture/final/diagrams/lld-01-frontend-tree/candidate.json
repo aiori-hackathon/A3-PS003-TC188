@@ -1,0 +1,184 @@
+{
+ "schema_version": 1,
+ "diagram_type": "tree",
+ "meta": {
+  "title": "LLD-01 · AIORI Frontend Component Tree (src/app/web)",
+  "output": "docs/architecture/final/diagrams/lld-01-frontend-tree/aiori-lld-01-frontend-tree.html",
+  "quality_profile": "showcase",
+  "locale": "en"
+ },
+ "layout": {
+  "direction": "right"
+ },
+ "nodes": [
+  {
+   "id": "app",
+   "label": "App (main.tsx)",
+   "sublabel": "BrowserRouter · StudyProvider"
+  },
+  {
+   "id": "shell",
+   "parent": "app",
+   "label": "Shell + Suspense",
+   "sublabel": "Sidebar, Footer, Routes"
+  },
+  {
+   "id": "overview",
+   "parent": "shell",
+   "label": "Overview  /",
+   "sublabel": "StudyGate"
+  },
+  {
+   "id": "ov_ex",
+   "parent": "overview",
+   "label": "ExampleForecast",
+   "sublabel": "api.predict → ForecastChart"
+  },
+  {
+   "id": "ov_in",
+   "parent": "overview",
+   "label": "Insights · ResultsTable"
+  },
+  {
+   "id": "forecast",
+   "parent": "shell",
+   "label": "Forecast  /forecast",
+   "sublabel": "StudyGate"
+  },
+  {
+   "id": "fc_ws",
+   "parent": "forecast",
+   "label": "ForecastWorkspace",
+   "sublabel": "SensorPicker, inputs"
+  },
+  {
+   "id": "fc_res",
+   "parent": "forecast",
+   "label": "Result",
+   "sublabel": "ForecastChart, step table"
+  },
+  {
+   "id": "perf",
+   "parent": "shell",
+   "label": "Performance  /performance",
+   "sublabel": "WapeTarget, BarCompare"
+  },
+  {
+   "id": "fed",
+   "parent": "shell",
+   "label": "Federated  /federated",
+   "sublabel": "Verdict, FedAvgDiagram"
+  },
+  {
+   "id": "meth",
+   "parent": "shell",
+   "label": "Methodology · About",
+   "sublabel": "static study text + data"
+  },
+  {
+   "id": "nf",
+   "parent": "shell",
+   "label": "NotFound  *"
+  },
+  {
+   "id": "replay",
+   "parent": "shell",
+   "label": "Replay  /replay",
+   "sublabel": "replay build only"
+  },
+  {
+   "id": "rp_view",
+   "parent": "replay",
+   "label": "ReplayView",
+   "sublabel": "date, slot, playback state"
+  },
+  {
+   "id": "rp_strip",
+   "parent": "rp_view",
+   "label": "CoverageStrip",
+   "sublabel": "valid sensors per slot"
+  },
+  {
+   "id": "rp_map",
+   "parent": "rp_view",
+   "label": "ReplayMap",
+   "sublabel": "Leaflet canvas markers"
+  },
+  {
+   "id": "rp_panel",
+   "parent": "rp_view",
+   "label": "SensorPanel",
+   "sublabel": "DayChart, ForecastView"
+  },
+  {
+   "id": "dis",
+   "parent": "shell",
+   "label": "Disruptions  /disruptions",
+   "sublabel": "replay build only"
+  },
+  {
+   "id": "dis_ex",
+   "parent": "dis",
+   "label": "Explorer",
+   "sublabel": "filters in state, ?event= in URL"
+  },
+  {
+   "id": "dis_list",
+   "parent": "dis_ex",
+   "label": "Overview · FilterBar",
+   "sublabel": "EventTable, paging"
+  },
+  {
+   "id": "dis_ev",
+   "parent": "dis_ex",
+   "label": "EventPanel",
+   "sublabel": "per selected event"
+  },
+  {
+   "id": "dis_cards",
+   "parent": "dis_ev",
+   "label": "SeriesCard · SensorsCard",
+   "sublabel": "CompareCard"
+  },
+  {
+   "id": "dis_fc",
+   "parent": "dis_ev",
+   "label": "ForecastCard",
+   "sublabel": "ForecastView, RobustnessView"
+  },
+  {
+   "id": "dis_more",
+   "parent": "dis_ex",
+   "label": "AggregateCard · AboutCard",
+   "sublabel": "summary, limitations"
+  }
+ ],
+ "cards": [
+  {
+   "dot": "cyan",
+   "title": "Shared building blocks",
+   "items": [
+    "components/ui: Button, Card, Field, Segmented, TableWrap, Skeleton, ErrorState, EmptyState",
+    "components/charts: ForecastChart, HorizonChart, BarCompare (Recharts)",
+    "components/study.tsx: StudyGate, ResultsTable, FedAvgDiagram"
+   ]
+  },
+  {
+   "dot": "emerald",
+   "title": "Data access",
+   "items": [
+    "lib/api.ts: study API (health, metrics, sensors, demo, models, predict)",
+    "lib/replay.ts and lib/disruptions.ts: replay and explorer clients, types, pure helpers",
+    "lib/useRemote.ts: abort-on-change fetch hook with LRU cache"
+   ]
+  },
+  {
+   "dot": "slate",
+   "title": "Scope",
+   "items": [
+    "This is the active source behind web/dist and web/dist-replay",
+    "The Phase 10 redesign copy (web-phase10) has the same tree with restyled components and is not active"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+# Build context is the repository root. Only the frontend source and the nginx config may enter the build.
+*
+!src/app/web-phase10/
+!deploy/aiori/nginx.conf
+src/app/web-phase10/node_modules
+src/app/web-phase10/dist*
+src/app/web-phase10/*.md
+src/app/web-phase10/.env*

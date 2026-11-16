@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "LLD-10 · Server Start-up and Operations",
+    "output": "docs/architecture/final/diagrams/lld-10-runtime-startup/aiori-lld-10-runtime-startup.html",
+    "quality_profile": "showcase",
+    "locale": "en"
+  },
+  "lanes": [
+    { "id": "prod", "label": "server.py (:8000, AIORI_PORT)" },
+    { "id": "ext", "label": "replay_server.py (:8010, AIORI_REPLAY_PORT)" },
+    { "id": "ops", "label": "keepalive.ps1 (configured, task not registered)", "variant": "exception" }
+  ],
+  "mainPath": ["b0", "b1", "b2", "b3", "b4", "b5"],
+  "nodes": [
+    { "id": "a0", "lane": "prod", "col": 0, "type": "backend", "label": "main()", "sublabel": "frontend: AIORI_FRONTEND_DIR or web/dist" },
+    { "id": "a1", "lane": "prod", "col": 1, "type": "backend", "label": "Engine()", "sublabel": "nine_month, 2 GRU models" },
+    { "id": "a2", "lane": "prod", "col": 2, "type": "backend", "label": "Candidate()", "sublabel": "only if AIORI_CANDIDATE=1" },
+    { "id": "a3", "lane": "prod", "col": 3, "type": "backend", "label": "ThreadingHTTPServer", "sublabel": "127.0.0.1:8000" },
+    { "id": "a4", "lane": "prod", "col": 4, "type": "backend", "label": "serve_forever", "sublabel": "request lines to stderr" },
+    { "id": "b0", "lane": "ext", "col": 0, "type": "backend", "label": "Set frontend dir", "sublabel": "web/dist-replay if built" },
+    { "id": "b1", "lane": "ext", "col": 1, "type": "backend", "label": "Engine()", "sublabel": "same as :8000" },
+    { "id": "b2", "lane": "ext", "col": 2, "type": "backend", "label": "Replay()", "sublabel": "timeline, mmaps, 2 models" },
+    { "id": "b3", "lane": "ext", "col": 3, "type": "backend", "label": "Disruptions()", "sublabel": "or reason string → 503" },
+    { "id": "b4", "lane": "ext", "col": 4, "type": "backend", "label": "ThreadingHTTPServer", "sublabel": "127.0.0.1:8010" },
+    { "id": "b5", "lane": "ext", "col": 5, "type": "backend", "label": "serve_forever", "sublabel": "prints load times" },
+    { "id": "c0", "lane": "ops", "col": 0, "type": "security", "label": "Watchdog loop", "sublabel": "every 30 s" },
+    { "id": "c1", "lane": "ops", "col": 1, "type": "security", "label": "GET /api/health", "sublabel": "3 failures in a row" },
+    { "id": "c2", "lane": "ops", "col": 2, "type": "security", "label": "Restart server.py", "sublabel": "kills matching python" },
+    { "id": "c3", "lane": "ops", "col": 3, "type": "cloud", "label": "Restart cloudflared", "sublabel": "new quick-tunnel URL" }
+  ],
+  "edges": [
+    { "id": "a01", "from": "a0", "to": "a1" },
+    { "id": "a12", "from": "a1", "to": "a2", "label": "opt-in", "variant": "dashed" },
+    { "id": "a23", "from": "a2", "to": "a3" },
+    { "id": "a34", "from": "a3", "to": "a4" },
+    { "id": "b01", "from": "b0", "to": "b1", "variant": "emphasis" },
+    { "id": "b12", "from": "b1", "to": "b2", "variant": "emphasis" },
+    { "id": "b23", "from": "b2", "to": "b3", "variant": "emphasis" },
+    { "id": "b34", "from": "b3", "to": "b4", "variant": "emphasis" },
+    { "id": "b45", "from": "b4", "to": "b5", "variant": "emphasis" },
+    { "id": "c01", "from": "c0", "to": "c1", "variant": "dashed" },
+    { "id": "c12", "from": "c1", "to": "c2", "label": "unhealthy", "variant": "dashed" },
+    { "id": "c23", "from": "c2", "to": "c3", "label": "tunnel down", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Configuration (environment variables)", "items": ["server.py: AIORI_HOST, AIORI_PORT, AIORI_DATA_DIR, AIORI_RUNS_DIR, AIORI_FINAL_DIR, AIORI_DEVICE, AIORI_THREADS, AIORI_FRONTEND_DIR, AIORI_CORS_ORIGINS, AIORI_CANDIDATE", "replay.py: AIORI_REPLAY_DATA, AIORI_REPLAY_STAGE3, AIORI_REPLAY_SENSOR_META, AIORI_REPLAY_DEVICE", "Defaults: 127.0.0.1, CPU, torch threads 2"] },
+    { "dot": "amber", "title": "Failure and recovery", "items": ["Any model or data check failure at start-up stops the process (no partial service)", "A stale or missing catalog only disables the explorer endpoints (503)", "No automatic restart is active: the keep-alive task is not registered and no supervisor runs"] },
+    { "dot": "slate", "title": "Shutdown", "items": ["Stopping the process ends the service; nothing is written at runtime, so no state is lost", "Caches are in-process memory only and start empty"] }
+  ]
+}

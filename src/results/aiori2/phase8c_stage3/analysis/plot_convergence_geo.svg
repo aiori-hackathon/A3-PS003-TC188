@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="sans-serif"><rect width="100%" height="100%" fill="#fff"/><text x="450.0" y="22" text-anchor="middle" font-size="14">Validation-subset WAPE by epoch (geo); dotted line = 10-epoch Stage 2 budget</text>
+<text transform="translate(16,175.0) rotate(-90)" text-anchor="middle" font-size="12">subset WAPE (%)</text>
+<line x1="70" x2="880" y1="310.0" y2="310.0" stroke="#ddd"/>
+<text x="64" y="314.0" text-anchor="end" font-size="10">10.75</text>
+<line x1="70" x2="880" y1="276.3" y2="276.3" stroke="#ddd"/>
+<text x="64" y="280.3" text-anchor="end" font-size="10">10.86</text>
+<line x1="70" x2="880" y1="242.5" y2="242.5" stroke="#ddd"/>
+<text x="64" y="246.5" text-anchor="end" font-size="10">10.96</text>
+<line x1="70" x2="880" y1="208.8" y2="208.8" stroke="#ddd"/>
+<text x="64" y="212.8" text-anchor="end" font-size="10">11.07</text>
+<line x1="70" x2="880" y1="175.0" y2="175.0" stroke="#ddd"/>
+<text x="64" y="179.0" text-anchor="end" font-size="10">11.18</text>
+<line x1="70" x2="880" y1="141.2" y2="141.2" stroke="#ddd"/>
+<text x="64" y="145.2" text-anchor="end" font-size="10">11.28</text>
+<line x1="70" x2="880" y1="107.5" y2="107.5" stroke="#ddd"/>
+<text x="64" y="111.5" text-anchor="end" font-size="10">11.39</text>
+<line x1="70" x2="880" y1="73.7" y2="73.7" stroke="#ddd"/>
+<text x="64" y="77.7" text-anchor="end" font-size="10">11.49</text>
+<line x1="70" x2="880" y1="40.0" y2="40.0" stroke="#ddd"/>
+<text x="64" y="44.0" text-anchor="end" font-size="10">11.60</text>
+<text transform="translate(90.2,322) rotate(35)" font-size="10">1</text>
+<text transform="translate(130.8,322) rotate(35)" font-size="10">2</text>
+<text transform="translate(171.2,322) rotate(35)" font-size="10">3</text>
+<text transform="translate(211.8,322) rotate(35)" font-size="10">4</text>
+<text transform="translate(252.2,322) rotate(35)" font-size="10">5</text>
+<text transform="translate(292.8,322) rotate(35)" font-size="10">6</text>
+<text transform="translate(333.2,322) rotate(35)" font-size="10">7</text>
+<text transform="translate(373.8,322) rotate(35)" font-size="10">8</text>
+<text transform="translate(414.2,322) rotate(35)" font-size="10">9</text>
+<text transform="translate(454.8,322) rotate(35)" font-size="10">10</text>
+<text transform="translate(495.2,322) rotate(35)" font-size="10">11</text>
+<text transform="translate(535.8,322) rotate(35)" font-size="10">12</text>
+<text transform="translate(576.2,322) rotate(35)" font-size="10">13</text>
+<text transform="translate(616.8,322) rotate(35)" font-size="10">14</text>
+<text transform="translate(657.2,322) rotate(35)" font-size="10">15</text>
+<text transform="translate(697.8,322) rotate(35)" font-size="10">16</text>
+<text transform="translate(738.2,322) rotate(35)" font-size="10">17</text>
+<text transform="translate(778.8,322) rotate(35)" font-size="10">18</text>
+<text transform="translate(819.2,322) rotate(35)" font-size="10">19</text>
+<text transform="translate(859.8,322) rotate(35)" font-size="10">20</text>
+<rect x="700" y="46" width="10" height="10" fill="#1b7837"/><text x="715" y="55" font-size="10">mlp fedavgm</text>
+<rect x="700" y="62" width="10" height="10" fill="#2166ac"/><text x="715" y="71" font-size="10">nhits fedavgm</text>
+<rect x="700" y="78" width="10" height="10" fill="#b35806"/><text x="715" y="87" font-size="10">nhits fedadam</text>
+<rect x="700" y="94" width="10" height="10" fill="#6a6a6a"/><text x="715" y="103" font-size="10">nhits fedavg</text>
+<line x1="454.8" x2="454.8" y1="40" y2="310" stroke="#000" stroke-dasharray="3 3"/>
+<polyline points="90.2,40.0 130.8,195.8 171.2,214.1 211.8,222.1 252.2,228.0 292.8,229.0 333.2,232.8 373.8,237.2 414.2,237.8 454.8,238.4 495.2,241.3 535.8,241.8 576.2,244.8 616.8,248.5 657.2,248.5 697.8,252.2 738.2,252.1 778.8,252.0 819.2,257.3 859.8,255.0" fill="none" stroke="#2166ac" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,40.0 130.8,197.8 171.2,213.9 211.8,215.8 252.2,226.8 292.8,222.0 333.2,231.6 373.8,236.5 414.2,230.4 454.8,240.6 495.2,244.4 535.8,244.9 576.2,247.4 616.8,247.1 657.2,251.0 697.8,250.8 738.2,253.8 778.8,251.2 819.2,252.3 859.8,254.7" fill="none" stroke="#2166ac" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,40.0 130.8,200.1 171.2,211.7 211.8,219.3 252.2,223.7 292.8,229.1 333.2,231.0 373.8,233.7 414.2,231.0 454.8,241.3 495.2,239.5 535.8,240.6 576.2,234.3" fill="none" stroke="#2166ac" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,93.3 130.8,196.3 171.2,207.2 211.8,216.3 252.2,218.8 292.8,227.4 333.2,226.0 373.8,227.0 414.2,236.4 454.8,236.9 495.2,243.7 535.8,243.9 576.2,230.8 616.8,254.7 657.2,245.7 697.8,256.1 738.2,259.2 778.8,265.5 819.2,264.8 859.8,266.1" fill="none" stroke="#1b7837" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,80.9 130.8,187.8 171.2,201.3 211.8,206.7 252.2,210.6 292.8,212.6 333.2,221.4 373.8,222.4 414.2,230.7 454.8,231.6 495.2,238.1 535.8,239.7 576.2,240.9 616.8,241.6 657.2,248.9 697.8,250.5 738.2,248.4 778.8,251.7 819.2,256.9 859.8,257.7" fill="none" stroke="#1b7837" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,40.0 130.8,188.5 171.2,207.4 211.8,214.2 252.2,219.5 292.8,215.5 333.2,224.2 373.8,223.9 414.2,229.1 454.8,234.3 495.2,239.4 535.8,241.9 576.2,239.6 616.8,245.7 657.2,256.3 697.8,251.4 738.2,257.9 778.8,260.5 819.2,269.5 859.8,269.6" fill="none" stroke="#1b7837" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,40.0 130.8,183.1 171.2,197.6 211.8,206.7 252.2,217.8 292.8,217.7 333.2,226.4 373.8,228.3 414.2,228.9 454.8,234.7 495.2,237.5 535.8,231.6 576.2,234.1 616.8,244.0 657.2,235.0 697.8,246.2 738.2,246.6 778.8,248.3 819.2,249.4 859.8,249.0" fill="none" stroke="#b35806" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,63.4 130.8,176.7 171.2,197.5 211.8,197.4 252.2,214.5 292.8,219.1 333.2,223.5 373.8,223.9 414.2,218.4 454.8,226.4 495.2,233.3 535.8,237.9 576.2,236.6 616.8,243.0 657.2,243.9 697.8,244.4 738.2,246.7 778.8,244.5 819.2,248.4 859.8,249.0" fill="none" stroke="#b35806" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,62.8 130.8,181.4 171.2,199.2 211.8,203.0 252.2,214.7 292.8,210.5 333.2,220.2 373.8,228.1 414.2,230.3 454.8,229.7 495.2,232.2 535.8,236.8 576.2,240.5 616.8,241.8 657.2,240.5 697.8,245.1 738.2,227.3 778.8,248.9 819.2,251.7 859.8,243.4" fill="none" stroke="#b35806" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,40.0 130.8,92.4 171.2,125.7 211.8,132.2 252.2,156.0 292.8,166.1 333.2,164.6 373.8,169.9 414.2,180.7 454.8,187.5 495.2,188.0 535.8,191.0 576.2,189.0 616.8,195.4 657.2,194.6 697.8,200.1 738.2,200.8 778.8,202.2 819.2,205.1 859.8,204.7" fill="none" stroke="#6a6a6a" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,40.0 130.8,73.8 171.2,104.3 211.8,139.7 252.2,150.7 292.8,161.7 333.2,169.6 373.8,178.3 414.2,182.2 454.8,184.7 495.2,191.1 535.8,193.3 576.2,195.1 616.8,198.3 657.2,198.6 697.8,202.1 738.2,200.6 778.8,203.1 819.2,204.0 859.8,207.2" fill="none" stroke="#6a6a6a" stroke-width="1.2" stroke-opacity=".75"/>
+<polyline points="90.2,40.0 130.8,72.2 171.2,119.3 211.8,154.3 252.2,164.1 292.8,167.9 333.2,173.2 373.8,180.8 414.2,183.1 454.8,187.2 495.2,185.3 535.8,192.1 576.2,195.2 616.8,197.2 657.2,193.0 697.8,200.8 738.2,197.3 778.8,197.4 819.2,204.8 859.8,204.2" fill="none" stroke="#6a6a6a" stroke-width="1.2" stroke-opacity=".75"/></svg>

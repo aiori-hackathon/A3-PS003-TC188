@@ -1,4 +1,7 @@
 # --- Raw XTraffic dataset (CC BY-NC 4.0; never commit) ---
+src/year_2022/
+src/year_2023/
+src/year_2024/
 year_2023/
 *.npy
 node_order.npy
@@ -14,11 +17,20 @@ src/data/processed/
 src/data/*
 !src/data/raw_integrity_baseline.json
 
-# --- Model artifacts (none yet; Phase 6 not started) ---
+# --- Model artifacts and experiment outputs ---
+# Checkpoints never enter Git. Results stay local, except the small Stage 3 analysis folder and the
+# Stage 1-2 result tables, which document the final model selection.
 *.pt
 *.pth
 *.ckpt
-results/
+src/results/*
+!src/results/aiori2/
+src/results/aiori2/*
+!src/results/aiori2/phase8c_stage3/
+src/results/aiori2/phase8c_stage3/*
+!src/results/aiori2/phase8c_stage3/analysis/
+!src/results/aiori2/phase7_stage1/
+src/results/aiori2/phase7_stage1/*/
 
 # --- Python environment and caches ---
 .venv/
@@ -60,3 +72,26 @@ src/app/web/dist/
 
 # --- Isolated GPU environment for accuracy optimisation ---
 .venv-gpu/
+
+# --- Local tool state and Archify receipts (receipts carry absolute local paths) ---
+.impeccable/
+.archify/
+docs/**/*.finalize.json
+docs/**/*.finalize-summary.json
+docs/**/*.delivery.json
+docs/**/*.browser-check.json
+*.tsbuildinfo
+
+# --- Local rollback copies, retired tunnel tooling and deployment run-time state (kept on disk) ---
+src/app/backups/
+.keepalive/
+deploy/aiori/logs/
+
+# --- Machine-specific Stage 3 training watchdog (kept on disk) ---
+src/aiori2_watchdog/
+src/tests/test_aiori2_watchdog.py
+
+# --- Internal planning reports and session notes (kept on disk) ---
+docs/repository-preparation/
+src/app/PHASE10_UI_CONTINUE.md
+docs/architecture/final/ARCHITECTURE_CONTINUE.md

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="sans-serif"><rect width="100%" height="100%" fill="#fff"/><text x="450.0" y="22" text-anchor="middle" font-size="14">Per geographic client WAPE, mean of 3 seeds</text>
+<text transform="translate(16,175.0) rotate(-90)" text-anchor="middle" font-size="12">WAPE (%)</text>
+<line x1="70" x2="880" y1="310.0" y2="310.0" stroke="#ddd"/>
+<text x="64" y="314.0" text-anchor="end" font-size="10">8.50</text>
+<line x1="70" x2="880" y1="276.2" y2="276.2" stroke="#ddd"/>
+<text x="64" y="280.2" text-anchor="end" font-size="10">9.12</text>
+<line x1="70" x2="880" y1="242.5" y2="242.5" stroke="#ddd"/>
+<text x="64" y="246.5" text-anchor="end" font-size="10">9.75</text>
+<line x1="70" x2="880" y1="208.8" y2="208.8" stroke="#ddd"/>
+<text x="64" y="212.8" text-anchor="end" font-size="10">10.38</text>
+<line x1="70" x2="880" y1="175.0" y2="175.0" stroke="#ddd"/>
+<text x="64" y="179.0" text-anchor="end" font-size="10">11.00</text>
+<line x1="70" x2="880" y1="141.2" y2="141.2" stroke="#ddd"/>
+<text x="64" y="145.2" text-anchor="end" font-size="10">11.62</text>
+<line x1="70" x2="880" y1="107.5" y2="107.5" stroke="#ddd"/>
+<text x="64" y="111.5" text-anchor="end" font-size="10">12.25</text>
+<line x1="70" x2="880" y1="73.8" y2="73.8" stroke="#ddd"/>
+<text x="64" y="77.8" text-anchor="end" font-size="10">12.88</text>
+<line x1="70" x2="880" y1="40.0" y2="40.0" stroke="#ddd"/>
+<text x="64" y="44.0" text-anchor="end" font-size="10">13.50</text>
+<text transform="translate(120.6,322) rotate(35)" font-size="10">mlp fedavgm A IID</text>
+<text transform="translate(221.9,322) rotate(35)" font-size="10">nhits fedavgm B IID</text>
+<text transform="translate(323.1,322) rotate(35)" font-size="10">mlp fedavgm A geo</text>
+<text transform="translate(424.4,322) rotate(35)" font-size="10">nhits fedadam B IID</text>
+<text transform="translate(525.6,322) rotate(35)" font-size="10">nhits fedavgm B geo</text>
+<text transform="translate(626.9,322) rotate(35)" font-size="10">nhits fedadam B geo</text>
+<text transform="translate(728.1,322) rotate(35)" font-size="10">nhits fedavg B IID</text>
+<text transform="translate(829.4,322) rotate(35)" font-size="10">nhits fedavg B geo</text>
+<rect x="700" y="46" width="10" height="10" fill="#4477aa"/><text x="715" y="55" font-size="10">client_0_la_ventura</text>
+<rect x="700" y="62" width="10" height="10" fill="#66ccee"/><text x="715" y="71" font-size="10">client_1_bay_area</text>
+<rect x="700" y="78" width="10" height="10" fill="#228833"/><text x="715" y="87" font-size="10">client_2_coastal_south_central</text>
+<rect x="700" y="94" width="10" height="10" fill="#ccbb44"/><text x="715" y="103" font-size="10">client_3_inland_central</text>
+<rect x="81.1" y="261.5" width="18.2" height="48.5" fill="#4477aa"/>
+<rect x="101.4" y="183.2" width="18.2" height="126.8" fill="#66ccee"/>
+<rect x="121.6" y="157.6" width="18.2" height="152.4" fill="#228833"/>
+<rect x="141.9" y="74.1" width="18.2" height="235.9" fill="#ccbb44"/>
+<rect x="182.4" y="259.1" width="18.2" height="50.9" fill="#4477aa"/>
+<rect x="202.6" y="180.4" width="18.2" height="129.6" fill="#66ccee"/>
+<rect x="222.9" y="155.8" width="18.2" height="154.2" fill="#228833"/>
+<rect x="243.1" y="74.1" width="18.2" height="235.9" fill="#ccbb44"/>
+<rect x="283.6" y="257.0" width="18.2" height="53.0" fill="#4477aa"/>
+<rect x="303.9" y="177.7" width="18.2" height="132.3" fill="#66ccee"/>
+<rect x="324.1" y="156.6" width="18.2" height="153.4" fill="#228833"/>
+<rect x="344.4" y="77.6" width="18.2" height="232.4" fill="#ccbb44"/>
+<rect x="384.9" y="257.7" width="18.2" height="52.3" fill="#4477aa"/>
+<rect x="405.1" y="180.0" width="18.2" height="130.0" fill="#66ccee"/>
+<rect x="425.4" y="155.0" width="18.2" height="155.0" fill="#228833"/>
+<rect x="445.6" y="72.5" width="18.2" height="237.5" fill="#ccbb44"/>
+<rect x="486.1" y="253.9" width="18.2" height="56.1" fill="#4477aa"/>
+<rect x="506.4" y="178.7" width="18.2" height="131.3" fill="#66ccee"/>
+<rect x="526.6" y="150.7" width="18.2" height="159.3" fill="#228833"/>
+<rect x="546.9" y="75.5" width="18.2" height="234.5" fill="#ccbb44"/>
+<rect x="587.4" y="253.2" width="18.2" height="56.8" fill="#4477aa"/>
+<rect x="607.6" y="178.5" width="18.2" height="131.5" fill="#66ccee"/>
+<rect x="627.9" y="151.4" width="18.2" height="158.6" fill="#228833"/>
+<rect x="648.1" y="75.4" width="18.2" height="234.6" fill="#ccbb44"/>
+<rect x="688.6" y="247.5" width="18.2" height="62.5" fill="#4477aa"/>
+<rect x="708.9" y="172.8" width="18.2" height="137.2" fill="#66ccee"/>
+<rect x="729.1" y="143.8" width="18.2" height="166.2" fill="#228833"/>
+<rect x="749.4" y="66.9" width="18.2" height="243.1" fill="#ccbb44"/>
+<rect x="789.9" y="245.7" width="18.2" height="64.3" fill="#4477aa"/>
+<rect x="810.1" y="171.2" width="18.2" height="138.8" fill="#66ccee"/>
+<rect x="830.4" y="141.4" width="18.2" height="168.6" fill="#228833"/>
+<rect x="850.6" y="70.8" width="18.2" height="239.2" fill="#ccbb44"/></svg>

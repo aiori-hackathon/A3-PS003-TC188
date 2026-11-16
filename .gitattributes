@@ -1,0 +1,3 @@
+# Frozen code and evidence: stored byte-for-byte, because their SHA-256 hashes are recorded
+src/aiori2/** -text
+src/results/aiori2/** -text
