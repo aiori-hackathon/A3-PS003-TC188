@@ -1,0 +1,111 @@
+{
+ "models": [
+  {
+   "label": "winner:mlp-fedavgm-A-IID-s20261027",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_iid-A-mlp-medium-fedavgm-s20261027-1387d83baa"
+  },
+  {
+   "label": "winner:mlp-fedavgm-A-IID-s20261114",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_iid-A-mlp-medium-fedavgm-s20261114-fcdb72187f"
+  },
+  {
+   "label": "winner:mlp-fedavgm-A-IID-s20261115",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_iid-A-mlp-medium-fedavgm-s20261115-8bf61ee37c"
+  },
+  {
+   "label": "winner:mlp-fedavgm-A-geo-s20261027",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_geo-A-mlp-medium-fedavgm-s20261027-ba24d6a0a6"
+  },
+  {
+   "label": "winner:mlp-fedavgm-A-geo-s20261114",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_geo-A-mlp-medium-fedavgm-s20261114-eabd640e6d"
+  },
+  {
+   "label": "winner:mlp-fedavgm-A-geo-s20261115",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_geo-A-mlp-medium-fedavgm-s20261115-e6b12a2e21"
+  },
+  {
+   "label": "baseline:nhits-fedavg-B-IID-s20261027",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_iid-B-nhits-medium-fedavg-s20261027-862b20f47d"
+  },
+  {
+   "label": "baseline:nhits-fedavg-B-IID-s20261114",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_iid-B-nhits-medium-fedavg-s20261114-359f2b8ebf"
+  },
+  {
+   "label": "baseline:nhits-fedavg-B-IID-s20261115",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_iid-B-nhits-medium-fedavg-s20261115-ca4e3ba6e5"
+  },
+  {
+   "label": "baseline:nhits-fedavg-B-geo-s20261027",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_geo-B-nhits-medium-fedavg-s20261027-3cbf29b7cc"
+  },
+  {
+   "label": "baseline:nhits-fedavg-B-geo-s20261114",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_geo-B-nhits-medium-fedavg-s20261114-d9157ffdd6"
+  },
+  {
+   "label": "baseline:nhits-fedavg-B-geo-s20261115",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase8c_stage3\\fedavg_geo-B-nhits-medium-fedavg-s20261115-be7b212b05"
+  },
+  {
+   "label": "stage1-ref-10ep-single-seed:local-A-gru-medium-none-s20261027-3244cf26c2",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase7_stage1\\local-A-gru-medium-none-s20261027-3244cf26c2"
+  },
+  {
+   "label": "stage1-ref-10ep-single-seed:centralised-A-mlp-medium-none-s20261027-5b19477e3b",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase7_stage1\\centralised-A-mlp-medium-none-s20261027-5b19477e3b"
+  },
+  {
+   "label": "stage1-ref-10ep-single-seed:local-A-mlp-medium-none-s20261027-cf39fd6a22",
+   "run_dir": "C:\\Users\\PC-017\\Desktop\\Traffic\\src\\results\\aiori2\\phase7_stage1\\local-A-mlp-medium-none-s20261027-cf39fd6a22"
+  }
+ ],
+ "persistence": [
+  "A",
+  "B"
+ ],
+ "policy": {
+  "protocol_sha256": "47436d98eba002a66199ab5af5d1a889c1f65b14937f86d01e65384973080f8b",
+  "rule": [
+   "winner = configuration with the lowest configuration score; test both of its cells, all 3 seeds (no seed picking; report mean, SD, range)",
+   "runner-up configuration also tested (all 3 seeds, both cells) if its score is within one pooled seed SD of the winner",
+   "baseline = N-HiTS FedAvg B, both cells, all 3 seeds",
+   "non-federated references (Stage 1, 10-epoch, single seed, flagged as unmatched exposure): best Stage 1 run (local GRU A) and centralised + local runs of the winner's model and history",
+   "persistence baseline on the test split for history A and B"
+  ],
+  "winner": {
+   "model": "mlp",
+   "algorithm": "fedavgm",
+   "history": "A",
+   "score": 10.865788392474617,
+   "iid_mean": 10.840509903146696,
+   "geo_mean": 10.891066881802535,
+   "geo_minus_iid": 0.0505569786558393,
+   "sd_6runs": 0.03385208385585777,
+   "pooled_within_cell_sd": 0.02177042587267034,
+   "rank": 1
+  },
+  "runner_up": {
+   "model": "nhits",
+   "algorithm": "fedavgm",
+   "history": "B",
+   "score": 10.905015653931454,
+   "iid_mean": 10.877499628148932,
+   "geo_mean": 10.932531679713975,
+   "geo_minus_iid": 0.05503205156504265,
+   "sd_6runs": 0.03469882430239941,
+   "pooled_within_cell_sd": 0.019217517989179474,
+   "rank": 2
+  },
+  "runner_up_gap": 0.03922726145683697,
+  "pooled_seed_sd": 0.01476555437352075,
+  "pooled_sd_alternatives": {
+   "pooled_all_8_cells": 0.01476555437352075,
+   "pooled_winner_and_runnerup_cells": 0.020533685011973262,
+   "winner_cells_only": 0.02177042587267034
+  },
+  "runner_up_included": false,
+  "note": "selection decided from validation only; no test data read before freezing"
+ }
+}

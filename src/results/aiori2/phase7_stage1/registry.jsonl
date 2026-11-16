@@ -1,0 +1,192 @@
+{"time": "2026-11-13T11:31:04", "run_id": "centralised-A-mlp-medium-none-s20261027-5b19477e3b", "event": "start"}
+{"time": "2026-11-13T11:42:31", "run_id": "centralised-A-mlp-medium-none-s20261027-5b19477e3b", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T11:42:32", "run_id": "local-A-mlp-medium-none-s20261027-cf39fd6a22", "event": "start"}
+{"time": "2026-11-13T11:54:07", "run_id": "local-A-mlp-medium-none-s20261027-cf39fd6a22", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T11:54:08", "run_id": "fedavg_iid-A-mlp-medium-fedavg-s20261027-0d238e60e5", "event": "start"}
+{"time": "2026-11-13T12:04:45", "run_id": "fedavg_iid-A-mlp-medium-fedavg-s20261027-0d238e60e5", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T12:04:46", "run_id": "fedavg_geo-A-mlp-medium-fedavg-s20261027-0a4757d79e", "event": "start"}
+{"time": "2026-11-13T12:15:23", "run_id": "fedavg_geo-A-mlp-medium-fedavg-s20261027-0a4757d79e", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T12:15:23", "run_id": "centralised-A-gru-medium-none-s20261027-b55aeb4719", "event": "start"}
+{"time": "2026-11-13T12:24:07", "run_id": "centralised-A-gru-medium-none-s20261027-b55aeb4719", "event": "early_stopped", "epoch": 9}
+{"time": "2026-11-13T12:24:07", "run_id": "local-A-gru-medium-none-s20261027-3244cf26c2", "event": "start"}
+{"time": "2026-11-13T12:33:48", "run_id": "local-A-gru-medium-none-s20261027-3244cf26c2", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T12:33:49", "run_id": "fedavg_iid-A-gru-medium-fedavg-s20261027-acaa404755", "event": "start"}
+{"time": "2026-11-13T12:44:00", "run_id": "fedavg_iid-A-gru-medium-fedavg-s20261027-acaa404755", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T12:44:01", "run_id": "fedavg_geo-A-gru-medium-fedavg-s20261027-570c901cb9", "event": "start"}
+{"time": "2026-11-13T12:54:13", "run_id": "fedavg_geo-A-gru-medium-fedavg-s20261027-570c901cb9", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T12:54:13", "run_id": "centralised-A-tcn-medium-none-s20261027-8cd9b20a94", "event": "start"}
+{"time": "2026-11-13T12:58:26", "run_id": "centralised-A-tcn-medium-none-s20261027-8cd9b20a94", "event": "early_stopped", "epoch": 4}
+{"time": "2026-11-13T12:58:27", "run_id": "local-A-tcn-medium-none-s20261027-68a25d5eb8", "event": "start"}
+{"time": "2026-11-13T13:04:35", "run_id": "local-A-tcn-medium-none-s20261027-68a25d5eb8", "event": "early_stopped", "epoch": 6}
+{"time": "2026-11-13T13:04:36", "run_id": "fedavg_iid-A-tcn-medium-fedavg-s20261027-acffb6632f", "event": "start"}
+{"time": "2026-11-13T13:13:54", "run_id": "fedavg_iid-A-tcn-medium-fedavg-s20261027-acffb6632f", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T13:13:55", "run_id": "fedavg_geo-A-tcn-medium-fedavg-s20261027-8cb2f21be0", "event": "start"}
+{"time": "2026-11-13T13:23:34", "run_id": "fedavg_geo-A-tcn-medium-fedavg-s20261027-8cb2f21be0", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T13:23:34", "run_id": "centralised-A-patchtst-medium-none-s20261027-00999cb2b0", "event": "start"}
+{"time": "2026-11-13T13:41:49", "run_id": "centralised-A-patchtst-medium-none-s20261027-00999cb2b0", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T13:41:50", "run_id": "local-A-patchtst-medium-none-s20261027-0c8100a3eb", "event": "start"}
+{"time": "2026-11-13T13:49:15", "run_id": "local-A-patchtst-medium-none-s20261027-0c8100a3eb", "event": "early_stopped", "epoch": 4}
+{"time": "2026-11-13T13:49:16", "run_id": "fedavg_iid-A-patchtst-medium-fedavg-s20261027-fc01480a8b", "event": "start"}
+{"time": "2026-11-13T14:06:16", "run_id": "fedavg_iid-A-patchtst-medium-fedavg-s20261027-fc01480a8b", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T14:06:17", "run_id": "fedavg_geo-A-patchtst-medium-fedavg-s20261027-7ebe650dc2", "event": "start"}
+{"time": "2026-11-13T14:23:37", "run_id": "fedavg_geo-A-patchtst-medium-fedavg-s20261027-7ebe650dc2", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T14:23:38", "run_id": "centralised-A-nhits-medium-none-s20261027-1256cffffc", "event": "start"}
+{"time": "2026-11-13T14:38:12", "run_id": "centralised-A-nhits-medium-none-s20261027-1256cffffc", "event": "early_stopped", "epoch": 10}
+{"time": "2026-11-13T14:38:13", "run_id": "local-A-nhits-medium-none-s20261027-194ee55d29", "event": "start"}
+{"time": "2026-11-13T14:52:28", "run_id": "local-A-nhits-medium-none-s20261027-194ee55d29", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T14:52:30", "run_id": "fedavg_iid-A-nhits-medium-fedavg-s20261027-76270f6b6b", "event": "start"}
+{"time": "2026-11-13T15:05:37", "run_id": "fedavg_iid-A-nhits-medium-fedavg-s20261027-76270f6b6b", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T15:05:38", "run_id": "fedavg_geo-A-nhits-medium-fedavg-s20261027-ecd04d4cc1", "event": "start"}
+{"time": "2026-11-13T15:19:26", "run_id": "fedavg_geo-A-nhits-medium-fedavg-s20261027-ecd04d4cc1", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T15:19:27", "run_id": "centralised-B-mlp-medium-none-s20261027-c8b8c073d0", "event": "start"}
+{"time": "2026-11-13T15:30:53", "run_id": "centralised-B-mlp-medium-none-s20261027-c8b8c073d0", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T15:30:55", "run_id": "local-B-mlp-medium-none-s20261027-4756259d30", "event": "start"}
+{"time": "2026-11-13T15:42:29", "run_id": "local-B-mlp-medium-none-s20261027-4756259d30", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T15:42:32", "run_id": "fedavg_iid-B-mlp-medium-fedavg-s20261027-8910796e0e", "event": "start"}
+{"time": "2026-11-13T15:53:13", "run_id": "fedavg_iid-B-mlp-medium-fedavg-s20261027-8910796e0e", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T15:53:15", "run_id": "fedavg_geo-B-mlp-medium-fedavg-s20261027-12bab71913", "event": "start"}
+{"time": "2026-11-13T16:03:32", "run_id": "fedavg_geo-B-mlp-medium-fedavg-s20261027-12bab71913", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T16:03:33", "run_id": "centralised-B-gru-medium-none-s20261027-bef6004468", "event": "start"}
+{"time": "2026-11-13T16:13:02", "run_id": "centralised-B-gru-medium-none-s20261027-bef6004468", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T16:13:04", "run_id": "local-B-gru-medium-none-s20261027-0e091c201a", "event": "start"}
+{"time": "2026-11-13T16:22:34", "run_id": "local-B-gru-medium-none-s20261027-0e091c201a", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T16:22:37", "run_id": "fedavg_iid-B-gru-medium-fedavg-s20261027-78647e19d3", "event": "start"}
+{"time": "2026-11-13T16:32:35", "run_id": "fedavg_iid-B-gru-medium-fedavg-s20261027-78647e19d3", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T16:32:37", "run_id": "fedavg_geo-B-gru-medium-fedavg-s20261027-426d7225e1", "event": "start"}
+{"time": "2026-11-13T16:42:38", "run_id": "fedavg_geo-B-gru-medium-fedavg-s20261027-426d7225e1", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T16:42:39", "run_id": "centralised-B-tcn-medium-none-s20261027-1ca166f446", "event": "start"}
+{"time": "2026-11-13T16:46:46", "run_id": "centralised-B-tcn-medium-none-s20261027-1ca166f446", "event": "early_stopped", "epoch": 4}
+{"time": "2026-11-13T16:46:48", "run_id": "local-B-tcn-medium-none-s20261027-cf8597749f", "event": "start"}
+{"time": "2026-11-13T16:51:53", "run_id": "local-B-tcn-medium-none-s20261027-cf8597749f", "event": "early_stopped", "epoch": 5}
+{"time": "2026-11-13T16:51:56", "run_id": "fedavg_iid-B-tcn-medium-fedavg-s20261027-bc8d0b1ce4", "event": "start"}
+{"time": "2026-11-13T17:01:24", "run_id": "fedavg_iid-B-tcn-medium-fedavg-s20261027-bc8d0b1ce4", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T17:01:26", "run_id": "fedavg_geo-B-tcn-medium-fedavg-s20261027-0ec13a23e1", "event": "start"}
+{"time": "2026-11-13T17:10:55", "run_id": "fedavg_geo-B-tcn-medium-fedavg-s20261027-0ec13a23e1", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T17:10:56", "run_id": "centralised-B-patchtst-medium-none-s20261027-af35c779ae", "event": "start"}
+{"time": "2026-11-13T17:21:45", "run_id": "centralised-B-patchtst-medium-none-s20261027-af35c779ae", "event": "early_stopped", "epoch": 6}
+{"time": "2026-11-13T17:21:46", "run_id": "local-B-patchtst-medium-none-s20261027-a1221967d8", "event": "start"}
+{"time": "2026-11-13T17:34:26", "run_id": "local-B-patchtst-medium-none-s20261027-a1221967d8", "event": "early_stopped", "epoch": 7}
+{"time": "2026-11-13T17:34:29", "run_id": "fedavg_iid-B-patchtst-medium-fedavg-s20261027-6d39ea3241", "event": "start"}
+{"time": "2026-11-13T17:51:28", "run_id": "fedavg_iid-B-patchtst-medium-fedavg-s20261027-6d39ea3241", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T17:51:30", "run_id": "fedavg_geo-B-patchtst-medium-fedavg-s20261027-d02d7acc9b", "event": "start"}
+{"time": "2026-11-13T18:08:34", "run_id": "fedavg_geo-B-patchtst-medium-fedavg-s20261027-d02d7acc9b", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T18:08:35", "run_id": "centralised-B-nhits-medium-none-s20261027-da253ec226", "event": "start"}
+{"time": "2026-11-13T18:23:23", "run_id": "centralised-B-nhits-medium-none-s20261027-da253ec226", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T18:23:25", "run_id": "local-B-nhits-medium-none-s20261027-a7b7be9836", "event": "start"}
+{"time": "2026-11-13T18:38:17", "run_id": "local-B-nhits-medium-none-s20261027-a7b7be9836", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T18:38:19", "run_id": "fedavg_iid-B-nhits-medium-fedavg-s20261027-a339e79335", "event": "start"}
+{"time": "2026-11-13T18:52:22", "run_id": "fedavg_iid-B-nhits-medium-fedavg-s20261027-a339e79335", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T18:52:24", "run_id": "fedavg_geo-B-nhits-medium-fedavg-s20261027-a8e3b7518c", "event": "start"}
+{"time": "2026-11-13T19:06:26", "run_id": "fedavg_geo-B-nhits-medium-fedavg-s20261027-a8e3b7518c", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T19:42:42", "run_id": "fedavg_iid-A-nhits-medium-fedprox-s20261027-c693d5ab5b", "event": "start"}
+{"time": "2026-11-13T20:05:47", "run_id": "fedavg_iid-A-nhits-medium-fedprox-s20261027-c693d5ab5b", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T20:05:48", "run_id": "fedavg_iid-A-nhits-medium-fedavgm-s20261027-28e6a8c1ef", "event": "start"}
+{"time": "2026-11-13T20:19:45", "run_id": "fedavg_iid-A-nhits-medium-fedavgm-s20261027-28e6a8c1ef", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T20:19:47", "run_id": "fedavg_iid-A-nhits-medium-fedadam-s20261027-73905f1199", "event": "start"}
+{"time": "2026-11-13T20:33:46", "run_id": "fedavg_iid-A-nhits-medium-fedadam-s20261027-73905f1199", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T20:33:47", "run_id": "fedavg_iid-A-nhits-medium-fedyogi-s20261027-3390b18eb1", "event": "start"}
+{"time": "2026-11-13T20:47:43", "run_id": "fedavg_iid-A-nhits-medium-fedyogi-s20261027-3390b18eb1", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T20:47:44", "run_id": "fedavg_iid-A-nhits-medium-fedadagrad-s20261027-ff445bc5c6", "event": "start"}
+{"time": "2026-11-13T21:01:46", "run_id": "fedavg_iid-A-nhits-medium-fedadagrad-s20261027-ff445bc5c6", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T21:01:48", "run_id": "fedavg_iid-A-nhits-medium-scaffold-s20261027-dbdd297c26", "event": "start"}
+{"time": "2026-11-13T21:17:36", "run_id": "fedavg_iid-A-nhits-medium-scaffold-s20261027-dbdd297c26", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T21:17:37", "run_id": "fedavg_iid-A-nhits-medium-fednova-s20261027-8132b2c50c", "event": "start"}
+{"time": "2026-11-13T21:31:38", "run_id": "fedavg_iid-A-nhits-medium-fednova-s20261027-8132b2c50c", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T21:31:39", "run_id": "fedavg_geo-A-nhits-medium-fedprox-s20261027-8f3570f933", "event": "start"}
+{"time": "2026-11-13T21:54:48", "run_id": "fedavg_geo-A-nhits-medium-fedprox-s20261027-8f3570f933", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T21:54:49", "run_id": "fedavg_geo-A-nhits-medium-fedavgm-s20261027-b2bb4ea46d", "event": "start"}
+{"time": "2026-11-13T22:08:49", "run_id": "fedavg_geo-A-nhits-medium-fedavgm-s20261027-b2bb4ea46d", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T22:08:50", "run_id": "fedavg_geo-A-nhits-medium-fedadam-s20261027-d6c0e982a5", "event": "start"}
+{"time": "2026-11-13T22:22:54", "run_id": "fedavg_geo-A-nhits-medium-fedadam-s20261027-d6c0e982a5", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T22:22:55", "run_id": "fedavg_geo-A-nhits-medium-fedyogi-s20261027-0f311ab4c0", "event": "start"}
+{"time": "2026-11-13T22:36:55", "run_id": "fedavg_geo-A-nhits-medium-fedyogi-s20261027-0f311ab4c0", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T22:36:56", "run_id": "fedavg_geo-A-nhits-medium-fedadagrad-s20261027-1f9f59d9aa", "event": "start"}
+{"time": "2026-11-13T22:50:54", "run_id": "fedavg_geo-A-nhits-medium-fedadagrad-s20261027-1f9f59d9aa", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T22:50:55", "run_id": "fedavg_geo-A-nhits-medium-scaffold-s20261027-e71b50ea1b", "event": "start"}
+{"time": "2026-11-13T23:06:40", "run_id": "fedavg_geo-A-nhits-medium-scaffold-s20261027-e71b50ea1b", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T23:06:41", "run_id": "fedavg_geo-A-nhits-medium-fednova-s20261027-7179e2a517", "event": "start"}
+{"time": "2026-11-13T23:20:45", "run_id": "fedavg_geo-A-nhits-medium-fednova-s20261027-7179e2a517", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T23:20:46", "run_id": "fedavg_iid-A-mlp-medium-fedprox-s20261027-b3c3a14537", "event": "start"}
+{"time": "2026-11-13T23:39:44", "run_id": "fedavg_iid-A-mlp-medium-fedprox-s20261027-b3c3a14537", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T23:39:45", "run_id": "fedavg_iid-A-mlp-medium-fedavgm-s20261027-ec201e1a2a", "event": "start"}
+{"time": "2026-11-13T23:50:32", "run_id": "fedavg_iid-A-mlp-medium-fedavgm-s20261027-ec201e1a2a", "event": "completed", "epoch": 10}
+{"time": "2026-11-13T23:50:33", "run_id": "fedavg_iid-A-mlp-medium-fedadam-s20261027-e6a0f36d44", "event": "start"}
+{"time": "2026-11-14T00:01:15", "run_id": "fedavg_iid-A-mlp-medium-fedadam-s20261027-e6a0f36d44", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T00:01:16", "run_id": "fedavg_iid-A-mlp-medium-fedyogi-s20261027-a53c19056b", "event": "start"}
+{"time": "2026-11-14T00:11:58", "run_id": "fedavg_iid-A-mlp-medium-fedyogi-s20261027-a53c19056b", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T00:11:59", "run_id": "fedavg_iid-A-mlp-medium-fedadagrad-s20261027-e3c78d038a", "event": "start"}
+{"time": "2026-11-14T00:22:42", "run_id": "fedavg_iid-A-mlp-medium-fedadagrad-s20261027-e3c78d038a", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T00:22:43", "run_id": "fedavg_iid-A-mlp-medium-scaffold-s20261027-1f68961079", "event": "start"}
+{"time": "2026-11-14T00:35:05", "run_id": "fedavg_iid-A-mlp-medium-scaffold-s20261027-1f68961079", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T00:35:07", "run_id": "fedavg_iid-A-mlp-medium-fednova-s20261027-66a39d9597", "event": "start"}
+{"time": "2026-11-14T00:45:50", "run_id": "fedavg_iid-A-mlp-medium-fednova-s20261027-66a39d9597", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T00:45:51", "run_id": "fedavg_geo-A-mlp-medium-fedprox-s20261027-dc7aa232e0", "event": "start"}
+{"time": "2026-11-14T01:05:04", "run_id": "fedavg_geo-A-mlp-medium-fedprox-s20261027-dc7aa232e0", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T01:05:05", "run_id": "fedavg_geo-A-mlp-medium-fedavgm-s20261027-8e918e8690", "event": "start"}
+{"time": "2026-11-14T01:15:49", "run_id": "fedavg_geo-A-mlp-medium-fedavgm-s20261027-8e918e8690", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T01:15:50", "run_id": "fedavg_geo-A-mlp-medium-fedadam-s20261027-8b54755304", "event": "start"}
+{"time": "2026-11-14T01:26:32", "run_id": "fedavg_geo-A-mlp-medium-fedadam-s20261027-8b54755304", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T01:26:33", "run_id": "fedavg_geo-A-mlp-medium-fedyogi-s20261027-2ac822e121", "event": "start"}
+{"time": "2026-11-14T01:37:13", "run_id": "fedavg_geo-A-mlp-medium-fedyogi-s20261027-2ac822e121", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T01:37:14", "run_id": "fedavg_geo-A-mlp-medium-fedadagrad-s20261027-93d595e8f7", "event": "start"}
+{"time": "2026-11-14T01:47:56", "run_id": "fedavg_geo-A-mlp-medium-fedadagrad-s20261027-93d595e8f7", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T01:47:57", "run_id": "fedavg_geo-A-mlp-medium-scaffold-s20261027-61617901a2", "event": "start"}
+{"time": "2026-11-14T02:00:17", "run_id": "fedavg_geo-A-mlp-medium-scaffold-s20261027-61617901a2", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T02:00:18", "run_id": "fedavg_geo-A-mlp-medium-fednova-s20261027-6d4b734991", "event": "start"}
+{"time": "2026-11-14T02:11:00", "run_id": "fedavg_geo-A-mlp-medium-fednova-s20261027-6d4b734991", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T02:11:02", "run_id": "fedavg_iid-B-nhits-medium-fedprox-s20261027-2a017884b1", "event": "start"}
+{"time": "2026-11-14T02:34:01", "run_id": "fedavg_iid-B-nhits-medium-fedprox-s20261027-2a017884b1", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T02:34:03", "run_id": "fedavg_iid-B-nhits-medium-fedavgm-s20261027-423322d877", "event": "start"}
+{"time": "2026-11-14T02:48:02", "run_id": "fedavg_iid-B-nhits-medium-fedavgm-s20261027-423322d877", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T02:48:05", "run_id": "fedavg_iid-B-nhits-medium-fedadam-s20261027-8f432e6e5d", "event": "start"}
+{"time": "2026-11-14T03:02:04", "run_id": "fedavg_iid-B-nhits-medium-fedadam-s20261027-8f432e6e5d", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T03:02:06", "run_id": "fedavg_iid-B-nhits-medium-fedyogi-s20261027-1e1d4bb740", "event": "start"}
+{"time": "2026-11-14T03:16:05", "run_id": "fedavg_iid-B-nhits-medium-fedyogi-s20261027-1e1d4bb740", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T03:16:08", "run_id": "fedavg_iid-B-nhits-medium-fedadagrad-s20261027-65e35e62cd", "event": "start"}
+{"time": "2026-11-14T03:30:05", "run_id": "fedavg_iid-B-nhits-medium-fedadagrad-s20261027-65e35e62cd", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T03:30:08", "run_id": "fedavg_iid-B-nhits-medium-scaffold-s20261027-1cf60aff53", "event": "start"}
+{"time": "2026-11-14T03:45:55", "run_id": "fedavg_iid-B-nhits-medium-scaffold-s20261027-1cf60aff53", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T03:45:57", "run_id": "fedavg_iid-B-nhits-medium-fednova-s20261027-83faa60564", "event": "start"}
+{"time": "2026-11-14T03:59:57", "run_id": "fedavg_iid-B-nhits-medium-fednova-s20261027-83faa60564", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T03:59:59", "run_id": "fedavg_geo-B-nhits-medium-fedprox-s20261027-105ba8c276", "event": "start"}
+{"time": "2026-11-14T04:23:04", "run_id": "fedavg_geo-B-nhits-medium-fedprox-s20261027-105ba8c276", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T04:23:06", "run_id": "fedavg_geo-B-nhits-medium-fedavgm-s20261027-c302675d76", "event": "start"}
+{"time": "2026-11-14T04:37:05", "run_id": "fedavg_geo-B-nhits-medium-fedavgm-s20261027-c302675d76", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T04:37:07", "run_id": "fedavg_geo-B-nhits-medium-fedadam-s20261027-9ce777bfdd", "event": "start"}
+{"time": "2026-11-14T04:51:10", "run_id": "fedavg_geo-B-nhits-medium-fedadam-s20261027-9ce777bfdd", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T04:51:12", "run_id": "fedavg_geo-B-nhits-medium-fedyogi-s20261027-dd8a09870e", "event": "start"}
+{"time": "2026-11-14T05:05:09", "run_id": "fedavg_geo-B-nhits-medium-fedyogi-s20261027-dd8a09870e", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T05:05:10", "run_id": "fedavg_geo-B-nhits-medium-fedadagrad-s20261027-13f2eac379", "event": "start"}
+{"time": "2026-11-14T05:19:14", "run_id": "fedavg_geo-B-nhits-medium-fedadagrad-s20261027-13f2eac379", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T05:19:16", "run_id": "fedavg_geo-B-nhits-medium-scaffold-s20261027-cbc6011ee4", "event": "start"}
+{"time": "2026-11-14T05:35:00", "run_id": "fedavg_geo-B-nhits-medium-scaffold-s20261027-cbc6011ee4", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T05:35:02", "run_id": "fedavg_geo-B-nhits-medium-fednova-s20261027-654771f469", "event": "start"}
+{"time": "2026-11-14T05:49:06", "run_id": "fedavg_geo-B-nhits-medium-fednova-s20261027-654771f469", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T05:49:08", "run_id": "fedavg_iid-B-mlp-medium-fedprox-s20261027-31e6906c53", "event": "start"}
+{"time": "2026-11-14T06:08:18", "run_id": "fedavg_iid-B-mlp-medium-fedprox-s20261027-31e6906c53", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T06:08:21", "run_id": "fedavg_iid-B-mlp-medium-fedavgm-s20261027-0adfd937f4", "event": "start"}
+{"time": "2026-11-14T06:19:09", "run_id": "fedavg_iid-B-mlp-medium-fedavgm-s20261027-0adfd937f4", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T06:19:11", "run_id": "fedavg_iid-B-mlp-medium-fedadam-s20261027-f149e24dea", "event": "start"}
+{"time": "2026-11-14T06:29:56", "run_id": "fedavg_iid-B-mlp-medium-fedadam-s20261027-f149e24dea", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T06:29:58", "run_id": "fedavg_iid-B-mlp-medium-fedyogi-s20261027-95fbd120fd", "event": "start"}
+{"time": "2026-11-14T06:40:43", "run_id": "fedavg_iid-B-mlp-medium-fedyogi-s20261027-95fbd120fd", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T06:40:45", "run_id": "fedavg_iid-B-mlp-medium-fedadagrad-s20261027-509c8f26e7", "event": "start"}
+{"time": "2026-11-14T06:51:31", "run_id": "fedavg_iid-B-mlp-medium-fedadagrad-s20261027-509c8f26e7", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T06:51:34", "run_id": "fedavg_iid-B-mlp-medium-scaffold-s20261027-7629ad0507", "event": "start"}
+{"time": "2026-11-14T07:03:59", "run_id": "fedavg_iid-B-mlp-medium-scaffold-s20261027-7629ad0507", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T07:04:01", "run_id": "fedavg_iid-B-mlp-medium-fednova-s20261027-fb755013fb", "event": "start"}
+{"time": "2026-11-14T07:14:50", "run_id": "fedavg_iid-B-mlp-medium-fednova-s20261027-fb755013fb", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T07:14:51", "run_id": "fedavg_geo-B-mlp-medium-fedprox-s20261027-83791b96ed", "event": "start"}
+{"time": "2026-11-14T07:34:07", "run_id": "fedavg_geo-B-mlp-medium-fedprox-s20261027-83791b96ed", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T07:34:09", "run_id": "fedavg_geo-B-mlp-medium-fedavgm-s20261027-f2bfc1a66c", "event": "start"}
+{"time": "2026-11-14T07:44:57", "run_id": "fedavg_geo-B-mlp-medium-fedavgm-s20261027-f2bfc1a66c", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T07:44:59", "run_id": "fedavg_geo-B-mlp-medium-fedadam-s20261027-96cefc035f", "event": "start"}
+{"time": "2026-11-14T07:55:44", "run_id": "fedavg_geo-B-mlp-medium-fedadam-s20261027-96cefc035f", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T07:55:45", "run_id": "fedavg_geo-B-mlp-medium-fedyogi-s20261027-9be6d76715", "event": "start"}
+{"time": "2026-11-14T08:06:30", "run_id": "fedavg_geo-B-mlp-medium-fedyogi-s20261027-9be6d76715", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T08:06:32", "run_id": "fedavg_geo-B-mlp-medium-fedadagrad-s20261027-192d50e192", "event": "start"}
+{"time": "2026-11-14T08:17:16", "run_id": "fedavg_geo-B-mlp-medium-fedadagrad-s20261027-192d50e192", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T08:17:18", "run_id": "fedavg_geo-B-mlp-medium-scaffold-s20261027-d63f340d82", "event": "start"}
+{"time": "2026-11-14T08:29:43", "run_id": "fedavg_geo-B-mlp-medium-scaffold-s20261027-d63f340d82", "event": "completed", "epoch": 10}
+{"time": "2026-11-14T08:29:45", "run_id": "fedavg_geo-B-mlp-medium-fednova-s20261027-b7f9b047e5", "event": "start"}
+{"time": "2026-11-14T08:40:26", "run_id": "fedavg_geo-B-mlp-medium-fednova-s20261027-b7f9b047e5", "event": "completed", "epoch": 10}
