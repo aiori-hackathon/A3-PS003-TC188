@@ -1,0 +1,10 @@
+# AIORI 2.0 training environment (Linux / DGX). Versions match the local environments used in Phases 2-6.
+# Python 3.12 (3.10+ should work but was not tested).
+numpy==2.5.4
+pandas==3.1.0
+pytest==9.1.1
+# PyTorch: install the CUDA build that matches the DGX driver (check `nvidia-smi` -> "CUDA Version"):
+#   driver supports CUDA >= 13.0:  pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cu130
+#   older drivers: pick the newest cuXYZ wheel <= the driver's CUDA version from https://download.pytorch.org/whl/
+# Locally verified: torch 2.14.1+cu130 (RTX PRO 4000 Blackwell) and 2.14.1+cpu. The DGX build is UNVERIFIED until Phase 7.
+torch==2.14.1

@@ -1,0 +1,47 @@
+{
+  "version": "aiori2_3yr_v1",
+  "description": "AIORI 2.0 Phase 2: three-year (2022-2024) flow-only preprocessing for the fixed 200 AIORI sensors",
+  "paths_relative_to": "the src/ directory (override with --base-dir)",
+  "raw_dirs": {"2022": "year_2022", "2023": "year_2023", "2024": "year_2024"},
+  "selection": "data/processed/nine_month/sensor_selection.csv",
+  "node_order": "node_order.npy",
+  "metadata": "sensor_meta_feature.csv",
+  "out_dir": "data/processed/aiori2_3yr",
+  "protected_paths": ["data/processed/nine_month", "results/phase9/runs", "results/phase9/final", "results/accuracy_optimization/candidate_v1"],
+  "years": [2022, 2023, 2024],
+  "steps_per_day": 288,
+  "step_minutes": 5,
+  "timestamps": "reconstructed from file names (YYYY_pMM) and 288 five-minute slots per day; the raw arrays carry no timestamps",
+  "timezone_assumption": "Pacific local wall-clock time (America/Los_Angeles), INFERRED from the 2023 spring-forward hour being missing; every day keeps all 288 stored slots and no DST hour is shifted or removed",
+  "channels": {"flow": 0, "occupancy": 1, "speed": 2},
+  "channel_definitions": "working convention from aiori/config.py; not confirmed by the publisher",
+  "zero_fill_years": [2022, 2024],
+  "sha256_sources": true,
+  "policies": {
+    "conservative": {
+      "description": "Mask non-finite flow (all years) and every simultaneous flow=occupancy=speed=0 reading in 2022/2024",
+      "all_zero_min_run_steps": 1
+    },
+    "outage": {
+      "description": "Mask non-finite flow (all years) and only all-three-zero runs of at least 12 steps (1 hour) in 2022/2024; shorter all-zero bursts are kept as possibly valid low-volume readings",
+      "all_zero_min_run_steps": 12,
+      "rationale": "An operating freeway detector reporting zero flow, zero occupancy and zero speed for an hour or more is consistent with an outage (the 2023 spring-forward gap is exactly 12 steps); 2023 never shows the all-zero pattern, so isolated bursts are uncertain and kept"
+    }
+  },
+  "default_policy": "conservative",
+  "quality": {"long_run_steps": 288},
+  "experiments": {
+    "A": {"description": "train on 2023 only", "train": ["2023-01-01", "2024-01-01"]},
+    "B": {"description": "train on 2022 + 2023", "train": ["2022-01-01", "2024-01-01"]}
+  },
+  "val": ["2024-01-01", "2024-07-01"],
+  "test": ["2024-07-01", "2025-01-01"],
+  "input_len": 12,
+  "horizon": 12,
+  "min_valid_targets": 1,
+  "max_ffill_steps": 6,
+  "input_channels": ["flow"],
+  "iid_partition_seed": 20261027,
+  "n_clients": 4,
+  "arm_scaler_scope": {"centralised": "pooled", "local": "client_geo", "fedavg_geo": "client_geo", "fedavg_iid": "client_iid"}
+}
