@@ -1,7 +1,14 @@
-## AIORI-3-HACKATHON-PROJECTS
-### Team Name : Cors Enabled
-### Team Code : A3-PS003-TC188
-### PS-003: Federated Traffic-Flow Prediction with Communication-Cost Evaluation
+## Aiori-Traffic
+Problem Statement PS-003: Federated Traffic-Flow Prediction with Communication-Cost Evaluation
+Team Code : A3-PS003-TC188
+ 
+**Institution:** BMS College of Engineering, Bengaluru  
+**Team Name:** Cors Enabled
+
+### Members
+- **Hardik Mangal**
+- **Dhruv Jain**
+- **Dr. Monika Puttaramaiah**
 #### YouTube video link : https://youtu.be/RmcWK-jka4o
 #### Demonstration video link : https://youtu.be/APK435N8Xjo/
 #### Live demo : shown during the presentation from a temporary Cloudflare Quick Tunnel address (see [Deployment](#deployment)). There is no permanent public URL.
