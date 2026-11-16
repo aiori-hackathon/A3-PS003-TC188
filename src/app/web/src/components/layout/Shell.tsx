@@ -1,4 +1,4 @@
-import { BookOpenText, ChartNoAxesColumn, Info, LayoutGrid, Menu, Network, TrendingUp, X } from "lucide-react";
+import { Activity, BookOpenText, ChartNoAxesColumn, History, Info, LayoutGrid, Menu, Network, TrendingUp, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { NavLink, useLocation } from "react-router";
 import { cn } from "../../lib/cn";
@@ -8,6 +8,13 @@ import { ButtonLink } from "../ui";
 export const ROUTES = [
   { to: "/", title: "Overview", icon: LayoutGrid, group: "Product" },
   { to: "/forecast", title: "Forecasting", icon: TrendingUp, group: "Product" },
+  // Phase 9A: shown only in `--mode replay` builds (npm run build:replay); the default production build is unchanged.
+  ...(import.meta.env.MODE === "replay"
+    ? ([
+        { to: "/replay", title: "Historical Traffic Replay", icon: History, group: "Product" },
+        { to: "/disruptions", title: "Historical Disruption Explorer", icon: Activity, group: "Product" }, // Phase 9B
+      ] as const)
+    : []),
   { to: "/performance", title: "Model performance", icon: ChartNoAxesColumn, group: "Product" },
   { to: "/federated", title: "Federated learning", icon: Network, group: "Research" },
   { to: "/methodology", title: "Methodology", icon: BookOpenText, group: "Research" },

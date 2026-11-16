@@ -1,0 +1,39 @@
+/* Historical Traffic Replay map: dark-adapted OpenStreetMap tiles and tooltips in the app palette (index.css is left unchanged). */
+.leaflet-container {
+  background: #0e0e0e;
+  font: inherit;
+}
+.replay-tiles {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.85) saturate(0.35);
+}
+.leaflet-tooltip.replay-tip {
+  background: rgba(31, 31, 31, 0.96);
+  border: 1px solid #353535;
+  color: #a3a3a3;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+.leaflet-tooltip.replay-tip b {
+  color: #ededed;
+  font-weight: 600;
+}
+.leaflet-tooltip-top.replay-tip::before {
+  border-top-color: #353535;
+}
+.leaflet-control-attribution {
+  background: rgba(19, 19, 19, 0.8) !important;
+  color: #8a8a8a !important;
+}
+.leaflet-control-attribution a {
+  color: #a3a3a3 !important;
+}
+.leaflet-bar a {
+  background: #1f1f1f;
+  color: #ededed;
+  border-color: #353535;
+}
+.leaflet-bar a:hover {
+  background: #262626;
+}
