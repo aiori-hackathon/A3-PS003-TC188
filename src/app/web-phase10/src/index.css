@@ -2,40 +2,43 @@
 @import "@fontsource-variable/overpass-mono";
 @import "tailwindcss";
 
-/* Phase 10 design system. The visual language is borrowed from the freeway the sensors sit on: a light engineering-sheet
-   surface, guide-sign green for navigation / the primary action / the model's forecast, warning amber for values observed
-   afterwards and for anomalies, interstate blue for below-typical flow, red for missing or failed. Type is Overpass (the
+/* Design system: coastal slate. The visual language is borrowed from the California streets the sensors sit on: cool slate
+   neutrals that sit with the hero photograph's sky, palms and asphalt; a deep blue-slate "guide sign" panel for navigation and
+   the hero's action panel; a muted sea-teal accent for the primary action, links and the model's forecast. Data colours keep
+   their meaning: warning amber for values observed afterwards and for anomalies, interstate blue for below-typical flow, red
+   for missing or failed. Type is Overpass (the
    open-source family drawn from Highway Gothic sign lettering) with Overpass Mono for measurements. Elevation comes from
    surface steps and 1px rules; one soft shadow is reserved for things that float (tooltips, the mobile menu). */
 @theme {
-  --color-bg: #eceeed;
-  --color-raised: #f6f7f6;
+  --color-bg: #eceff1;
+  --color-raised: #f5f7f8;
   --color-surface: #ffffff;
-  --color-surface-2: #f2f4f3;
-  --color-surface-3: #e4e8e6;
-  --color-line: #dde1df;
-  --color-line-strong: #bcc3bf;
-  --color-fg: #14201b;
-  --color-fg-2: #414d47;
-  --color-fg-3: #5d6963;
-  --color-accent: #006a4e;
-  --color-accent-hover: #00543e;
+  --color-surface-2: #f0f3f5;
+  --color-surface-3: #e2e7ea;
+  --color-line: #d9dfe3;
+  --color-line-strong: #b3bdc4;
+  --color-control: #7f8b93; /* borders of inputs, selects, switches: 3:1 against the card */
+  --color-fg: #13202a;
+  --color-fg-2: #3b4954;
+  --color-fg-3: #57646e;
+  --color-accent: #1b6a72;
+  --color-accent-hover: #145860;
   --color-accent-ink: #ffffff;
-  --color-sign: #006a4e;
-  --color-sign-deep: #00543e;
+  --color-sign: #22394a;
+  --color-sign-deep: #1a2d3b;
   --color-observed: #a85a00;
   --color-below: #1f5fa8;
   --color-danger: #c2362e;
-  --color-g1: #4a554f;
-  --color-g2: #7c8781;
-  --color-g3: #a5aea9;
+  --color-g1: #48545c;
+  --color-g2: #7a868e;
+  --color-g3: #a3adb4;
   /* chart and map helpers (the same values the components used inline before they became tokens) */
-  --color-grid: #e1e5e3;
-  --color-ref: #8b958f;
-  --color-cursor: #9aa39e;
+  --color-grid: #dfe4e7;
+  --color-ref: #88939a;
+  --color-cursor: #98a3aa;
   --color-danger-ink: #a8271f;
-  --color-accent-tint: #e2f0eb;
-  --color-marker: #3d4a44;
+  --color-accent-tint: #e0eff0;
+  --color-marker: #36424a;
 
   --font-sans: "Overpass Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Overpass Mono Variable", ui-monospace, Consolas, monospace;
@@ -59,7 +62,7 @@
 
   --radius-control: 4px;
   --radius-card: 8px;
-  --shadow-float: 0 10px 28px -8px rgba(20, 32, 27, 0.28), 0 2px 6px rgba(20, 32, 27, 0.08);
+  --shadow-float: 0 10px 28px -8px rgba(18, 30, 40, 0.28), 0 2px 6px rgba(18, 30, 40, 0.08);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --animate-rise: rise 0.5s var(--ease-out-expo) both;
@@ -72,33 +75,34 @@
   }
 }
 
-/* Dark theme: same roles, night values. Sign green stays the sign; text and lines lift for contrast on dark surfaces. */
+/* Dark theme: same roles, night values. The slate sign stays the sign; text and lines lift for contrast on dark surfaces. */
 :root[data-theme="dark"] {
-  --color-bg: #0e1412;
-  --color-raised: #131a17;
-  --color-surface: #171f1b;
-  --color-surface-2: #1d2622;
-  --color-surface-3: #26302b;
-  --color-line: #2a3430;
-  --color-line-strong: #43504a;
-  --color-fg: #e5ebe8;
-  --color-fg-2: #bdc7c2;
-  --color-fg-3: #98a49e;
-  --color-accent: #45b48b;
-  --color-accent-hover: #62c69f;
-  --color-accent-ink: #08140f;
+  --color-bg: #0f1519;
+  --color-raised: #141b20;
+  --color-surface: #182126;
+  --color-surface-2: #1e282e;
+  --color-surface-3: #273238;
+  --color-line: #2a353c;
+  --color-line-strong: #45535c;
+  --color-control: #66737c;
+  --color-fg: #e4eaee;
+  --color-fg-2: #bac5cc;
+  --color-fg-3: #95a2ab;
+  --color-accent: #6cc4c7;
+  --color-accent-hover: #8fd4d6;
+  --color-accent-ink: #061517;
   --color-observed: #e39a45;
   --color-below: #74a6ea;
   --color-danger: #ee6f63;
-  --color-g1: #b3bdb8;
-  --color-g2: #87928c;
-  --color-g3: #69746e;
-  --color-grid: #25302b;
-  --color-ref: #7f8a84;
-  --color-cursor: #6c7771;
+  --color-g1: #b1bcc3;
+  --color-g2: #85929a;
+  --color-g3: #67747c;
+  --color-grid: #232d33;
+  --color-ref: #7d8a92;
+  --color-cursor: #6a777f;
   --color-danger-ink: #ff9a8f;
-  --color-accent-tint: #153a2d;
-  --color-marker: #0e1412;
+  --color-accent-tint: #13363a;
+  --color-marker: #0f1519;
   --shadow-float: 0 10px 28px -8px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
@@ -153,6 +157,83 @@
   input[type="range"],
   input[type="checkbox"] {
     accent-color: var(--color-accent);
+  }
+}
+
+/* Overview hero photo. One photo for both themes: a pale scrim in light mode, a dark one (plus a slightly dimmed photo) in dark
+   mode. The scrim keeps one shape everywhere; --hero-mask scales its whole intensity evenly (1 = full strength). Phones stack the
+   text over the panel, so their scrim runs top-to-bottom and the photo is anchored on the road. */
+.hero-photo {
+  object-position: 50% 72%;
+}
+.hero-scrim {
+  --s: var(--color-raised);
+  --hero-mask: 0.75;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--s) calc(90% * var(--hero-mask)), transparent) 0%,
+    color-mix(in srgb, var(--s) calc(86% * var(--hero-mask)), transparent) 50%,
+    color-mix(in srgb, var(--s) calc(30% * var(--hero-mask)), transparent) 76%,
+    color-mix(in srgb, var(--s) calc(12% * var(--hero-mask)), transparent) 100%
+  );
+}
+:root[data-theme="dark"] .hero-photo {
+  filter: brightness(0.8) saturate(0.95);
+}
+/* The signal sits in the same light as the photo: dim the metal and housing in dark mode (the lit lamp stays bright via its glow). */
+:root[data-theme="dark"] .hero-signal > div {
+  filter: brightness(0.72);
+}
+:root[data-theme="dark"] .hero-scrim {
+  --hero-mask: 0.75;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--s) calc(88% * var(--hero-mask)), transparent) 0%,
+    color-mix(in srgb, var(--s) calc(84% * var(--hero-mask)), transparent) 50%,
+    color-mix(in srgb, var(--s) calc(45% * var(--hero-mask)), transparent) 76%,
+    color-mix(in srgb, var(--s) calc(32% * var(--hero-mask)), transparent) 100%
+  );
+}
+/* Text scrim: a soft, feathered pad in the surface colour hugging the hero copy only, so the heading and paragraphs meet
+   WCAG AA over the busiest part of the photo while the rest of the photograph keeps the lighter overall mask. */
+.hero-copy {
+  position: relative;
+  --copy-scrim: 78%;
+}
+.hero-copy::before {
+  content: "";
+  position: absolute;
+  inset: -14px -22px -28px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--color-raised) var(--copy-scrim), transparent);
+  filter: blur(14px);
+}
+:root[data-theme="dark"] .hero-copy {
+  --copy-scrim: 66%;
+}
+@media (min-width: 1024px) {
+  .hero-photo {
+    object-position: 50% 62%;
+  }
+  .hero-scrim {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--s) calc(92% * var(--hero-mask)), transparent) 0%,
+      color-mix(in srgb, var(--s) calc(84% * var(--hero-mask)), transparent) 34%,
+      color-mix(in srgb, var(--s) calc(30% * var(--hero-mask)), transparent) 56%,
+      color-mix(in srgb, var(--s) calc(6% * var(--hero-mask)), transparent) 100%
+    );
+  }
+  :root[data-theme="dark"] .hero-scrim {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--s) calc(90% * var(--hero-mask)), transparent) 0%,
+      color-mix(in srgb, var(--s) calc(82% * var(--hero-mask)), transparent) 34%,
+      color-mix(in srgb, var(--s) calc(40% * var(--hero-mask)), transparent) 56%,
+      color-mix(in srgb, var(--s) calc(25% * var(--hero-mask)), transparent) 100%
+    );
   }
 }
 

@@ -1,7 +1,7 @@
 import type { ModelKey, Prediction } from "./types";
 
 /**
- * Which response series to draw as the primary (green) and comparison lines. Optimized-MLP replays compare against the
+ * Which response series to draw as the primary (accent) and comparison lines. Optimized-MLP replays compare against the
  * original GRU; everything else shows the original GRU with the centralised GRU. Labels always name the model that
  * produced the values, so no metric of one model is shown beside another model's forecast.
  */

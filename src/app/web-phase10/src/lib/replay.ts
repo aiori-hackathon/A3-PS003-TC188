@@ -178,9 +178,9 @@ export const speedDelay = (stepsPerSecond: number) => Math.round(1000 / stepsPer
 /* ---------- relative-flow colour (not a congestion level) ---------- */
 
 export const REL_LOW = "#1f5fa8";
-export const REL_MID = "#aab3ae";
+export const REL_MID = "#adb5bb"; // neutral slate grey: "typical" (was a green-tinted grey)
 export const REL_HIGH = "#a85a00";
-export const NO_DATA = "#8b958f";
+export const NO_DATA = "#8a949b";
 
 const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
 const mix = (a: string, b: string, t: number) =>

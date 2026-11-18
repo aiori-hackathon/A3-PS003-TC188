@@ -32,7 +32,7 @@ function Tip({ active, payload, label, title, digits = 1 }: Partial<TooltipConte
   const items = ((payload ?? []) as readonly Item[]).filter((p) => typeof p.value === "number");
   if (!active || !items.length) return null;
   return (
-    <div className="min-w-[180px] rounded-[8px] border border-line-strong bg-surface-2/95 px-3 py-2 text-xs shadow-[0_8px_24px_rgba(20,32,27,0.18)] backdrop-blur">
+    <div className="min-w-[180px] rounded-[8px] border border-line-strong bg-surface-2/95 px-3 py-2 text-xs shadow-[0_8px_24px_rgba(18,30,40,0.18)] backdrop-blur">
       <p className="mb-1.5 font-medium text-fg">{title(String(label))}</p>
       {items.map((p) => (
         <p key={String(p.dataKey)} className="flex items-center justify-between gap-4 py-0.5 text-fg-2">
