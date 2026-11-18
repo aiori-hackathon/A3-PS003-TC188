@@ -10,7 +10,7 @@ const BTN =
   "inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-control px-3.5 pt-px text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50";
 const VARIANT: Record<Variant, string> = {
   primary: "bg-accent text-accent-ink hover:bg-accent-hover",
-  secondary: "border border-line-strong bg-surface text-fg hover:border-fg-3 hover:bg-surface-2",
+  secondary: "border border-control bg-surface text-fg hover:border-fg-3 hover:bg-surface-2",
   ghost: "text-fg-2 hover:bg-surface-3 hover:text-fg",
 };
 
@@ -118,7 +118,7 @@ export const StatStrip = ({ children, className }: { children: ReactNode; classN
 
 /* ---------- form controls ---------- */
 const CONTROL =
-  "h-9 w-full min-w-0 rounded-control border border-line-strong bg-surface px-3 text-sm text-fg transition-[border-color,box-shadow] outline-none focus-visible:border-accent focus-visible:ring-3 focus-visible:ring-accent/20 focus-visible:outline-none aria-invalid:border-danger";
+  "h-9 w-full min-w-0 rounded-control border border-control bg-surface px-3 text-sm text-fg transition-[border-color,box-shadow] outline-none focus-visible:border-accent focus-visible:ring-3 focus-visible:ring-accent/20 focus-visible:outline-none aria-invalid:border-danger";
 
 export function Field({ label, hint, error, children, className }: { label: string; hint?: ReactNode; error?: string; className?: string; children: (id: string, describedBy?: string) => ReactNode }) {
   const id = useId();
@@ -160,7 +160,7 @@ export function Switch({ checked, onChange, label, hint }: { checked: boolean; o
       </span>
       <span className="relative inline-flex">
         <input type="checkbox" role="switch" className="peer sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-        <span className="h-5 w-9 rounded-full border border-line-strong bg-surface-3 transition-colors peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent" />
+        <span className="h-5 w-9 rounded-full border border-control bg-surface-3 transition-colors peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent" />
         <span className="pointer-events-none absolute left-[3px] top-[3px] size-3.5 rounded-full bg-fg-3 transition-transform duration-200 ease-out peer-checked:translate-x-4 peer-checked:bg-accent-ink" />
       </span>
     </label>
@@ -171,7 +171,7 @@ export function Switch({ checked, onChange, label, hint }: { checked: boolean; o
 export function Segmented<T extends string>({ value, onChange, options, label, className }: { value: T; onChange: (v: T) => void; options: { value: T; label: ReactNode }[]; label: string; className?: string }) {
   const name = useId();
   return (
-    <div role="radiogroup" aria-label={label} className={cn("grid auto-cols-fr grid-flow-col gap-1 rounded-[6px] border border-line-strong bg-surface-2 p-1", className)}>
+    <div role="radiogroup" aria-label={label} className={cn("grid auto-cols-fr grid-flow-col gap-1 rounded-[6px] border border-control bg-surface-2 p-1", className)}>
       {options.map((o) => (
         <label
           key={o.value}

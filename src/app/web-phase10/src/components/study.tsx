@@ -144,7 +144,7 @@ export function ForecastingPerformance({ o }: { o: Optimized }) {
   ];
   const max = Math.max(...rows.map((r) => r.value ?? 0)) * 1.06;
   return (
-    <section className="overflow-hidden rounded-card border border-accent/25 bg-surface bg-[linear-gradient(180deg,rgba(59,178,126,0.07),rgba(59,178,126,0)_60%)]">
+    <section className="overflow-hidden rounded-card border border-accent/25 bg-surface bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_7%,transparent),transparent_60%)]">
       <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-center">
         <div>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/35 bg-accent/12 px-2.5 py-1 text-xs font-medium text-accent">

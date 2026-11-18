@@ -1,0 +1,14 @@
+la-palm-street.webp
+
+"Palm lined street in Los Angeles, California" by Carol M. Highsmith.
+Library of Congress, Prints and Photographs Division, Carol M. Highsmith Archive, LCCN 2013632428.
+https://www.loc.gov/item/2013632428/
+Also on Wikimedia Commons:
+https://commons.wikimedia.org/wiki/File:Palm_lined_street_in_Los_Angeles,_California_LCCN2013632428.tif
+
+Rights: public domain. Carol M. Highsmith dedicated this archive to the public; the Library of Congress states there are
+no known restrictions on publication. Attribution is not required but is given here as a courtesy.
+
+Changes: from the 3840 px rendering of the original TIFF; resized to 2048 x 1296, softened slightly (0.9 px blur) and
+converted to WebP for the website. The traffic signal on the homepage is a separate SVG layer
+drawn by the site, not part of this photograph.

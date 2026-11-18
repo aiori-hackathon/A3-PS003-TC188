@@ -111,6 +111,102 @@ function useExtended(): Extended | null {
   return x;
 }
 
+/* Where the signal head sits: centred in the 48px gap between the text column (1.15fr) and the action panel (1fr), inside the
+   section's 40px side padding. */
+const SIGNAL_X = "(40px + (100% - 128px) * 1.15 / 2.15 + 24px)";
+const LENS = [
+  { y: 31, base: "#3a0d0a", tint: "#6b1712" }, // red, unlit
+  { y: 67, base: "#22200a", tint: "#4a4416" }, // yellow, unlit: dark olive like a real amber lens by day
+  { y: 103, lit: true }, // green, lit
+] as const;
+
+/** A traffic signal over the hero photo's road (desktop and tablet only), drawn after a real US signal: galvanized mast arm
+    from the right edge, rigid bracket, wide matte charcoal backplate, three separate black 12" sections bolted down the left
+    edge, deep tunnel visors shading the top of each lens, LED-dot lenses with the green lit. The photo itself is unedited. */
+function HeroSignal() {
+  return (
+    <div className="hero-signal absolute inset-x-0 top-[20px] hidden lg:block">
+      {/* Mast arm: tapers toward its tip, end cap just past the head. */}
+      <div
+        className="absolute right-0 h-[9px] shadow-[0_3px_4px_rgba(0,0,0,0.35)] [clip-path:polygon(0_22%,100%_0,100%_100%,0_78%)]"
+        style={{ left: `calc(${SIGNAL_X} - 22px)`, background: "linear-gradient(180deg,#c9cfcc 0%,#9aa29e 38%,#6f7773 75%,#545b58 100%)" }}
+      />
+      <svg viewBox="0 0 54 132" className="absolute top-[4px] w-[38px] -translate-x-1/2 drop-shadow-[0_4px_6px_rgba(0,0,0,0.45)]" style={{ left: `calc(${SIGNAL_X})` }}>
+        <defs>
+          <linearGradient id="sig-metal" x1="0" x2="1">
+            <stop offset="0" stopColor="#5e6662" />
+            <stop offset="0.45" stopColor="#b9c0bc" />
+            <stop offset="1" stopColor="#59605c" />
+          </linearGradient>
+          {/* Matte charcoal backplate, a touch lighter toward the top where the sky light falls. */}
+          <linearGradient id="sig-plate" x1="0" y1="0" x2="0.35" y2="1">
+            <stop offset="0" stopColor="#3b3f3e" />
+            <stop offset="1" stopColor="#262928" />
+          </linearGradient>
+          <linearGradient id="sig-box" x1="0" x2="1">
+            <stop offset="0" stopColor="#1c1f1e" />
+            <stop offset="0.55" stopColor="#141615" />
+            <stop offset="1" stopColor="#0c0d0d" />
+          </linearGradient>
+          <radialGradient id="sig-green" cx="0.45" cy="0.55" r="0.62">
+            <stop offset="0" stopColor="#b8ffe6" />
+            <stop offset="0.45" stopColor="#38eab4" />
+            <stop offset="1" stopColor="#00a77c" />
+          </radialGradient>
+          <radialGradient id="sig-glow">
+            <stop offset="0" stopColor="#3ff0bb" stopOpacity="0.5" />
+            <stop offset="1" stopColor="#3ff0bb" stopOpacity="0" />
+          </radialGradient>
+          {/* The tunnel visor's shadow over the upper part of each lens. */}
+          <linearGradient id="sig-shade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#000" stopOpacity="0.8" />
+            <stop offset="0.42" stopColor="#000" stopOpacity="0.25" />
+            <stop offset="0.6" stopColor="#000" stopOpacity="0" />
+          </linearGradient>
+          <pattern id="sig-led" width="1.6" height="1.6" patternUnits="userSpaceOnUse">
+            <circle cx="0.8" cy="0.8" r="0.42" fill="#000" opacity="0.3" />
+          </pattern>
+          <clipPath id="sig-lens">
+            <circle cx="0" cy="0" r="11.5" />
+          </clipPath>
+        </defs>
+        {/* Rigid bracket from the arm. */}
+        <rect x="24" y="0" width="6" height="12" fill="url(#sig-metal)" />
+        <rect x="21" y="1" width="12" height="3.5" rx="1" fill="#7d8581" />
+        <rect x="1" y="9" width="52" height="122" rx="3" fill="url(#sig-plate)" />
+        {LENS.map((l) => (
+          <g key={l.y}>
+            {/* One bolted section per lamp. */}
+            <rect x="11" y={l.y - 17} width="32" height="34" rx="1.6" fill="url(#sig-box)" stroke="#070808" strokeWidth="0.6" />
+            {[l.y - 12, l.y + 12].map((by) => (
+              <circle key={by} cx="12.6" cy={by} r="0.75" fill="#555b59" />
+            ))}
+            <g transform={`translate(27 ${l.y})`}>
+              <g clipPath="url(#sig-lens)">
+                {"lit" in l ? (
+                  <circle r="11.5" fill="url(#sig-green)" />
+                ) : (
+                  <>
+                    <circle r="11.5" fill={l.base} />
+                    {/* Daylight reflection on the unlit lens. */}
+                    <ellipse cx="-2" cy="4" rx="9" ry="6" fill={l.tint} opacity="0.75" />
+                  </>
+                )}
+                <circle r="11.5" fill="url(#sig-led)" />
+                <rect x="-11.5" y="-11.5" width="23" height="23" fill="url(#sig-shade)" />
+              </g>
+              {"lit" in l && <circle r="20" fill="url(#sig-glow)" />}
+              {/* Tunnel visor rim: thick at the top, thinning toward the open bottom. */}
+              <path d="M-13.4 3A13.4 13.4 0 0 1 13.4 3L11.6 1A11.6 11.6 0 0 0 -11.6 1Z" fill="#080909" />
+              <circle r="11.9" fill="none" stroke="#050606" strokeWidth="0.8" />
+            </g>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 /** The page's way in, drawn as a freeway distance sign: where you can go, and one real figure for each destination. */
 function Destinations({ sensors, events }: { sensors: number; events: number | null }) {
   const rows: [string, string, string][] = [
@@ -182,8 +278,15 @@ export default function Overview() {
         const o = m.optimized;
         return (
           <>
-            <section className="mb-4 grid items-center gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-12">
-              <div>
+            <section className="relative isolate mb-4 grid items-center gap-8 overflow-hidden rounded-[14px] border border-line bg-raised px-5 py-8 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-12 lg:px-10">
+              {/* Backdrop: a palm-lined Los Angeles street (public domain, see public/hero/). The scrim keeps the text side calm; the
+                  road's vanishing point falls in the gap between the text and the panel, where a traffic signal hangs on desktop. */}
+              <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+                <img src="/hero/la-palm-street.webp" alt="" width={2048} height={1296} decoding="async" fetchPriority="high" className="hero-photo absolute inset-0 size-full object-cover" />
+                <div className="hero-scrim absolute inset-0" />
+                <HeroSignal />
+              </div>
+              <div className="hero-copy">
                 <h1 tabIndex={-1} className="text-[34px] font-extrabold leading-[1.06] outline-none sm:text-[46px]">
                   Freeway traffic, replayed and forecast an hour ahead.
                 </h1>

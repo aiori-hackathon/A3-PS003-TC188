@@ -168,9 +168,9 @@ export function Shell({ children }: { children: ReactNode }) {
       <a href="#main" className="sr-only z-50 rounded-control bg-fg px-3 py-2 text-sm text-surface focus:not-sr-only focus:fixed focus:left-3 focus:top-3">
         Skip to content
       </a>
-      {/* The navigation is drawn as an overhead guide sign: green panel, white inset border, white lettering. */}
+      {/* The navigation is drawn as an overhead guide sign: slate panel, white inset border, white lettering. */}
       <div className="sticky top-0 z-30 bg-bg px-2 pt-2 sm:px-3">
-        <header className="relative mx-auto max-w-[1320px] rounded-[10px] bg-sign p-[3px] shadow-[0_1px_0_rgba(20,32,27,0.25)]">
+        <header className="relative mx-auto max-w-[1320px] rounded-[10px] bg-sign p-[3px] shadow-[0_1px_0_rgba(18,30,40,0.25)]">
           <div className="flex h-12 items-center gap-2 rounded-[7px] border-2 border-white/90 px-2 text-white sm:px-3">
             <Wordmark />
             <nav aria-label="Main navigation" className="ml-3 hidden min-w-0 items-center xl:flex">
