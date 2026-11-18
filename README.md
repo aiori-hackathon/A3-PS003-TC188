@@ -12,7 +12,7 @@ Team Code : A3-PS003-TC188
 - **Dr. Monika Puttaramaiah**
 #### YouTube video link : https://youtu.be/RmcWK-jka4o
 #### Demonstration video link : https://youtu.be/APK435N8Xjo/
-#### Live demo : https://induced-struct-firefox-table.trycloudflare.com/
+#### Live demo : [`Live Demo`](https://induced-struct-firefox-table.trycloudflare.com/)
 ---
 
 # AIORI
