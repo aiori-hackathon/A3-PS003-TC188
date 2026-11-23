@@ -1,3 +1,3 @@
-#### Live demo : served during the AIORI presentation from a temporary Cloudflare Quick Tunnel address.
-Quick Tunnel addresses change every time the tunnel restarts, so no permanent link is listed here.
+#### Live demo : https://induced-struct-firefox-table.trycloudflare.com/
+Served from the presenter's workstation through a free Cloudflare Quick Tunnel: it is reachable only while that machine is running the site, and the address changes if the tunnel restarts.
 See deploy/aiori/PRESENTATION_DAY_RUNBOOK.md for how the demo is started and how to find the current address.
