@@ -22,7 +22,6 @@ AIORI forecasts freeway traffic flow one hour ahead and tests whether that forec
 traffic. It uses recorded XTraffic data from 200 California sensors split into four regional clients. Everything it shows
 is historical: it is not a live traffic monitor, and its forecasts are not traffic advisories.
 
-Problem statement: [`AIORI3_A3-PS003-TC188.pdf`](AIORI3_A3-PS003-TC188.pdf).
 
 ## Core idea
 
@@ -39,14 +38,6 @@ Problem statement: [`AIORI3_A3-PS003-TC188.pdf`](AIORI3_A3-PS003-TC188.pdf).
 4. Measure the communication cost of federation alongside its accuracy.
 5. Deliver the result as a working, read-only web application with historical replay and disruption analysis.
 
-## Architecture
-
-![AIORI system architecture](docs/architecture/aiori-architecture.png)
-
-- **Offline:** data preparation, federated training and the disruption detector write frozen files; the website never starts them.
-- **Serving:** a React site and a Python API that only read those files and run CPU inference.
-- **Deployment:** nginx and the API run in Docker; a Cloudflare tunnel publishes the site.
-- **More detail:** [HLD and LLD](docs/architecture/final/AIORI_FINAL_ARCHITECTURE.md) (15 diagrams), the [interactive diagram](docs/architecture/AIORI_SYSTEM_ARCHITECTURE.html) (download and open in a browser) and the [project graph](docs/graphify/final/AIORI_GRAPH_README.md).
 
 ## Results
 
