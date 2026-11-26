@@ -15,7 +15,7 @@ Team Code : A3-PS003-TC188
 #### Live demo : [`Live Demo`](https://induced-struct-firefox-table.trycloudflare.com/)
 ---
 
-# AIORI
+# AIORI-TRAFFIC INTELLIGENCE
 
 AIORI forecasts freeway traffic flow one hour ahead and tests whether that forecaster can be trained across regions
 **without pooling their data**, using federated learning, while counting exactly what the collaboration costs in network
